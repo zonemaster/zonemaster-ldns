@@ -15,7 +15,7 @@ new(class,str)
     char *class;
     char *str;
 
-char *
+NetLDNS::Packet
 mxquery(obj,dname)
     NetLDNS obj;
     char *dname;
@@ -23,3 +23,9 @@ mxquery(obj,dname)
 void
 DESTROY(obj)
         NetLDNS obj;
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::Packet
+
+char *
+rcode(obj)
+    NetLDNS::Packet obj;

@@ -23,20 +23,24 @@ NetLDNS new(char *class, char *str) {
     return obj;
 }
 
-char *mxquery(NetLDNS obj, char *dname) {
+NetLDNS__Packet mxquery(NetLDNS obj, char *dname) {
     ldns_rdf *domain;
-    ldns_pkt *p;
+    NetLDNS__Packet p;
 
     domain = ldns_dname_new_frm_str(dname);
     p = ldns_resolver_query(obj->res, domain, LDNS_RR_TYPE_MX, LDNS_RR_CLASS_IN, LDNS_RD);
 
-    ldns_buffer *tmp = ldns_buffer_new(0);
-    ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(p));
-
-    return ldns_buffer_export(tmp);
+    return p;
 }
 
 void DESTROY(NetLDNS obj) {
     ldns_resolver_deep_free(obj->res);
     free(obj);
+}
+
+char *rcode(NetLDNS__Packet obj){
+    ldns_buffer *tmp = ldns_buffer_new(0);
+    ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
+
+    return ldns_buffer_export(tmp);    
 }

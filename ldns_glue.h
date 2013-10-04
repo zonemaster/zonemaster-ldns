@@ -5,7 +5,10 @@ typedef struct {
 } resolver_t;
 
 typedef resolver_t *NetLDNS;
+typedef ldns_pkt *NetLDNS__Packet;
 
 NetLDNS new(char *class,char *str);
-char *mxquery(NetLDNS obj, char *dname);
+NetLDNS__Packet mxquery(NetLDNS obj, char *dname);
 void DESTROY(NetLDNS obj);
+
+char *rcode(NetLDNS__Packet obj);

@@ -4,7 +4,9 @@ BEGIN { use_ok('NetLDNS')}
 
 my $s = NetLDNS->new('8.8.8.8');
 isa_ok($s, 'NetLDNS');
-my $rcode = $s->mxquery('nic.se');
-is($rcode, 'NOERROR');
+my $p = $s->mxquery('nic.se');
+isa_ok($p, 'NetLDNS::Packet');
+
+is($p->rcode, 'NOERROR', 'expected rcode');
 
 done_testing;

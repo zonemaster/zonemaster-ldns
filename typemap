@@ -1,1 +1,2 @@
 NetLDNS             T_PTROBJ
+NetLDNS::Packet     T_PTROBJ
