@@ -4,26 +4,11 @@
 
 #include "ppport.h"
 
-#include "seventeen.h"
+#include "ldns_glue.h"
 
 MODULE = NetLDNS        PACKAGE = NetLDNS
 
 PROTOTYPES: ENABLE
-
-int
-seventeen()
-
-void
-count(str)
-    char * str
-    PREINIT:
-        int n;
-    PPCODE:
-        n = count(str);
-        EXTEND(SP,2);
-        PUSHs(sv_2mortal(newSVnv(n  )));
-        PUSHs(sv_2mortal(newSVpv(str,n)));
-
 
 NetLDNS
 new(class,str)
@@ -31,5 +16,10 @@ new(class,str)
     char *str;
 
 char *
-str(obj)
+mxquery(obj,dname)
+    NetLDNS obj;
+    char *dname;
+
+void
+DESTROY(obj)
         NetLDNS obj;

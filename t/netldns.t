@@ -2,14 +2,9 @@ use Test::More;
 
 BEGIN { use_ok('NetLDNS')}
 
-is(NetLDNS::seventeen(), 17);
-
-my ($n, $str ) = NetLDNS::count("foobar");
-is($n, 6);
-is($str, 'foobar');
-
-my $s = NetLDNS->new('foobar');
+my $s = NetLDNS->new('8.8.8.8');
 isa_ok($s, 'NetLDNS');
-is($s->str, 'foobar');
+my $rcode = $s->mxquery('nic.se');
+is($rcode, 'NOERROR');
 
 done_testing;
