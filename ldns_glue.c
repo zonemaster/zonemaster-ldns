@@ -34,13 +34,19 @@ NetLDNS__Packet mxquery(NetLDNS obj, char *dname) {
 }
 
 void DESTROY(NetLDNS obj) {
+    fprintf(stderr,"DESTROY called on %p.\n", (void *)obj);
     ldns_resolver_deep_free(obj->res);
     free(obj);
 }
 
-char *rcode(NetLDNS__Packet obj){
+char *packet_rcode(NetLDNS__Packet obj){
     ldns_buffer *tmp = ldns_buffer_new(0);
     ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
 
     return ldns_buffer_export(tmp);    
+}
+
+void packet_DESTROY(NetLDNS__Packet obj) {
+    fprintf(stderr,"packet_DESTROY called on %p.\n", (void *)obj);
+    ldns_pkt_free(obj);
 }

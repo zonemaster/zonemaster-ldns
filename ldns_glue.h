@@ -11,4 +11,5 @@ NetLDNS new(char *class,char *str);
 NetLDNS__Packet mxquery(NetLDNS obj, char *dname);
 void DESTROY(NetLDNS obj);
 
-char *rcode(NetLDNS__Packet obj);
+char *packet_rcode(NetLDNS__Packet obj);
+void packet_DESTROY(NetLDNS__Packet obj);

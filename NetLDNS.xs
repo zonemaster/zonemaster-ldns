@@ -24,8 +24,12 @@ void
 DESTROY(obj)
         NetLDNS obj;
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::Packet
+MODULE = NetLDNS        PACKAGE = NetLDNS::Packet PREFIX=packet_
 
 char *
-rcode(obj)
+packet_rcode(obj)
+    NetLDNS::Packet obj;
+
+void
+packet_DESTROY(obj)
     NetLDNS::Packet obj;
