@@ -20,11 +20,21 @@ mxquery(obj,dname)
     NetLDNS obj;
     char *dname;
 
+NetLDNS::Packet
+query(obj, dname, rrtype, rrclass)
+    NetLDNS obj;
+    char *dname;
+    char *rrtype;
+    char *rrclass;
+
 void
 DESTROY(obj)
         NetLDNS obj;
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::Packet PREFIX=packet_
+
+
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
 
 char *
 packet_rcode(obj)

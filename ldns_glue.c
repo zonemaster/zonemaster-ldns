@@ -7,6 +7,10 @@
 #include "perl.h"
 #include "XSUB.h"
 
+/*
+ *  NetLDNS functions
+ */
+
 NetLDNS new(char *class, char *str) {
     NetLDNS obj = malloc(sizeof(resolver_t));
     ldns_rdf *ns;
@@ -33,11 +37,38 @@ NetLDNS__Packet mxquery(NetLDNS obj, char *dname) {
     return p;
 }
 
+NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass) {
+    ldns_rdf *domain;
+    ldns_rr_type t;
+    ldns_rr_class c;
+    NetLDNS__Packet p;
+
+    t = ldns_get_rr_type_by_name(rrtype);
+    if(!t)
+    {
+        croak("Unknown RR type");
+    }
+
+    c = ldns_get_rr_class_by_name(rrclass);
+    if(!c)
+    {
+        croak("Unknown RR class");
+    }
+
+    domain = ldns_dname_new_frm_str(dname);
+    p = ldns_resolver_query(obj->res, domain, t, c, LDNS_RD);
+
+    return p;
+}
+
 void DESTROY(NetLDNS obj) {
-    fprintf(stderr,"DESTROY called on %p.\n", (void *)obj);
     ldns_resolver_deep_free(obj->res);
     free(obj);
 }
+
+/*
+ *  NetLDNS::Packet functions
+ */
 
 char *packet_rcode(NetLDNS__Packet obj){
     ldns_buffer *tmp = ldns_buffer_new(0);
@@ -47,6 +78,5 @@ char *packet_rcode(NetLDNS__Packet obj){
 }
 
 void packet_DESTROY(NetLDNS__Packet obj) {
-    fprintf(stderr,"packet_DESTROY called on %p.\n", (void *)obj);
     ldns_pkt_free(obj);
 }
