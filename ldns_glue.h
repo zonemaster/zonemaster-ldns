@@ -16,3 +16,5 @@ void DESTROY(NetLDNS obj);
 char *packet_rcode(NetLDNS__Packet obj);
 bool packet_qr(NetLDNS__Packet obj);
 void packet_DESTROY(NetLDNS__Packet obj);
+
+void rr_DESTROY(NetLDNS__RR obj);

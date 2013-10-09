@@ -84,3 +84,13 @@ bool packet_qr(NetLDNS__Packet obj) {
 void packet_DESTROY(NetLDNS__Packet obj) {
     ldns_pkt_free(obj);
 }
+
+/*
+ *  NetLDNS::RR functions
+ */
+
+void rr_DESTROY(NetLDNS__RR obj) {
+    ldns_rr_free(obj);
+
+    return;
+}

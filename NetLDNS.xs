@@ -59,7 +59,7 @@ packet_answer(obj)
         for(size_t i = 0; i < n; ++i)
         {
             SV* rr_sv = sv_newmortal();
-            sv_setref_pv(rr_sv, "NetLDNS::RR", ldns_rr_list_rr(rrs,i));
+            sv_setref_pv(rr_sv, "NetLDNS::RR", ldns_rr_clone(ldns_rr_list_rr(rrs,i)));
             PUSHs(rr_sv);
         }
     }
@@ -67,3 +67,11 @@ packet_answer(obj)
 void
 packet_DESTROY(obj)
     NetLDNS::Packet obj;
+
+
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
+
+void
+rr_DESTROY(obj)
+    NetLDNS::RR obj;
