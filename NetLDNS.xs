@@ -36,7 +36,7 @@ DESTROY(obj)
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
 
-char *
+SV *
 packet_rcode(obj)
     NetLDNS::Packet obj;
 
@@ -71,6 +71,10 @@ packet_DESTROY(obj)
 
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
+
+SV *
+rr_owner(obj)
+    NetLDNS::RR obj;
 
 void
 rr_DESTROY(obj)

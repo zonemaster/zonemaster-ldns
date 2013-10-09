@@ -70,11 +70,17 @@ void DESTROY(NetLDNS obj) {
  *  NetLDNS::Packet functions
  */
 
-char *packet_rcode(NetLDNS__Packet obj){
+SV *packet_rcode(NetLDNS__Packet obj){
     ldns_buffer *tmp = ldns_buffer_new(0);
     ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
+    char *str;
+    SV *new;
 
-    return ldns_buffer_export(tmp);    
+    str = ldns_buffer_export(tmp);
+    new = newSVpv(str,0);
+    free(str);
+
+    return new;
 }
 
 bool packet_qr(NetLDNS__Packet obj) {
@@ -88,6 +94,20 @@ void packet_DESTROY(NetLDNS__Packet obj) {
 /*
  *  NetLDNS::RR functions
  */
+
+SV *rr_owner(NetLDNS__RR obj) {
+    SV *new;
+    ldns_rdf *owner = ldns_rr_owner(obj);
+    ldns_buffer *buf = ldns_buffer_new(ldns_rdf_size(owner));
+    char *tmp;
+
+    ldns_rdf2buffer_str_dname(buf,owner);
+    tmp = ldns_buffer_export(buf);
+    new = newSVpv(tmp,0);
+    free(tmp);
+
+    return new;
+}
 
 void rr_DESTROY(NetLDNS__RR obj) {
     ldns_rr_free(obj);

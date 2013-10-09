@@ -1,3 +1,7 @@
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+
 #include <ldns/ldns.h>
 
 typedef struct {
@@ -13,8 +17,9 @@ NetLDNS__Packet mxquery(NetLDNS obj, char *dname);
 NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass);
 void DESTROY(NetLDNS obj);
 
-char *packet_rcode(NetLDNS__Packet obj);
+SV *packet_rcode(NetLDNS__Packet obj);
 bool packet_qr(NetLDNS__Packet obj);
 void packet_DESTROY(NetLDNS__Packet obj);
 
+SV *rr_owner(NetLDNS__RR obj);
 void rr_DESTROY(NetLDNS__RR obj);

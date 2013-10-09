@@ -25,6 +25,9 @@ ok(!$@);
 
 my @answer = $p2->answer;
 is(scalar(@answer), 3, 'expected number of NS records in answer');
-isa_ok($_, 'NetLDNS::RR') for @answer;
+foreach my $rr (@answer) {
+    isa_ok($rr, 'NetLDNS::RR');
+    is($rr->owner, 'iis.se.', 'expected owner name');
+}
 
 done_testing;
