@@ -40,6 +40,30 @@ char *
 packet_rcode(obj)
     NetLDNS::Packet obj;
 
+bool
+packet_qr(obj)
+    NetLDNS::Packet obj;
+
+void
+packet_answer(obj)
+    NetLDNS::Packet obj;
+    PPCODE:
+    {
+        size_t i,n;
+        ldns_rr_list *rrs;
+
+        rrs = ldns_pkt_answer(obj);
+        n = ldns_rr_list_rr_count(rrs);
+
+        EXTEND(sp,n);
+        for(size_t i = 0; i < n; ++i)
+        {
+            SV* rr_sv = sv_newmortal();
+            sv_setref_pv(rr_sv, "NetLDNS::RR", ldns_rr_list_rr(rrs,i));
+            PUSHs(rr_sv);
+        }
+    }
+
 void
 packet_DESTROY(obj)
     NetLDNS::Packet obj;

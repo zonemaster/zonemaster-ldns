@@ -46,13 +46,13 @@ NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass) {
     t = ldns_get_rr_type_by_name(rrtype);
     if(!t)
     {
-        croak("Unknown RR type");
+        croak("Unknown RR type: %s", rrtype);
     }
 
     c = ldns_get_rr_class_by_name(rrclass);
     if(!c)
     {
-        croak("Unknown RR class");
+        croak("Unknown RR class: %s", rrclass);
     }
 
     domain = ldns_dname_new_frm_str(dname);
@@ -75,6 +75,10 @@ char *packet_rcode(NetLDNS__Packet obj){
     ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
 
     return ldns_buffer_export(tmp);    
+}
+
+bool packet_qr(NetLDNS__Packet obj) {
+    return ldns_pkt_qr(obj);
 }
 
 void packet_DESTROY(NetLDNS__Packet obj) {
