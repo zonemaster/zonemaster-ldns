@@ -116,3 +116,20 @@ rr_class(obj)
 void
 rr_DESTROY(obj)
     NetLDNS::RR obj;
+
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NS           PREFIX=rr_ns_
+
+char *
+rr_ns_nsdname(obj)
+    NetLDNS::RR::NS obj;
+    CODE:
+        {
+            ldns_rdf *field = ldns_rr_rdf(obj, 0);
+            ldns_buffer *buf = ldns_buffer_new(ldns_rdf_size(field));
+            ldns_rdf2buffer_str_dname(buf,field);
+            RETVAL = ldns_buffer_export(buf);
+            ldns_buffer_free(buf);
+        }
+    OUTPUT:
+        RETVAL

@@ -27,12 +27,14 @@ ok(!$@);
 
 my @answer = $p2->answer;
 is(scalar(@answer), 3, 'expected number of NS records in answer');
+my %known = map {$_ => 1} qw[ns.nic.se. i.ns.se. ns3.nic.se.];
 foreach my $rr (@answer) {
     isa_ok($rr, 'NetLDNS::RR::NS');
     is($rr->owner, 'iis.se.', 'expected owner name');
     ok($rr->ttl > 0, 'positive TTL');
     is($rr->type, 'NS', 'type is NS');
     is($rr->class, 'IN', 'class is IN');
+    ok($known{$rr->nsdname}, 'known nsdname');
 }
 
 done_testing;

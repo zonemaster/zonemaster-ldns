@@ -11,6 +11,17 @@ typedef struct {
 typedef resolver_t *NetLDNS;
 typedef ldns_pkt *NetLDNS__Packet;
 typedef ldns_rr *NetLDNS__RR;
+typedef ldns_rr *NetLDNS__RR__NS;
+typedef ldns_rr *NetLDNS__RR__A;
+typedef ldns_rr *NetLDNS__RR__AAAA;
+typedef ldns_rr *NetLDNS__RR__SOA;
+typedef ldns_rr *NetLDNS__RR__MX;
+typedef ldns_rr *NetLDNS__RR__DS;
+typedef ldns_rr *NetLDNS__RR__DNSKEY;
+typedef ldns_rr *NetLDNS__RR__RRSIG;
+typedef ldns_rr *NetLDNS__RR__NSEC;
+typedef ldns_rr *NetLDNS__RR__NSEC3;
+typedef ldns_rr *NetLDNS__RR__NSECPARAM;
 
 NetLDNS new(char *class,char *str);
 NetLDNS__Packet mxquery(NetLDNS obj, char *dname);
