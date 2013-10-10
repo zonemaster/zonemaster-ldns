@@ -18,7 +18,6 @@ NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass);
 void DESTROY(NetLDNS obj);
 
 SV *packet_rcode(NetLDNS__Packet obj);
-bool packet_qr(NetLDNS__Packet obj);
 void packet_DESTROY(NetLDNS__Packet obj);
 
 SV *rr_owner(NetLDNS__RR obj);

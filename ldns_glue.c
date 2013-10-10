@@ -73,19 +73,15 @@ void DESTROY(NetLDNS obj) {
 
 SV *packet_rcode(NetLDNS__Packet obj){
     ldns_buffer *tmp = ldns_buffer_new(0);
-    ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
     char *str;
     SV *new;
 
+    ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
     str = ldns_buffer_export(tmp);
     new = newSV(0);
     sv_usepvn(new, str, strlen(str));
 
     return new;
-}
-
-bool packet_qr(NetLDNS__Packet obj) {
-    return ldns_pkt_qr(obj);
 }
 
 void packet_DESTROY(NetLDNS__Packet obj) {

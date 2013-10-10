@@ -1,6 +1,8 @@
 use Test::More;
+use Devel::Peek;
 
 BEGIN { use_ok('NetLDNS')}
+BEGIN { use_ok('NetLDNS::RR')}
 
 my $s = NetLDNS->new('8.8.8.8');
 isa_ok($s, 'NetLDNS');
@@ -26,8 +28,11 @@ ok(!$@);
 my @answer = $p2->answer;
 is(scalar(@answer), 3, 'expected number of NS records in answer');
 foreach my $rr (@answer) {
-    isa_ok($rr, 'NetLDNS::RR');
+    isa_ok($rr, 'NetLDNS::RR::NS');
     is($rr->owner, 'iis.se.', 'expected owner name');
+    ok($rr->ttl > 0, 'positive TTL');
+    is($rr->type, 'NS', 'type is NS');
+    is($rr->class, 'IN', 'class is IN');
 }
 
 done_testing;

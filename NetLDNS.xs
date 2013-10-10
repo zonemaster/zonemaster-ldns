@@ -43,6 +43,10 @@ packet_rcode(obj)
 bool
 packet_qr(obj)
     NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt_qr(obj);
+    OUTPUT:
+        RETVAL
 
 void
 packet_answer(obj)
@@ -58,9 +62,18 @@ packet_answer(obj)
         EXTEND(sp,n);
         for(size_t i = 0; i < n; ++i)
         {
+            char rrclass[30];
+            char *type;
+
+            ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
+
+            type = ldns_rr_type2str(ldns_rr_get_type(rr));
+            snprintf(rrclass, 30, "NetLDNS::RR::%s", type);
+
             SV* rr_sv = sv_newmortal();
-            sv_setref_pv(rr_sv, "NetLDNS::RR", ldns_rr_clone(ldns_rr_list_rr(rrs,i)));
+            sv_setref_pv(rr_sv, rrclass, rr);
             PUSHs(rr_sv);
+            Safefree(type);
         }
     }
 
@@ -75,6 +88,30 @@ MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
 SV *
 rr_owner(obj)
     NetLDNS::RR obj;
+
+U32
+rr_ttl(obj)
+    NetLDNS::RR obj;
+    CODE:
+        RETVAL = ldns_rr_ttl(obj);
+    OUTPUT:
+        RETVAL
+
+char *
+rr_type(obj)
+    NetLDNS::RR obj;
+    CODE:
+        RETVAL = ldns_rr_type2str(ldns_rr_get_type(obj));
+    OUTPUT:
+        RETVAL
+
+char *
+rr_class(obj)
+    NetLDNS::RR obj;
+    CODE:
+        RETVAL = ldns_rr_class2str(ldns_rr_get_class(obj));
+    OUTPUT:
+        RETVAL
 
 void
 rr_DESTROY(obj)
