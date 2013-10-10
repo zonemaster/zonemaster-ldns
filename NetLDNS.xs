@@ -113,6 +113,14 @@ rr_class(obj)
     OUTPUT:
         RETVAL
 
+char *
+rr_string(obj)
+    NetLDNS::RR obj;
+    CODE:
+        RETVAL = ldns_rr2str(obj);
+    OUTPUT:
+        RETVAL
+
 void
 rr_DESTROY(obj)
     NetLDNS::RR obj;
@@ -124,12 +132,6 @@ char *
 rr_ns_nsdname(obj)
     NetLDNS::RR::NS obj;
     CODE:
-        {
-            ldns_rdf *field = ldns_rr_rdf(obj, 0);
-            ldns_buffer *buf = ldns_buffer_new(ldns_rdf_size(field));
-            ldns_rdf2buffer_str_dname(buf,field);
-            RETVAL = ldns_buffer_export(buf);
-            ldns_buffer_free(buf);
-        }
+        RETVAL = ldns_rdf2str(ldns_rr_rdf(obj, 0));
     OUTPUT:
         RETVAL
