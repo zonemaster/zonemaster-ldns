@@ -77,6 +77,14 @@ packet_answer(obj)
         }
     }
 
+char *
+packet_string(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt2str(obj);
+    OUTPUT:
+        RETVAL
+
 void
 packet_DESTROY(obj)
     NetLDNS::Packet obj;
@@ -133,5 +141,24 @@ rr_ns_nsdname(obj)
     NetLDNS::RR::NS obj;
     CODE:
         RETVAL = ldns_rdf2str(ldns_rr_rdf(obj, 0));
+    OUTPUT:
+        RETVAL
+
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::MX           PREFIX=rr_mx_
+
+U16
+rr_mx_preference(obj)
+    NetLDNS::RR::MX obj;
+    CODE:
+        RETVAL = ldns_rdf2native_int16(ldns_rr_rdf(obj, 0));
+    OUTPUT:
+        RETVAL
+
+char *
+rr_mx_exchange(obj)
+    NetLDNS::RR::MX obj;
+    CODE:
+        RETVAL = ldns_rdf2str(ldns_rr_rdf(obj, 1));
     OUTPUT:
         RETVAL
