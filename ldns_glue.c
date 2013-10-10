@@ -12,10 +12,11 @@
  */
 
 NetLDNS new(char *class, char *str) {
-    NetLDNS obj = malloc(sizeof(resolver_t));
+    NetLDNS obj;
     ldns_rdf *ns;
     ldns_status s;
 
+    Newxz(obj,1,resolver_t);
     ns = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, str);
     obj->res = ldns_resolver_new();
     s = ldns_resolver_push_nameserver(obj->res, ns);
@@ -77,8 +78,8 @@ SV *packet_rcode(NetLDNS__Packet obj){
     SV *new;
 
     str = ldns_buffer_export(tmp);
-    new = newSVpv(str,0);
-    free(str);
+    new = newSV(0);
+    sv_usepvn(new, str, strlen(str));
 
     return new;
 }
@@ -102,9 +103,10 @@ SV *rr_owner(NetLDNS__RR obj) {
     char *tmp;
 
     ldns_rdf2buffer_str_dname(buf,owner);
+
+    new = newSV(0);
     tmp = ldns_buffer_export(buf);
-    new = newSVpv(tmp,0);
-    free(tmp);
+    sv_usepvn(new,tmp,strlen(tmp));
 
     return new;
 }
