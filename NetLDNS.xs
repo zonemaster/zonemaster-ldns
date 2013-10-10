@@ -162,3 +162,15 @@ rr_mx_exchange(obj)
         RETVAL = ldns_rdf2str(ldns_rr_rdf(obj, 1));
     OUTPUT:
         RETVAL
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::A                PREFIX=rr_a_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::AAAA             PREFIX=rr_aaaa_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::SOA              PREFIX=rr_soa_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DS               PREFIX=rr_ds_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DNSKEY           PREFIX=rr_dnskey_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::RRSIG            PREFIX=rr_rrsig_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::PTR              PREFIX=rr_ptr_
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::CNAME            PREFIX=rr_cname_

@@ -22,6 +22,8 @@ typedef ldns_rr *NetLDNS__RR__RRSIG;
 typedef ldns_rr *NetLDNS__RR__NSEC;
 typedef ldns_rr *NetLDNS__RR__NSEC3;
 typedef ldns_rr *NetLDNS__RR__NSECPARAM;
+typedef ldns_rr *NetLDNS__RR__PTR;
+typedef ldns_rr *NetLDNS__RR__CNAME;
 
 NetLDNS new(char *class,char *str);
 NetLDNS__Packet mxquery(NetLDNS obj, char *dname);
