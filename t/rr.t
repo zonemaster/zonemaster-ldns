@@ -18,4 +18,16 @@ foreach my $rr ($p->answer) {
     is($rr->minimum, 14400, 'minimum');
 }
 
+$p = $s->query('a.ns.se', 'A', 'IN');
+foreach my $rr ($p->answer) {
+    isa_ok($rr, 'NetLDNS::RR::A');
+    is($rr->address, '192.36.144.107', 'expected address string');
+}
+
+$p = $s->query('a.ns.se', 'AAAA', 'IN');
+foreach my $rr ($p->answer) {
+    isa_ok($rr, 'NetLDNS::RR::AAAA');
+    is($rr->address, '2a01:03f0:0000:0301:0000:0000:0000:0053', 'expected address string');
+}
+
 done_testing;

@@ -168,7 +168,38 @@ rr_mx_exchange(obj)
         RETVAL
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::A                PREFIX=rr_a_
+
+char *
+rr_a_address(obj)
+    NetLDNS::RR::A obj;
+    CODE:
+        ldns_rdf *rdata = ldns_rr_rdf(obj,0);
+        uint8_t *p = ldns_rdf_data(rdata);
+        char *address;
+
+        Newxz(address,16,char); /* enough for an IPv4 address as text with terminating zero */
+        snprintf(address, 16, "%d.%d.%d.%d", p[0], p[1], p[2], p[3]);
+        RETVAL = address;
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::AAAA             PREFIX=rr_aaaa_
+
+char *
+rr_aaaa_address(obj)
+    NetLDNS::RR::AAAA obj;
+    CODE:
+        ldns_rdf *rdata = ldns_rr_rdf(obj,0);
+        uint8_t *p = ldns_rdf_data(rdata);
+        char *address;
+
+        Newxz(address,40,char); /* enough for an IPv6 address as text with terminating zero */
+        snprintf(address, 40, "%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x",
+            p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15] );
+        RETVAL = address;
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::SOA              PREFIX=rr_soa_
 
 char *
