@@ -67,4 +67,13 @@ foreach my $rr ($pn->answer) {
     is($rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ');
 }
 
+my $pd = $se->query('nic.se', 'DS', 'IN');
+foreach my $rr ($pd->answer) {
+    isa_ok($rr, 'NetLDNS::RR::DS');
+    is($rr->keytag, 16696);
+    is($rr->algorithm, 5);
+    ok($rr->digtype == 1 or $rr->digtype == 2);
+    ok($rr->hexdigest eq '40079ddf8d09e7f10bb248a69b6630478a28ef969dde399f95bc3b39f8cbacd7' or $rr->hexdigest eq 'ef5d421412a5eaf1230071affd4f585e3b2b1a60');
+}
+
 done_testing;

@@ -260,6 +260,50 @@ rr_soa_minimum(obj)
         RETVAL
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DS               PREFIX=rr_ds_
+
+U16
+rr_ds_keytag(obj)
+    NetLDNS::RR::DS obj;
+    CODE:
+        RETVAL = D_U16(obj,0);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_ds_algorithm(obj)
+    NetLDNS::RR::DS obj;
+    CODE:
+        RETVAL = D_U8(obj,1);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_ds_digtype(obj)
+    NetLDNS::RR::DS obj;
+    CODE:
+        RETVAL = D_U8(obj,2);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_ds_digest(obj)
+    NetLDNS::RR::DS obj;
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+    }
+    OUTPUT:
+        RETVAL
+
+char *
+rr_ds_hexdigest(obj)
+    NetLDNS::RR::DS obj;
+    CODE:
+        RETVAL = D_STRING(obj,3);
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
 U16
