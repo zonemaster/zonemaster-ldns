@@ -13,5 +13,6 @@ use NetLDNS::RR::NSEC3PARAM;
 use NetLDNS::RR::PTR;
 use NetLDNS::RR::RRSIG;
 use NetLDNS::RR::SOA;
+use NetLDNS::RR::TXT;
 
 1;

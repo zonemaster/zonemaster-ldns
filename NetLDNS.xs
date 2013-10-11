@@ -283,3 +283,13 @@ rr_cname_cname(obj)
         RETVAL = D_NAME(obj,0);
     OUTPUT:
         RETVAL
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::RR::TXT              PREFIX=rr_txt_
+
+char *
+rr_txt_txtdata(obj)
+    NetLDNS::RR::TXT obj;
+    CODE:
+        RETVAL = D_NAME(obj,0);
+    OUTPUT:
+        RETVAL

@@ -14,3 +14,4 @@ NetLDNS::RR::NESC3          T_PTROBJ
 NetLDNS::RR::NESC3PARAM     T_PTROBJ
 NetLDNS::RR::PTR            T_PTROBJ
 NetLDNS::RR::CNAME          T_PTROBJ
+NetLDNS::RR::TXT            T_PTROBJ

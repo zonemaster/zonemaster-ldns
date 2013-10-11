@@ -30,4 +30,11 @@ foreach my $rr ($p->answer) {
     is($rr->address, '2a01:03f0:0000:0301:0000:0000:0000:0053', 'expected address string');
 }
 
+my $se = NetLDNS->new('192.36.144.107');
+my $pt = $se->query('se','TXT','IN');
+foreach my $rr ($pt->answer) {
+    isa_ok($rr, 'NetLDNS::RR::TXT');
+    diag $rr->txtdata;
+}
+
 done_testing;
