@@ -6,6 +6,10 @@
 
 #include "ldns_glue.h"
 
+#define D_NAME(what,where) ldns_rdf2str(ldns_rr_rdf(what,where))
+#define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
+#define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
+
 MODULE = NetLDNS        PACKAGE = NetLDNS
 
 PROTOTYPES: ENABLE
@@ -151,7 +155,7 @@ U16
 rr_mx_preference(obj)
     NetLDNS::RR::MX obj;
     CODE:
-        RETVAL = ldns_rdf2native_int16(ldns_rr_rdf(obj, 0));
+        RETVAL = D_U16(obj, 0);
     OUTPUT:
         RETVAL
 
@@ -159,13 +163,70 @@ char *
 rr_mx_exchange(obj)
     NetLDNS::RR::MX obj;
     CODE:
-        RETVAL = ldns_rdf2str(ldns_rr_rdf(obj, 1));
+        RETVAL = D_NAME(obj, 1);
     OUTPUT:
         RETVAL
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::A                PREFIX=rr_a_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::AAAA             PREFIX=rr_aaaa_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::SOA              PREFIX=rr_soa_
+
+char *
+rr_soa_mname(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_NAME(obj,0);
+    OUTPUT:
+        RETVAL
+
+char *
+rr_soa_rname(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_NAME(obj,1);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_soa_serial(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_U32(obj,2);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_soa_refresh(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_U32(obj,3);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_soa_retry(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_U32(obj,4);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_soa_expire(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_U32(obj,5);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_soa_minimum(obj)
+    NetLDNS::RR::SOA obj;
+    CODE:
+        RETVAL = D_U32(obj,6);
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DS               PREFIX=rr_ds_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::RRSIG            PREFIX=rr_rrsig_

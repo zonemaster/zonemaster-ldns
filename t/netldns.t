@@ -2,7 +2,6 @@ use Test::More;
 use Devel::Peek;
 
 BEGIN { use_ok('NetLDNS')}
-BEGIN { use_ok('NetLDNS::RR')}
 
 my $s = NetLDNS->new('8.8.8.8');
 isa_ok($s, 'NetLDNS');
