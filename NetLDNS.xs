@@ -298,6 +298,82 @@ rr_dnskey_keydata(obj)
         RETVAL
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::RRSIG            PREFIX=rr_rrsig_
+
+char *
+rr_rrsig_typecovered(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_STRING(obj,0);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_rrsig_algorithm(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_U8(obj,1);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_rrsig_labels(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_U8(obj,2);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_rrsig_origttl(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_U32(obj,3);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_rrsig_expiration(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_U32(obj,4);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_rrsig_inception(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_U32(obj,5);
+    OUTPUT:
+        RETVAL
+
+U16
+rr_rrsig_keytag(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_U16(obj,6);
+    OUTPUT:
+        RETVAL
+
+char *
+rr_rrsig_signer(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+        RETVAL = D_STRING(obj,7);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_rrsig_signature(obj)
+    NetLDNS::RR::RRSIG obj;
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj,8);
+        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+    }
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_

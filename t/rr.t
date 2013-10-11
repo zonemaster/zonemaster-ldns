@@ -1,5 +1,6 @@
 use Test::More;
 use Devel::Peek;
+use MIME::Base64;
 
 BEGIN { use_ok('NetLDNS')}
 
@@ -44,5 +45,18 @@ foreach my $rr ($pk->answer) {
     is($rr->protocol, 3);
     is($rr->algorithm, 5);
 }
+
+my $pr = $se->query('se', 'RRSIG', 'IN');
+foreach my $rr ($pr->answer) {
+    isa_ok($rr, 'NetLDNS::RR::RRSIG');
+    is($rr->signer, 'se.');
+    is($rr->labels, 1);
+    if ($rr->typecovered eq 'DNSKEY') {
+        is($rr->keytag, 59747);
+    } else {
+        is($rr->keytag, 27646);
+    }
+}
+
 
 done_testing;
