@@ -34,7 +34,15 @@ my $se = NetLDNS->new('192.36.144.107');
 my $pt = $se->query('se','TXT','IN');
 foreach my $rr ($pt->answer) {
     isa_ok($rr, 'NetLDNS::RR::TXT');
-    diag $rr->txtdata;
+    like($rr->txtdata, qr/^"SE zone update: /);
+}
+
+my $pk = $se->query('se', 'DNSKEY', 'IN');
+foreach my $rr ($pk->answer) {
+    isa_ok($rr, 'NetLDNS::RR::DNSKEY');
+    ok($rr->flags == 256 or $rr->flags == 257);
+    is($rr->protocol, 3);
+    is($rr->algorithm, 5);
 }
 
 done_testing;

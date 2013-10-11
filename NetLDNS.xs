@@ -6,7 +6,8 @@
 
 #include "ldns_glue.h"
 
-#define D_NAME(what,where) ldns_rdf2str(ldns_rr_rdf(what,where))
+#define D_STRING(what,where) ldns_rdf2str(ldns_rr_rdf(what,where))
+#define D_U8(what,where) ldns_rdf2native_int8(ldns_rr_rdf(what,where))
 #define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
 #define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
 
@@ -163,7 +164,7 @@ char *
 rr_mx_exchange(obj)
     NetLDNS::RR::MX obj;
     CODE:
-        RETVAL = D_NAME(obj, 1);
+        RETVAL = D_STRING(obj, 1);
     OUTPUT:
         RETVAL
 
@@ -206,7 +207,7 @@ char *
 rr_soa_mname(obj)
     NetLDNS::RR::SOA obj;
     CODE:
-        RETVAL = D_NAME(obj,0);
+        RETVAL = D_STRING(obj,0);
     OUTPUT:
         RETVAL
 
@@ -214,7 +215,7 @@ char *
 rr_soa_rname(obj)
     NetLDNS::RR::SOA obj;
     CODE:
-        RETVAL = D_NAME(obj,1);
+        RETVAL = D_STRING(obj,1);
     OUTPUT:
         RETVAL
 
@@ -260,6 +261,42 @@ rr_soa_minimum(obj)
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DS               PREFIX=rr_ds_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DNSKEY           PREFIX=rr_dnskey_
+
+U16
+rr_dnskey_flags(obj)
+    NetLDNS::RR::DNSKEY obj;
+    CODE:
+        RETVAL = D_U16(obj,0);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_dnskey_protocol(obj)
+    NetLDNS::RR::DNSKEY obj;
+    CODE:
+        RETVAL = D_U8(obj,1);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_dnskey_algorithm(obj)
+    NetLDNS::RR::DNSKEY obj;
+    CODE:
+        RETVAL = D_U8(obj,2);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_dnskey_keydata(obj)
+    NetLDNS::RR::DNSKEY obj;
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+    }
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::RRSIG            PREFIX=rr_rrsig_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
@@ -270,7 +307,7 @@ char *
 rr_ptr_ptrdname(obj)
     NetLDNS::RR::PTR obj;
     CODE:
-        RETVAL = D_NAME(obj,0);
+        RETVAL = D_STRING(obj,0);
     OUTPUT:
         RETVAL
 
@@ -280,7 +317,7 @@ char *
 rr_cname_cname(obj)
     NetLDNS::RR::CNAME obj;
     CODE:
-        RETVAL = D_NAME(obj,0);
+        RETVAL = D_STRING(obj,0);
     OUTPUT:
         RETVAL
 
@@ -290,6 +327,6 @@ char *
 rr_txt_txtdata(obj)
     NetLDNS::RR::TXT obj;
     CODE:
-        RETVAL = D_NAME(obj,0);
+        RETVAL = D_STRING(obj,0);
     OUTPUT:
         RETVAL
