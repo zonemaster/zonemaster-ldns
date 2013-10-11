@@ -58,5 +58,13 @@ foreach my $rr ($pr->answer) {
     }
 }
 
+my $pn = $se->query('se', 'NSEC', 'IN');
+foreach my $rr ($pn->answer) {
+    isa_ok($rr,'NetLDNS::RR::NSEC');
+    ok($rr->typehref->{TXT});
+    ok(!$rr->typehref->{MX});
+    ok($rr->typehref->{TXT});
+    is($rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ');
+}
 
 done_testing;

@@ -375,6 +375,52 @@ rr_rrsig_signature(obj)
         RETVAL
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
+
+char *
+rr_nsec_next(obj)
+    NetLDNS::RR::NSEC obj;
+    CODE:
+        RETVAL = D_STRING(obj,0);
+    OUTPUT:
+        RETVAL
+
+char *
+rr_nsec_typelist(obj)
+    NetLDNS::RR::NSEC obj;
+    CODE:
+        RETVAL = D_STRING(obj,1);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_nsec_typehref(obj)
+    NetLDNS::RR::NSEC obj;
+    CODE:
+    {
+        char *typestring = D_STRING(obj,1);
+        size_t pos;
+        HV *res = newHV();
+
+        pos = 0;
+        while(typestring[pos] != '\0')
+        {
+            pos++;
+            if(typestring[pos] == ' ')
+            {
+                typestring[pos] = '\0';
+                if(hv_store(res,typestring,pos,&PL_sv_yes,0)==NULL)
+                {
+                    croak("Failed to store to hash");
+                }
+                typestring += pos+1;
+                pos = 0;
+            }
+        }
+        RETVAL = newRV_noinc((SV *)res);
+    }
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::PTR              PREFIX=rr_ptr_
