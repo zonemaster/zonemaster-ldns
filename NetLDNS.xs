@@ -265,4 +265,21 @@ MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::PTR              PREFIX=rr_ptr_
+
+char *
+rr_ptr_ptrdname(obj)
+    NetLDNS::RR::PTR obj;
+    CODE:
+        RETVAL = D_NAME(obj,0);
+    OUTPUT:
+        RETVAL
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::CNAME            PREFIX=rr_cname_
+
+char *
+rr_cname_cname(obj)
+    NetLDNS::RR::CNAME obj;
+    CODE:
+        RETVAL = D_NAME(obj,0);
+    OUTPUT:
+        RETVAL
