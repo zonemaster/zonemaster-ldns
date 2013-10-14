@@ -6,7 +6,7 @@ BEGIN { use_ok('NetLDNS')}
 
 my $s = NetLDNS->new('8.8.8.8');
 
-my $p = $s->query('iis.se', 'SOA', 'IN');
+my $p = $s->query('iis.se', 'SOA');
 
 foreach my $rr ($p->answer) {
     isa_ok($rr, 'NetLDNS::RR::SOA');
@@ -19,26 +19,26 @@ foreach my $rr ($p->answer) {
     is($rr->minimum, 14400, 'minimum');
 }
 
-$p = $s->query('a.ns.se', 'A', 'IN');
+$p = $s->query('a.ns.se');
 foreach my $rr ($p->answer) {
     isa_ok($rr, 'NetLDNS::RR::A');
     is($rr->address, '192.36.144.107', 'expected address string');
 }
 
-$p = $s->query('a.ns.se', 'AAAA', 'IN');
+$p = $s->query('a.ns.se', 'AAAA');
 foreach my $rr ($p->answer) {
     isa_ok($rr, 'NetLDNS::RR::AAAA');
     is($rr->address, '2a01:03f0:0000:0301:0000:0000:0000:0053', 'expected address string');
 }
 
 my $se = NetLDNS->new('192.36.144.107');
-my $pt = $se->query('se','TXT','IN');
+my $pt = $se->query('se','TXT');
 foreach my $rr ($pt->answer) {
     isa_ok($rr, 'NetLDNS::RR::TXT');
     like($rr->txtdata, qr/^"SE zone update: /);
 }
 
-my $pk = $se->query('se', 'DNSKEY', 'IN');
+my $pk = $se->query('se', 'DNSKEY');
 foreach my $rr ($pk->answer) {
     isa_ok($rr, 'NetLDNS::RR::DNSKEY');
     ok($rr->flags == 256 or $rr->flags == 257);
@@ -46,7 +46,7 @@ foreach my $rr ($pk->answer) {
     is($rr->algorithm, 5);
 }
 
-my $pr = $se->query('se', 'RRSIG', 'IN');
+my $pr = $se->query('se', 'RRSIG');
 foreach my $rr ($pr->answer) {
     isa_ok($rr, 'NetLDNS::RR::RRSIG');
     is($rr->signer, 'se.');
@@ -58,7 +58,7 @@ foreach my $rr ($pr->answer) {
     }
 }
 
-my $pn = $se->query('se', 'NSEC', 'IN');
+my $pn = $se->query('se', 'NSEC');
 foreach my $rr ($pn->answer) {
     isa_ok($rr,'NetLDNS::RR::NSEC');
     ok($rr->typehref->{TXT});
@@ -67,7 +67,7 @@ foreach my $rr ($pn->answer) {
     is($rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ');
 }
 
-my $pd = $se->query('nic.se', 'DS', 'IN');
+my $pd = $se->query('nic.se', 'DS');
 foreach my $rr ($pd->answer) {
     isa_ok($rr, 'NetLDNS::RR::DS');
     is($rr->keytag, 16696);

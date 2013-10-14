@@ -21,12 +21,7 @@ new(class,str)
     char *str;
 
 NetLDNS::Packet
-mxquery(obj,dname)
-    NetLDNS obj;
-    char *dname;
-
-NetLDNS::Packet
-query(obj, dname, rrtype, rrclass)
+query(obj, dname, rrtype="A", rrclass="IN")
     NetLDNS obj;
     char *dname;
     char *rrtype;
@@ -53,7 +48,7 @@ packet_qr(obj)
     OUTPUT:
         RETVAL
 
-void
+SV *
 packet_answer(obj)
     NetLDNS::Packet obj;
     PPCODE:
