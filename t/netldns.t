@@ -42,4 +42,17 @@ foreach my $rr ($p->answer) {
     ok($known_mx{$rr->exchange}, 'known MX exchange ('.$rr->exchange.')');
 }
 
+my $lroot = NetLDNS->new('199.7.83.42');
+my $se = $lroot->query('se', 'NS');
+
+my @se_q = $se->question;
+my @se_ans = $se->answer;
+my @se_auth = $se->authority;
+my @se_add = $se->additional;
+
+is(scalar(@se_q), 1, 'one question');
+is(scalar(@se_ans), 0, 'zero answers');
+is(scalar(@se_auth), 9, 'nine authority');
+is(scalar(@se_add), 16, 'sixteen additional');
+
 done_testing;
