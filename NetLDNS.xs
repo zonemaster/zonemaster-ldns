@@ -29,6 +29,111 @@ query(obj, dname, rrtype="A", rrclass="IN")
     char *rrclass;
 
 void
+set_recursive(obj,re)
+    NetLDNS obj;
+    bool re;
+    CODE:
+        ldns_resolver_set_recursive(obj->res, re);
+
+bool
+recursive(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_recursive(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
+set_debug(obj,re)
+    NetLDNS obj;
+    bool re;
+    CODE:
+        ldns_resolver_set_debug(obj->res, re);
+
+bool
+debug(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_debug(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
+set_dnssec(obj,re)
+    NetLDNS obj;
+    bool re;
+    CODE:
+        ldns_resolver_set_dnssec(obj->res, re);
+
+bool
+dnssec(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_dnssec(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
+set_usevc(obj,re)
+    NetLDNS obj;
+    bool re;
+    CODE:
+        ldns_resolver_set_usevc(obj->res, re);
+
+bool
+usevc(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_usevc(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
+set_igntc(obj,re)
+    NetLDNS obj;
+    bool re;
+    CODE:
+        ldns_resolver_set_igntc(obj->res, re);
+
+bool
+igntc(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_igntc(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
+set_retry(obj,i)
+    NetLDNS obj;
+    U8 i;
+    CODE:
+        ldns_resolver_set_retry(obj->res, i);
+
+U8
+retry(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_retry(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
+set_retrans(obj,i)
+    NetLDNS obj;
+    U8 i;
+    CODE:
+        ldns_resolver_set_retrans(obj->res, i);
+
+U8
+retrans(obj)
+    NetLDNS obj;
+    CODE:
+        RETVAL = ldns_resolver_retrans(obj->res);
+    OUTPUT:
+        RETVAL
+
+void
 DESTROY(obj)
         NetLDNS obj;
 
