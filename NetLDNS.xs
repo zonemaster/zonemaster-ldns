@@ -11,7 +11,6 @@
 #define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
 #define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
 
-/* NetLNDS ********************************************************************************************************/
 MODULE = NetLDNS        PACKAGE = NetLDNS
 
 PROTOTYPES: ENABLE
@@ -243,7 +242,7 @@ packet_DESTROY(obj)
     NetLDNS::Packet obj;
 
 
-/* NetLNDS::RR ****************************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
 
 SV *
@@ -287,7 +286,7 @@ rr_DESTROY(obj)
     NetLDNS::RR obj;
 
 
-/* NetLNDS::RR::NS ************************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NS           PREFIX=rr_ns_
 
 char *
@@ -298,7 +297,7 @@ rr_ns_nsdname(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::MX ************************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::MX           PREFIX=rr_mx_
 
 U16
@@ -317,7 +316,7 @@ rr_mx_exchange(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::A *************************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::A                PREFIX=rr_a_
 
 char *
@@ -334,7 +333,7 @@ rr_a_address(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::AAAA **********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::AAAA             PREFIX=rr_aaaa_
 
 char *
@@ -352,7 +351,7 @@ rr_aaaa_address(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::SOA ***********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::SOA              PREFIX=rr_soa_
 
 char *
@@ -411,7 +410,7 @@ rr_soa_minimum(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::DS ************************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DS               PREFIX=rr_ds_
 
 U16
@@ -457,7 +456,7 @@ rr_ds_hexdigest(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::DNSKEY ********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
 U16
@@ -495,7 +494,7 @@ rr_dnskey_keydata(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::RRSIG *********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::RRSIG            PREFIX=rr_rrsig_
 
 char *
@@ -573,7 +572,7 @@ rr_rrsig_signature(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::NSEC **********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
 
 char *
@@ -621,13 +620,13 @@ rr_nsec_typehref(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::NSEC3 *********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
 
-/* NetLNDS::RR::NSEC3PARAM ****************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 
-/* NetLNDS::RR::PTR ***********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::PTR              PREFIX=rr_ptr_
 
 char *
@@ -638,7 +637,7 @@ rr_ptr_ptrdname(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::CNAME *********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::CNAME            PREFIX=rr_cname_
 
 char *
@@ -649,7 +648,7 @@ rr_cname_cname(obj)
     OUTPUT:
         RETVAL
 
-/* NetLNDS::RR::TXT ***********************************************************************************************/
+
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR::TXT              PREFIX=rr_txt_
 
 char *
