@@ -22,6 +22,13 @@ ok($p2->rd(), 'RD bit set');
 ok(!$p2->cd(), 'CD bit not set');
 ok($p2->ra(), 'RA bit set');
 ok(!$p2->ad(), 'AD bit not set');
+ok(!$p2->do(), 'DO bit not set');
+
+is($p2->size, 82, 'expected size');
+($p2->querytime > 0);
+is($p2->answerfrom, '8.8.8.8', 'expected answerfrom');
+my $diff = $p2->timestamp - time();
+ok(($diff > 0 and $diff < 1), 'timestamp looks reasonable');
 
 eval { $s->query('nic.se', 'gurksallad', 'CH')};
 like($@, qr/Unknown RR type: gurksallad/);

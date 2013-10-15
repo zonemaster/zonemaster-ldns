@@ -31,7 +31,6 @@ void
 DESTROY(obj)
         NetLDNS obj;
 
-
 MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
 
 SV *
@@ -43,11 +42,10 @@ packet_opcode(obj)
     NetLDNS::Packet obj;
     CODE:
         char *str = ldns_pkt_opcode2str(ldns_pkt_get_opcode(obj));
-        RETVAL = newSVpv(str,0);
+        RETVAL = newSV(0);
+        sv_usepvn(RETVAL, str, strlen(str));
     OUTPUT:
         RETVAL
-    CLEANUP:
-        Safefree(str);
 
 U16
 packet_id(obj)
@@ -110,6 +108,50 @@ packet_ad(obj)
     NetLDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_ad(obj);
+    OUTPUT:
+        RETVAL
+
+bool
+packet_do(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt_edns_do(obj);
+    OUTPUT:
+        RETVAL
+
+size_t
+packet_size(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt_size(obj);
+    OUTPUT:
+        RETVAL
+
+U32
+packet_querytime(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt_querytime(obj);
+    OUTPUT:
+        RETVAL
+
+SV *
+packet_answerfrom(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        char *str = ldns_rdf2str(ldns_pkt_answerfrom(obj));
+        RETVAL = newSV(0);
+        sv_usepvn(RETVAL, str, strlen(str));
+    OUTPUT:
+        RETVAL
+
+double
+packet_timestamp(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        struct timeval t = ldns_pkt_timestamp(obj);
+        RETVAL = (double)t.tv_sec;
+        RETVAL += ((double)t.tv_usec)/1000000;
     OUTPUT:
         RETVAL
 
