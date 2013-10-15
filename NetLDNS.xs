@@ -38,13 +38,11 @@ SV *
 packet_rcode(obj)
     NetLDNS::Packet obj;
 
-SV *
+char *
 packet_opcode(obj)
     NetLDNS::Packet obj;
     CODE:
-        char *str = ldns_pkt_opcode2str(ldns_pkt_get_opcode(obj));
-        RETVAL = newSV(0);
-        sv_usepvn(RETVAL, str, strlen(str));
+        RETVAL = ldns_pkt_opcode2str(ldns_pkt_get_opcode(obj));
     OUTPUT:
         RETVAL
 
@@ -136,13 +134,11 @@ packet_querytime(obj)
     OUTPUT:
         RETVAL
 
-SV *
+char *
 packet_answerfrom(obj)
     NetLDNS::Packet obj;
     CODE:
-        char *str = ldns_rdf2str(ldns_pkt_answerfrom(obj));
-        RETVAL = newSV(0);
-        sv_usepvn(RETVAL, str, strlen(str));
+        RETVAL = ldns_rdf2str(ldns_pkt_answerfrom(obj));
     OUTPUT:
         RETVAL
 
