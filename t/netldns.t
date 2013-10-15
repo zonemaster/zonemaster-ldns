@@ -12,6 +12,7 @@ is($p->rcode, 'NOERROR', 'expected rcode');
 my $p2 = $s->query('iis.se','NS','IN');
 isa_ok($p2, 'NetLDNS::Packet');
 is($p2->rcode, 'NOERROR');
+is($p2->opcode, 'QUERY', 'expected opcode');
 
 ok($p2->id() > 0, 'packet ID set');
 ok($p2->qr(), 'QR bit set');

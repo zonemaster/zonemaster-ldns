@@ -33,12 +33,22 @@ DESTROY(obj)
         NetLDNS obj;
 
 
-/* NetLNDS::Packet ************************************************************************************************/
 MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
 
 SV *
 packet_rcode(obj)
     NetLDNS::Packet obj;
+
+SV *
+packet_opcode(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        char *str = ldns_pkt_opcode2str(ldns_pkt_get_opcode(obj));
+        RETVAL = newSVpv(str,0);
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        Safefree(str);
 
 U16
 packet_id(obj)
