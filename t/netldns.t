@@ -13,7 +13,14 @@ my $p2 = $s->query('iis.se','NS','IN');
 isa_ok($p2, 'NetLDNS::Packet');
 is($p2->rcode, 'NOERROR');
 
+ok($p2->id() > 0, 'packet ID set');
 ok($p2->qr(), 'QR bit set');
+ok(!$p2->aa(), 'AA bit not set');
+ok(!$p2->tc(), 'TC bit not set');
+ok($p2->rd(), 'RD bit set');
+ok(!$p2->cd(), 'CD bit not set');
+ok($p2->ra(), 'RA bit set');
+ok(!$p2->ad(), 'AD bit not set');
 
 eval { $s->query('nic.se', 'gurksallad', 'CH')};
 like($@, qr/Unknown RR type: gurksallad/);
