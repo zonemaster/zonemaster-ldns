@@ -381,6 +381,51 @@ packet_string(obj)
     OUTPUT:
         RETVAL
 
+SV *
+packet_wireformat(obj)
+    NetLDNS::Packet obj;
+    CODE:
+    {
+        size_t sz;
+        uint8_t *buf;
+        ldns_status status;
+
+        status = ldns_pkt2wire(&buf, obj, &sz);
+        if(status != LDNS_STATUS_OK)
+        {
+            croak("Failed to produce wire format: %s",  ldns_get_errorstr_by_id(status));
+        }
+        else
+        {
+            RETVAL = newSVpvn((const char *)buf,sz);
+            Safefree(buf);
+        }
+    }
+    OUTPUT:
+        RETVAL
+
+NetLDNS::Packet
+packet_new_from_wireformat(class,buf)
+    char *class;
+    SV *buf;
+    CODE:
+    {
+        NetLDNS__Packet pkt;
+        ldns_status status;
+
+        status = ldns_wire2pkt(&pkt, (const uint8_t *)SvPV_nolen(buf), SvCUR(buf));
+        if(status != LDNS_STATUS_OK)
+        {
+            croak("Failed to parse wire format: %s",  ldns_get_errorstr_by_id(status));
+        }
+        else
+        {
+            RETVAL = pkt;
+        }
+    }
+    OUTPUT:
+        RETVAL
+
 void
 packet_DESTROY(obj)
     NetLDNS::Packet obj;

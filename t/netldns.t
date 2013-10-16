@@ -13,6 +13,10 @@ my $p2 = $s->query('iis.se','NS','IN');
 isa_ok($p2, 'NetLDNS::Packet');
 is($p2->rcode, 'NOERROR');
 is($p2->opcode, 'QUERY', 'expected opcode');
+my $pround = NetLDNS::Packet->new_from_wireformat($p2->wireformat);
+isa_ok($pround, 'NetLDNS::Packet');
+is($pround->opcode, $p2->opcode, 'roundtrip opcode OK');
+is($pround->rcode, $p2->rcode, 'roundtrip rcode OK');
 
 ok($p2->id() > 0, 'packet ID set');
 ok($p2->qr(), 'QR bit set');
