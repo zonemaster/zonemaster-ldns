@@ -32,6 +32,3 @@ void DESTROY(NetLDNS obj);
 
 SV *packet_rcode(NetLDNS__Packet obj);
 void packet_DESTROY(NetLDNS__Packet obj);
-
-SV *rr_owner(NetLDNS__RR obj);
-void rr_DESTROY(NetLDNS__RR obj);

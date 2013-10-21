@@ -53,28 +53,3 @@ NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass) {
 
     return p;
 }
-
-/*
- *  NetLDNS::RR functions
- */
-
-SV *rr_owner(NetLDNS__RR obj) {
-    SV *new;
-    ldns_rdf *owner = ldns_rr_owner(obj);
-    ldns_buffer *buf = ldns_buffer_new(ldns_rdf_size(owner));
-    char *tmp;
-
-    ldns_rdf2buffer_str_dname(buf,owner);
-
-    new = newSV(0);
-    tmp = ldns_buffer_export(buf);
-    sv_usepvn(new,tmp,strlen(tmp));
-
-    return new;
-}
-
-void rr_DESTROY(NetLDNS__RR obj) {
-    ldns_rr_free(obj);
-
-    return;
-}
