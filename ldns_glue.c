@@ -24,20 +24,10 @@ NetLDNS new(char *class, char *str) {
     s = ldns_resolver_push_nameserver(obj->res, ns);
     if( s != LDNS_STATUS_OK)
     {
-        croak("Some sort of error");
+        croak("Some sort of error: %s", ldns_get_errorstr_by_id(s));
     }
 
     return obj;
-}
-
-NetLDNS__Packet mxquery(NetLDNS obj, char *dname) {
-    ldns_rdf *domain;
-    NetLDNS__Packet p;
-
-    domain = ldns_dname_new_frm_str(dname);
-    p = ldns_resolver_query(obj->res, domain, LDNS_RR_TYPE_MX, LDNS_RR_CLASS_IN, LDNS_RD);
-
-    return p;
 }
 
 NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass) {
@@ -62,32 +52,6 @@ NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass) {
     p = ldns_resolver_query(obj->res, domain, t, c, LDNS_RD);
 
     return p;
-}
-
-void DESTROY(NetLDNS obj) {
-    ldns_resolver_deep_free(obj->res);
-    free(obj);
-}
-
-/*
- *  NetLDNS::Packet functions
- */
-
-SV *packet_rcode(NetLDNS__Packet obj){
-    ldns_buffer *tmp = ldns_buffer_new(0);
-    char *str;
-    SV *new;
-
-    ldns_pkt_rcode2buffer_str(tmp, ldns_pkt_get_rcode(obj));
-    str = ldns_buffer_export(tmp);
-    new = newSV(0);
-    sv_usepvn(new, str, strlen(str));
-
-    return new;
-}
-
-void packet_DESTROY(NetLDNS__Packet obj) {
-    ldns_pkt_free(obj);
 }
 
 /*

@@ -136,12 +136,19 @@ retrans(obj)
 void
 DESTROY(obj)
         NetLDNS obj;
+        CODE:
+            ldns_resolver_deep_free(obj->res);
+            Safefree(obj);
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
 
-SV *
+char *
 packet_rcode(obj)
     NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt_rcode2str(ldns_pkt_get_rcode(obj));
+    OUTPUT:
+        RETVAL
 
 char *
 packet_opcode(obj)
@@ -429,8 +436,8 @@ packet_new_from_wireformat(class,buf)
 void
 packet_DESTROY(obj)
     NetLDNS::Packet obj;
-
-
+    CODE:
+        ldns_pkt_free(obj);
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
 

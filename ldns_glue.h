@@ -27,7 +27,6 @@ typedef ldns_rr *NetLDNS__RR__CNAME;
 typedef ldns_rr *NetLDNS__RR__TXT;
 
 NetLDNS new(char *class,char *str);
-NetLDNS__Packet mxquery(NetLDNS obj, char *dname);
 NetLDNS__Packet query(NetLDNS obj, char *dname, char *rrtype, char *rrclass);
 void DESTROY(NetLDNS obj);
 
