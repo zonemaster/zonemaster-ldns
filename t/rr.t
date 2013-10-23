@@ -28,7 +28,7 @@ foreach my $rr ($p->answer) {
 $p = $s->query('a.ns.se', 'AAAA');
 foreach my $rr ($p->answer) {
     isa_ok($rr, 'NetLDNS::RR::AAAA');
-    is($rr->address, '2a01:03f0:0000:0301:0000:0000:0000:0053', 'expected address string');
+    is($rr->address, '2a01:3f0:0:301::53', 'expected address string');
 }
 
 my $se = NetLDNS->new('192.36.144.107');
