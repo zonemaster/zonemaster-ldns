@@ -5,7 +5,24 @@
 #define NEED_newRV_noinc
 #include "ppport.h"
 
-#include "ldns_glue.h"
+#include <ldns/ldns.h>
+typedef ldns_resolver *NetLDNS;
+typedef ldns_pkt *NetLDNS__Packet;
+typedef ldns_rr *NetLDNS__RR;
+typedef ldns_rr *NetLDNS__RR__NS;
+typedef ldns_rr *NetLDNS__RR__A;
+typedef ldns_rr *NetLDNS__RR__AAAA;
+typedef ldns_rr *NetLDNS__RR__SOA;
+typedef ldns_rr *NetLDNS__RR__MX;
+typedef ldns_rr *NetLDNS__RR__DS;
+typedef ldns_rr *NetLDNS__RR__DNSKEY;
+typedef ldns_rr *NetLDNS__RR__RRSIG;
+typedef ldns_rr *NetLDNS__RR__NSEC;
+typedef ldns_rr *NetLDNS__RR__NSEC3;
+typedef ldns_rr *NetLDNS__RR__NSECPARAM;
+typedef ldns_rr *NetLDNS__RR__PTR;
+typedef ldns_rr *NetLDNS__RR__CNAME;
+typedef ldns_rr *NetLDNS__RR__TXT;
 
 #define D_STRING(what,where) ldns_rdf2str(ldns_rr_rdf(what,where))
 #define D_U8(what,where) ldns_rdf2native_int8(ldns_rr_rdf(what,where))
@@ -17,9 +34,28 @@ MODULE = NetLDNS        PACKAGE = NetLDNS
 PROTOTYPES: ENABLE
 
 NetLDNS
-new(class,str)
+new(class, ...)
     char *class;
-    char *str;
+    CODE:
+    {
+        int i;
+
+        RETVAL = ldns_resolver_new();
+        for (i=1;i<items;i++)
+        {
+            ldns_status s;
+            ldns_rdf *addr;
+
+            addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
+            s = ldns_resolver_push_nameserver(RETVAL,addr);
+            if(s != LDNS_STATUS_OK)
+            {
+                croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));
+            }
+        }
+    }
+    OUTPUT:
+        RETVAL
 
 NetLDNS::Packet
 query(obj, dname, rrtype="A", rrclass="IN")
@@ -27,19 +63,42 @@ query(obj, dname, rrtype="A", rrclass="IN")
     char *dname;
     char *rrtype;
     char *rrclass;
+    CODE:
+    {
+        ldns_rdf *domain;
+        ldns_rr_type t;
+        ldns_rr_class c;
+
+        t = ldns_get_rr_type_by_name(rrtype);
+        if(!t)
+        {
+            croak("Unknown RR type: %s", rrtype);
+        }
+
+        c = ldns_get_rr_class_by_name(rrclass);
+        if(!c)
+        {
+            croak("Unknown RR class: %s", rrclass);
+        }
+
+        domain = ldns_dname_new_frm_str(dname);
+        RETVAL = ldns_resolver_query(obj, domain, t, c, LDNS_RD);
+    }
+    OUTPUT:
+        RETVAL
 
 void
 set_recursive(obj,re)
     NetLDNS obj;
     bool re;
     CODE:
-        ldns_resolver_set_recursive(obj->res, re);
+        ldns_resolver_set_recursive(obj, re);
 
 bool
 recursive(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_recursive(obj->res);
+        RETVAL = ldns_resolver_recursive(obj);
     OUTPUT:
         RETVAL
 
@@ -48,13 +107,13 @@ set_debug(obj,re)
     NetLDNS obj;
     bool re;
     CODE:
-        ldns_resolver_set_debug(obj->res, re);
+        ldns_resolver_set_debug(obj, re);
 
 bool
 debug(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_debug(obj->res);
+        RETVAL = ldns_resolver_debug(obj);
     OUTPUT:
         RETVAL
 
@@ -63,13 +122,13 @@ set_dnssec(obj,re)
     NetLDNS obj;
     bool re;
     CODE:
-        ldns_resolver_set_dnssec(obj->res, re);
+        ldns_resolver_set_dnssec(obj, re);
 
 bool
 dnssec(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_dnssec(obj->res);
+        RETVAL = ldns_resolver_dnssec(obj);
     OUTPUT:
         RETVAL
 
@@ -78,13 +137,13 @@ set_usevc(obj,re)
     NetLDNS obj;
     bool re;
     CODE:
-        ldns_resolver_set_usevc(obj->res, re);
+        ldns_resolver_set_usevc(obj, re);
 
 bool
 usevc(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_usevc(obj->res);
+        RETVAL = ldns_resolver_usevc(obj);
     OUTPUT:
         RETVAL
 
@@ -93,13 +152,13 @@ set_igntc(obj,re)
     NetLDNS obj;
     bool re;
     CODE:
-        ldns_resolver_set_igntc(obj->res, re);
+        ldns_resolver_set_igntc(obj, re);
 
 bool
 igntc(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_igntc(obj->res);
+        RETVAL = ldns_resolver_igntc(obj);
     OUTPUT:
         RETVAL
 
@@ -108,13 +167,13 @@ set_retry(obj,i)
     NetLDNS obj;
     U8 i;
     CODE:
-        ldns_resolver_set_retry(obj->res, i);
+        ldns_resolver_set_retry(obj, i);
 
 U8
 retry(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_retry(obj->res);
+        RETVAL = ldns_resolver_retry(obj);
     OUTPUT:
         RETVAL
 
@@ -123,13 +182,13 @@ set_retrans(obj,i)
     NetLDNS obj;
     U8 i;
     CODE:
-        ldns_resolver_set_retrans(obj->res, i);
+        ldns_resolver_set_retrans(obj, i);
 
 U8
 retrans(obj)
     NetLDNS obj;
     CODE:
-        RETVAL = ldns_resolver_retrans(obj->res);
+        RETVAL = ldns_resolver_retrans(obj);
     OUTPUT:
         RETVAL
 
@@ -137,8 +196,7 @@ void
 DESTROY(obj)
         NetLDNS obj;
         CODE:
-            ldns_resolver_deep_free(obj->res);
-            Safefree(obj);
+            ldns_resolver_deep_free(obj);
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
 
@@ -845,7 +903,7 @@ rr_nsec_typehref(obj)
             if(typestring[pos] == ' ')
             {
                 typestring[pos] = '\0';
-                if(hv_store(res,typestring,pos,&PL_sv_yes,0)==NULL)
+                if(hv_store(res,typestring,pos,newSViv(1),0)==NULL)
                 {
                     croak("Failed to store to hash");
                 }
