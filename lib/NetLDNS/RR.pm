@@ -15,4 +15,12 @@ use NetLDNS::RR::RRSIG;
 use NetLDNS::RR::SOA;
 use NetLDNS::RR::TXT;
 
+use overload '<=>' => \&do_compare, 'cmp' => \&do_compare;
+
+sub do_compare {
+    my ( $self, $other, $swapped ) = @_;
+
+    return $self->compare($other);
+}
+
 1;

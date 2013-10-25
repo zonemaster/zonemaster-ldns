@@ -20,7 +20,7 @@ typedef ldns_rr *NetLDNS__RR__DNSKEY;
 typedef ldns_rr *NetLDNS__RR__RRSIG;
 typedef ldns_rr *NetLDNS__RR__NSEC;
 typedef ldns_rr *NetLDNS__RR__NSEC3;
-typedef ldns_rr *NetLDNS__RR__NSECPARAM;
+typedef ldns_rr *NetLDNS__RR__NSEC3PARAM;
 typedef ldns_rr *NetLDNS__RR__PTR;
 typedef ldns_rr *NetLDNS__RR__CNAME;
 typedef ldns_rr *NetLDNS__RR__TXT;
@@ -430,13 +430,13 @@ packet_question(obj)
         EXTEND(sp,n);
         for(i = 0; i < n; ++i)
         {
-            char rrclass[30];
+            char rrclass[40];
             char *type;
 
             ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
 
             type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "NetLDNS::RR::%s", type);
+            snprintf(rrclass, 39, "NetLDNS::RR::%s", type);
 
             SV* rr_sv = sv_newmortal();
             sv_setref_pv(rr_sv, rrclass, rr);
@@ -509,6 +509,29 @@ packet_DESTROY(obj)
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
 
 SV *
+rr_new_from_string(class,str)
+    char *class;
+    char *str;
+    PPCODE:
+        ldns_status s;
+        ldns_rr *rr;
+        char rrclass[40];
+        char *rrtype;
+        SV* rr_sv;
+
+        s = ldns_rr_new_frm_str(&rr, str, 0, NULL, NULL);
+        if(s != LDNS_STATUS_OK)
+        {
+            croak("Failed to build RR: %s", ldns_get_errorstr_by_id(s));
+        }
+        rrtype = ldns_rr_type2str(ldns_rr_get_type(rr));
+        snprintf(rrclass, 39, "NetLDNS::RR::%s", rrtype);
+        Safefree(rrtype);
+        rr_sv = sv_newmortal();
+        sv_setref_pv(rr_sv, rrclass, rr);
+        PUSHs(rr_sv);
+
+SV *
 rr_owner(obj)
     NetLDNS::RR obj;
     CODE:
@@ -555,6 +578,15 @@ rr_string(obj)
         RETVAL
     CLEANUP:
         Safefree(RETVAL);
+
+I32
+rr_compare(obj1,obj2)
+    NetLDNS::RR obj1;
+    NetLDNS::RR obj2;
+    CODE:
+        RETVAL = ldns_rr_compare(obj1,obj2);
+    OUTPUT:
+        RETVAL
 
 void
 rr_DESTROY(obj)

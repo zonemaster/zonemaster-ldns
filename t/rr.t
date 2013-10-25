@@ -76,4 +76,16 @@ foreach my $rr ($pd->answer) {
     ok($rr->hexdigest eq '40079ddf8d09e7f10bb248a69b6630478a28ef969dde399f95bc3b39f8cbacd7' or $rr->hexdigest eq 'ef5d421412a5eaf1230071affd4f585e3b2b1a60');
 }
 
+my $made = NetLDNS::RR->new_from_string('nic.se IN NS a.ns.se');
+isa_ok($made, 'NetLDNS::RR::NS');
+my $made2 = NetLDNS::RR->new_from_string('nic.se IN NS a.ns.se');
+is($made->compare($made2), 0, 'direct comparison works');
+my $made3 = NetLDNS::RR->new_from_string('mic.se IN NS a.ns.se');
+my $made4 = NetLDNS::RR->new_from_string('oic.se IN NS a.ns.se');
+is($made->compare($made3), 1, 'direct comparison works');
+is($made->compare($made4), -1, 'direct comparison works');
+is($made eq $made2, 1, 'indirect comparison works');
+is($made <=> $made3, 1, 'indirect comparison works');
+is($made cmp $made4, -1, 'indirect comparison works');
+
 done_testing;
