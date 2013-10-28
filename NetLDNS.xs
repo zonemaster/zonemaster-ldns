@@ -10,6 +10,7 @@
 typedef ldns_resolver *NetLDNS;
 typedef ldns_pkt *NetLDNS__Packet;
 typedef ldns_rr *NetLDNS__RR;
+typedef ldns_rr_list *NetLDNS__RRList;
 typedef ldns_rr *NetLDNS__RR__NS;
 typedef ldns_rr *NetLDNS__RR__A;
 typedef ldns_rr *NetLDNS__RR__AAAA;
@@ -445,6 +446,14 @@ packet_question(obj)
         }
     }
 
+NetLDNS::RRList
+packet_all(obj)
+    NetLDNS::Packet obj;
+    CODE:
+        RETVAL = ldns_pkt_all_noquestion(obj);
+    OUTPUT:
+        RETVAL
+
 char *
 packet_string(obj)
     NetLDNS::Packet obj;
@@ -505,6 +514,14 @@ packet_DESTROY(obj)
     NetLDNS::Packet obj;
     CODE:
         ldns_pkt_free(obj);
+
+MODULE = NetLDNS        PACKAGE = NetLDNS::RRList           PREFIX=rrlist_
+
+void
+rrlist_DESTROY(obj)
+    NetLDNS::RRList obj;
+    CODE:
+        ldns_rr_list_deep_free(obj);
 
 MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
 

@@ -1,5 +1,6 @@
 NetLDNS                     T_PTROBJ
 NetLDNS::Packet             T_PTROBJ
+NetLDNS::RRList             T_PTROBJ
 NetLDNS::RR                 T_PTROBJ
 NetLDNS::RR::SOA            T_PTROBJ
 NetLDNS::RR::NS             T_PTROBJ
