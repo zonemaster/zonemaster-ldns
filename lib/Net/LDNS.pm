@@ -1,9 +1,9 @@
-package NetLDNS;
+package Net::LDNS;
 
 our $VERSION = '0.1';
 require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
-use NetLDNS::RR;
+use Net::LDNS::RR;
 
 1;

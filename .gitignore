@@ -5,4 +5,4 @@ Makefile
 *.o
 blib
 pm_to_blib
-NetLDNS.c
+LDNS.c

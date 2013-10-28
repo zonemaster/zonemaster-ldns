@@ -1,7 +1,7 @@
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME => 'NetLDNS',
-    VERSION_FROM => 'lib/NetLDNS.pm',
+    NAME => 'Net::LDNS',
+    VERSION_FROM => 'lib/Net/LDNS.pm',
     LIBS => [qw(-lldns)],
 );

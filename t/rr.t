@@ -2,14 +2,14 @@ use Test::More;
 use Devel::Peek;
 use MIME::Base64;
 
-BEGIN { use_ok('NetLDNS')}
+BEGIN { use_ok('Net::LDNS')}
 
-my $s = NetLDNS->new('8.8.8.8');
+my $s = Net::LDNS->new('8.8.8.8');
 
 my $p = $s->query('iis.se', 'SOA');
 
 foreach my $rr ($p->answer) {
-    isa_ok($rr, 'NetLDNS::RR::SOA');
+    isa_ok($rr, 'Net::LDNS::RR::SOA');
     is($rr->mname, 'ns.nic.se.');
     is($rr->rname, 'hostmaster.iis.se.');
     ok($rr->serial >= 1381471502, 'serial');
@@ -21,26 +21,26 @@ foreach my $rr ($p->answer) {
 
 $p = $s->query('a.ns.se');
 foreach my $rr ($p->answer) {
-    isa_ok($rr, 'NetLDNS::RR::A');
+    isa_ok($rr, 'Net::LDNS::RR::A');
     is($rr->address, '192.36.144.107', 'expected address string');
 }
 
 $p = $s->query('a.ns.se', 'AAAA');
 foreach my $rr ($p->answer) {
-    isa_ok($rr, 'NetLDNS::RR::AAAA');
+    isa_ok($rr, 'Net::LDNS::RR::AAAA');
     is($rr->address, '2a01:3f0:0:301::53', 'expected address string');
 }
 
-my $se = NetLDNS->new('192.36.144.107');
+my $se = Net::LDNS->new('192.36.144.107');
 my $pt = $se->query('se','TXT');
 foreach my $rr ($pt->answer) {
-    isa_ok($rr, 'NetLDNS::RR::TXT');
+    isa_ok($rr, 'Net::LDNS::RR::TXT');
     like($rr->txtdata, qr/^"SE zone update: /);
 }
 
 my $pk = $se->query('se', 'DNSKEY');
 foreach my $rr ($pk->answer) {
-    isa_ok($rr, 'NetLDNS::RR::DNSKEY');
+    isa_ok($rr, 'Net::LDNS::RR::DNSKEY');
     ok($rr->flags == 256 or $rr->flags == 257);
     is($rr->protocol, 3);
     is($rr->algorithm, 5);
@@ -48,7 +48,7 @@ foreach my $rr ($pk->answer) {
 
 my $pr = $se->query('se', 'RRSIG');
 foreach my $rr ($pr->answer) {
-    isa_ok($rr, 'NetLDNS::RR::RRSIG');
+    isa_ok($rr, 'Net::LDNS::RR::RRSIG');
     is($rr->signer, 'se.');
     is($rr->labels, 1);
     if ($rr->typecovered eq 'DNSKEY') {
@@ -60,7 +60,7 @@ foreach my $rr ($pr->answer) {
 
 my $pn = $se->query('se', 'NSEC');
 foreach my $rr ($pn->answer) {
-    isa_ok($rr,'NetLDNS::RR::NSEC');
+    isa_ok($rr,'Net::LDNS::RR::NSEC');
     ok($rr->typehref->{TXT});
     ok(!$rr->typehref->{MX});
     ok($rr->typehref->{TXT});
@@ -69,19 +69,19 @@ foreach my $rr ($pn->answer) {
 
 my $pd = $se->query('nic.se', 'DS');
 foreach my $rr ($pd->answer) {
-    isa_ok($rr, 'NetLDNS::RR::DS');
+    isa_ok($rr, 'Net::LDNS::RR::DS');
     is($rr->keytag, 16696);
     is($rr->algorithm, 5);
     ok($rr->digtype == 1 or $rr->digtype == 2);
     ok($rr->hexdigest eq '40079ddf8d09e7f10bb248a69b6630478a28ef969dde399f95bc3b39f8cbacd7' or $rr->hexdigest eq 'ef5d421412a5eaf1230071affd4f585e3b2b1a60');
 }
 
-my $made = NetLDNS::RR->new_from_string('nic.se IN NS a.ns.se');
-isa_ok($made, 'NetLDNS::RR::NS');
-my $made2 = NetLDNS::RR->new_from_string('nic.se IN NS a.ns.se');
+my $made = Net::LDNS::RR->new_from_string('nic.se IN NS a.ns.se');
+isa_ok($made, 'Net::LDNS::RR::NS');
+my $made2 = Net::LDNS::RR->new_from_string('nic.se IN NS a.ns.se');
 is($made->compare($made2), 0, 'direct comparison works');
-my $made3 = NetLDNS::RR->new_from_string('mic.se IN NS a.ns.se');
-my $made4 = NetLDNS::RR->new_from_string('oic.se IN NS a.ns.se');
+my $made3 = Net::LDNS::RR->new_from_string('mic.se IN NS a.ns.se');
+my $made4 = Net::LDNS::RR->new_from_string('oic.se IN NS a.ns.se');
 is($made->compare($made3), 1, 'direct comparison works');
 is($made->compare($made4), -1, 'direct comparison works');
 is($made eq $made2, 1, 'indirect comparison works');

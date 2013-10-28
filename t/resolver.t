@@ -1,8 +1,8 @@
 use Test::More;
 
-use NetLDNS;
+use Net::LDNS;
 
-my $r = NetLDNS->new('8.8.8.8');
+my $r = Net::LDNS->new('8.8.8.8');
 
 $r->set_recursive(0);
 ok(!$r->recursive, 'recursive off');

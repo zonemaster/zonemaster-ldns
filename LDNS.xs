@@ -7,35 +7,35 @@
 #include "ppport.h"
 
 #include <ldns/ldns.h>
-typedef ldns_resolver *NetLDNS;
-typedef ldns_pkt *NetLDNS__Packet;
-typedef ldns_rr *NetLDNS__RR;
-typedef ldns_rr_list *NetLDNS__RRList;
-typedef ldns_rr *NetLDNS__RR__NS;
-typedef ldns_rr *NetLDNS__RR__A;
-typedef ldns_rr *NetLDNS__RR__AAAA;
-typedef ldns_rr *NetLDNS__RR__SOA;
-typedef ldns_rr *NetLDNS__RR__MX;
-typedef ldns_rr *NetLDNS__RR__DS;
-typedef ldns_rr *NetLDNS__RR__DNSKEY;
-typedef ldns_rr *NetLDNS__RR__RRSIG;
-typedef ldns_rr *NetLDNS__RR__NSEC;
-typedef ldns_rr *NetLDNS__RR__NSEC3;
-typedef ldns_rr *NetLDNS__RR__NSEC3PARAM;
-typedef ldns_rr *NetLDNS__RR__PTR;
-typedef ldns_rr *NetLDNS__RR__CNAME;
-typedef ldns_rr *NetLDNS__RR__TXT;
+typedef ldns_resolver *Net__LDNS;
+typedef ldns_pkt *Net__LDNS__Packet;
+typedef ldns_rr *Net__LDNS__RR;
+typedef ldns_rr_list *Net__LDNS__RRList;
+typedef ldns_rr *Net__LDNS__RR__NS;
+typedef ldns_rr *Net__LDNS__RR__A;
+typedef ldns_rr *Net__LDNS__RR__AAAA;
+typedef ldns_rr *Net__LDNS__RR__SOA;
+typedef ldns_rr *Net__LDNS__RR__MX;
+typedef ldns_rr *Net__LDNS__RR__DS;
+typedef ldns_rr *Net__LDNS__RR__DNSKEY;
+typedef ldns_rr *Net__LDNS__RR__RRSIG;
+typedef ldns_rr *Net__LDNS__RR__NSEC;
+typedef ldns_rr *Net__LDNS__RR__NSEC3;
+typedef ldns_rr *Net__LDNS__RR__NSEC3PARAM;
+typedef ldns_rr *Net__LDNS__RR__PTR;
+typedef ldns_rr *Net__LDNS__RR__CNAME;
+typedef ldns_rr *Net__LDNS__RR__TXT;
 
 #define D_STRING(what,where) ldns_rdf2str(ldns_rr_rdf(what,where))
 #define D_U8(what,where) ldns_rdf2native_int8(ldns_rr_rdf(what,where))
 #define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
 #define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
 
-MODULE = NetLDNS        PACKAGE = NetLDNS
+MODULE = Net::LDNS        PACKAGE = Net::LDNS
 
 PROTOTYPES: ENABLE
 
-NetLDNS
+Net::LDNS
 new(class, ...)
     char *class;
     CODE:
@@ -59,9 +59,9 @@ new(class, ...)
     OUTPUT:
         RETVAL
 
-NetLDNS::Packet
+Net::LDNS::Packet
 query(obj, dname, rrtype="A", rrclass="IN")
-    NetLDNS obj;
+    Net::LDNS obj;
     char *dname;
     char *rrtype;
     char *rrclass;
@@ -91,14 +91,14 @@ query(obj, dname, rrtype="A", rrclass="IN")
 
 void
 set_recursive(obj,re)
-    NetLDNS obj;
+    Net::LDNS obj;
     bool re;
     CODE:
         ldns_resolver_set_recursive(obj, re);
 
 bool
 recursive(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_recursive(obj);
     OUTPUT:
@@ -106,14 +106,14 @@ recursive(obj)
 
 void
 set_debug(obj,re)
-    NetLDNS obj;
+    Net::LDNS obj;
     bool re;
     CODE:
         ldns_resolver_set_debug(obj, re);
 
 bool
 debug(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_debug(obj);
     OUTPUT:
@@ -121,14 +121,14 @@ debug(obj)
 
 void
 set_dnssec(obj,re)
-    NetLDNS obj;
+    Net::LDNS obj;
     bool re;
     CODE:
         ldns_resolver_set_dnssec(obj, re);
 
 bool
 dnssec(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_dnssec(obj);
     OUTPUT:
@@ -136,14 +136,14 @@ dnssec(obj)
 
 void
 set_usevc(obj,re)
-    NetLDNS obj;
+    Net::LDNS obj;
     bool re;
     CODE:
         ldns_resolver_set_usevc(obj, re);
 
 bool
 usevc(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_usevc(obj);
     OUTPUT:
@@ -151,14 +151,14 @@ usevc(obj)
 
 void
 set_igntc(obj,re)
-    NetLDNS obj;
+    Net::LDNS obj;
     bool re;
     CODE:
         ldns_resolver_set_igntc(obj, re);
 
 bool
 igntc(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_igntc(obj);
     OUTPUT:
@@ -166,14 +166,14 @@ igntc(obj)
 
 void
 set_retry(obj,i)
-    NetLDNS obj;
+    Net::LDNS obj;
     U8 i;
     CODE:
         ldns_resolver_set_retry(obj, i);
 
 U8
 retry(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_retry(obj);
     OUTPUT:
@@ -181,14 +181,14 @@ retry(obj)
 
 void
 set_retrans(obj,i)
-    NetLDNS obj;
+    Net::LDNS obj;
     U8 i;
     CODE:
         ldns_resolver_set_retrans(obj, i);
 
 U8
 retrans(obj)
-    NetLDNS obj;
+    Net::LDNS obj;
     CODE:
         RETVAL = ldns_resolver_retrans(obj);
     OUTPUT:
@@ -196,15 +196,15 @@ retrans(obj)
 
 void
 DESTROY(obj)
-        NetLDNS obj;
+        Net::LDNS obj;
         CODE:
             ldns_resolver_deep_free(obj);
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::Packet           PREFIX=packet_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
 
 char *
 packet_rcode(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_rcode2str(ldns_pkt_get_rcode(obj));
     OUTPUT:
@@ -214,7 +214,7 @@ packet_rcode(obj)
 
 char *
 packet_opcode(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_opcode2str(ldns_pkt_get_opcode(obj));
     OUTPUT:
@@ -224,7 +224,7 @@ packet_opcode(obj)
 
 U16
 packet_id(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_id(obj);
     OUTPUT:
@@ -232,7 +232,7 @@ packet_id(obj)
 
 bool
 packet_qr(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_qr(obj);
     OUTPUT:
@@ -240,7 +240,7 @@ packet_qr(obj)
 
 bool
 packet_aa(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_aa(obj);
     OUTPUT:
@@ -248,7 +248,7 @@ packet_aa(obj)
 
 bool
 packet_tc(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_tc(obj);
     OUTPUT:
@@ -256,7 +256,7 @@ packet_tc(obj)
 
 bool
 packet_rd(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_rd(obj);
     OUTPUT:
@@ -264,7 +264,7 @@ packet_rd(obj)
 
 bool
 packet_cd(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_cd(obj);
     OUTPUT:
@@ -272,7 +272,7 @@ packet_cd(obj)
 
 bool
 packet_ra(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_ra(obj);
     OUTPUT:
@@ -280,7 +280,7 @@ packet_ra(obj)
 
 bool
 packet_ad(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_ad(obj);
     OUTPUT:
@@ -288,7 +288,7 @@ packet_ad(obj)
 
 bool
 packet_do(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_edns_do(obj);
     OUTPUT:
@@ -296,7 +296,7 @@ packet_do(obj)
 
 size_t
 packet_size(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_size(obj);
     OUTPUT:
@@ -304,7 +304,7 @@ packet_size(obj)
 
 U32
 packet_querytime(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_querytime(obj);
     OUTPUT:
@@ -312,7 +312,7 @@ packet_querytime(obj)
 
 char *
 packet_answerfrom(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_rdf2str(ldns_pkt_answerfrom(obj));
     OUTPUT:
@@ -322,7 +322,7 @@ packet_answerfrom(obj)
 
 double
 packet_timestamp(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         struct timeval t = ldns_pkt_timestamp(obj);
         RETVAL = (double)t.tv_sec;
@@ -332,7 +332,7 @@ packet_timestamp(obj)
 
 SV *
 packet_answer(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -350,7 +350,7 @@ packet_answer(obj)
             ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
 
             type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "NetLDNS::RR::%s", type);
+            snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
 
             SV* rr_sv = sv_newmortal();
             sv_setref_pv(rr_sv, rrclass, rr);
@@ -361,7 +361,7 @@ packet_answer(obj)
 
 SV *
 packet_authority(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -379,7 +379,7 @@ packet_authority(obj)
             ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
 
             type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "NetLDNS::RR::%s", type);
+            snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
 
             SV* rr_sv = sv_newmortal();
             sv_setref_pv(rr_sv, rrclass, rr);
@@ -390,7 +390,7 @@ packet_authority(obj)
 
 SV *
 packet_additional(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -408,7 +408,7 @@ packet_additional(obj)
             ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
 
             type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "NetLDNS::RR::%s", type);
+            snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
 
             SV* rr_sv = sv_newmortal();
             sv_setref_pv(rr_sv, rrclass, rr);
@@ -419,7 +419,7 @@ packet_additional(obj)
 
 SV *
 packet_question(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -437,7 +437,7 @@ packet_question(obj)
             ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
 
             type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 39, "NetLDNS::RR::%s", type);
+            snprintf(rrclass, 39, "Net::LDNS::RR::%s", type);
 
             SV* rr_sv = sv_newmortal();
             sv_setref_pv(rr_sv, rrclass, rr);
@@ -446,9 +446,9 @@ packet_question(obj)
         }
     }
 
-NetLDNS::RRList
+Net::LDNS::RRList
 packet_all(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_all_noquestion(obj);
     OUTPUT:
@@ -456,7 +456,7 @@ packet_all(obj)
 
 char *
 packet_string(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt2str(obj);
     OUTPUT:
@@ -466,7 +466,7 @@ packet_string(obj)
 
 SV *
 packet_wireformat(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
     {
         size_t sz;
@@ -487,13 +487,13 @@ packet_wireformat(obj)
     OUTPUT:
         RETVAL
 
-NetLDNS::Packet
+Net::LDNS::Packet
 packet_new_from_wireformat(class,buf)
     char *class;
     SV *buf;
     CODE:
     {
-        NetLDNS__Packet pkt;
+        Net__LDNS__Packet pkt;
         ldns_status status;
 
         status = ldns_wire2pkt(&pkt, (const uint8_t *)SvPV_nolen(buf), SvCUR(buf));
@@ -511,19 +511,19 @@ packet_new_from_wireformat(class,buf)
 
 void
 packet_DESTROY(obj)
-    NetLDNS::Packet obj;
+    Net::LDNS::Packet obj;
     CODE:
         ldns_pkt_free(obj);
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RRList           PREFIX=rrlist_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RRList           PREFIX=rrlist_
 
 void
 rrlist_DESTROY(obj)
-    NetLDNS::RRList obj;
+    Net::LDNS::RRList obj;
     CODE:
         ldns_rr_list_deep_free(obj);
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR           PREFIX=rr_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR           PREFIX=rr_
 
 SV *
 rr_new_from_string(class,str)
@@ -542,7 +542,7 @@ rr_new_from_string(class,str)
             croak("Failed to build RR: %s", ldns_get_errorstr_by_id(s));
         }
         rrtype = ldns_rr_type2str(ldns_rr_get_type(rr));
-        snprintf(rrclass, 39, "NetLDNS::RR::%s", rrtype);
+        snprintf(rrclass, 39, "Net::LDNS::RR::%s", rrtype);
         Safefree(rrtype);
         rr_sv = sv_newmortal();
         sv_setref_pv(rr_sv, rrclass, rr);
@@ -550,7 +550,7 @@ rr_new_from_string(class,str)
 
 SV *
 rr_owner(obj)
-    NetLDNS::RR obj;
+    Net::LDNS::RR obj;
     CODE:
         char *str = ldns_rdf2str(ldns_rr_owner(obj));
         RETVAL = newSV(0);
@@ -560,7 +560,7 @@ rr_owner(obj)
 
 U32
 rr_ttl(obj)
-    NetLDNS::RR obj;
+    Net::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_ttl(obj);
     OUTPUT:
@@ -568,7 +568,7 @@ rr_ttl(obj)
 
 char *
 rr_type(obj)
-    NetLDNS::RR obj;
+    Net::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_type2str(ldns_rr_get_type(obj));
     OUTPUT:
@@ -578,7 +578,7 @@ rr_type(obj)
 
 char *
 rr_class(obj)
-    NetLDNS::RR obj;
+    Net::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_class2str(ldns_rr_get_class(obj));
     OUTPUT:
@@ -588,7 +588,7 @@ rr_class(obj)
 
 char *
 rr_string(obj)
-    NetLDNS::RR obj;
+    Net::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr2str(obj);
     OUTPUT:
@@ -598,8 +598,8 @@ rr_string(obj)
 
 I32
 rr_compare(obj1,obj2)
-    NetLDNS::RR obj1;
-    NetLDNS::RR obj2;
+    Net::LDNS::RR obj1;
+    Net::LDNS::RR obj2;
     CODE:
         RETVAL = ldns_rr_compare(obj1,obj2);
     OUTPUT:
@@ -607,17 +607,17 @@ rr_compare(obj1,obj2)
 
 void
 rr_DESTROY(obj)
-    NetLDNS::RR obj;
+    Net::LDNS::RR obj;
     CODE:
         ldns_rr_free(obj);
 
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NS           PREFIX=rr_ns_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NS           PREFIX=rr_ns_
 
 char *
 rr_ns_nsdname(obj)
-    NetLDNS::RR::NS obj;
+    Net::LDNS::RR::NS obj;
     CODE:
         RETVAL = ldns_rdf2str(ldns_rr_rdf(obj, 0));
     OUTPUT:
@@ -626,11 +626,11 @@ rr_ns_nsdname(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::MX           PREFIX=rr_mx_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::MX           PREFIX=rr_mx_
 
 U16
 rr_mx_preference(obj)
-    NetLDNS::RR::MX obj;
+    Net::LDNS::RR::MX obj;
     CODE:
         RETVAL = D_U16(obj, 0);
     OUTPUT:
@@ -638,7 +638,7 @@ rr_mx_preference(obj)
 
 char *
 rr_mx_exchange(obj)
-    NetLDNS::RR::MX obj;
+    Net::LDNS::RR::MX obj;
     CODE:
         RETVAL = D_STRING(obj, 1);
     OUTPUT:
@@ -647,11 +647,11 @@ rr_mx_exchange(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::A                PREFIX=rr_a_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::A                PREFIX=rr_a_
 
 char *
 rr_a_address(obj)
-    NetLDNS::RR::A obj;
+    Net::LDNS::RR::A obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -660,11 +660,11 @@ rr_a_address(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::AAAA             PREFIX=rr_aaaa_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::AAAA             PREFIX=rr_aaaa_
 
 char *
 rr_aaaa_address(obj)
-    NetLDNS::RR::AAAA obj;
+    Net::LDNS::RR::AAAA obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -673,11 +673,11 @@ rr_aaaa_address(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::SOA              PREFIX=rr_soa_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SOA              PREFIX=rr_soa_
 
 char *
 rr_soa_mname(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -687,7 +687,7 @@ rr_soa_mname(obj)
 
 char *
 rr_soa_rname(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_STRING(obj,1);
     OUTPUT:
@@ -697,7 +697,7 @@ rr_soa_rname(obj)
 
 U32
 rr_soa_serial(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,2);
     OUTPUT:
@@ -705,7 +705,7 @@ rr_soa_serial(obj)
 
 U32
 rr_soa_refresh(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,3);
     OUTPUT:
@@ -713,7 +713,7 @@ rr_soa_refresh(obj)
 
 U32
 rr_soa_retry(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,4);
     OUTPUT:
@@ -721,7 +721,7 @@ rr_soa_retry(obj)
 
 U32
 rr_soa_expire(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,5);
     OUTPUT:
@@ -729,18 +729,18 @@ rr_soa_expire(obj)
 
 U32
 rr_soa_minimum(obj)
-    NetLDNS::RR::SOA obj;
+    Net::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,6);
     OUTPUT:
         RETVAL
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DS               PREFIX=rr_ds_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::DS               PREFIX=rr_ds_
 
 U16
 rr_ds_keytag(obj)
-    NetLDNS::RR::DS obj;
+    Net::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_U16(obj,0);
     OUTPUT:
@@ -748,7 +748,7 @@ rr_ds_keytag(obj)
 
 U8
 rr_ds_algorithm(obj)
-    NetLDNS::RR::DS obj;
+    Net::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -756,7 +756,7 @@ rr_ds_algorithm(obj)
 
 U8
 rr_ds_digtype(obj)
-    NetLDNS::RR::DS obj;
+    Net::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -764,7 +764,7 @@ rr_ds_digtype(obj)
 
 SV *
 rr_ds_digest(obj)
-    NetLDNS::RR::DS obj;
+    Net::LDNS::RR::DS obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
@@ -775,7 +775,7 @@ rr_ds_digest(obj)
 
 char *
 rr_ds_hexdigest(obj)
-    NetLDNS::RR::DS obj;
+    Net::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_STRING(obj,3);
     OUTPUT:
@@ -784,11 +784,11 @@ rr_ds_hexdigest(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::DNSKEY           PREFIX=rr_dnskey_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
 U16
 rr_dnskey_flags(obj)
-    NetLDNS::RR::DNSKEY obj;
+    Net::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = D_U16(obj,0);
     OUTPUT:
@@ -796,7 +796,7 @@ rr_dnskey_flags(obj)
 
 U8
 rr_dnskey_protocol(obj)
-    NetLDNS::RR::DNSKEY obj;
+    Net::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -804,7 +804,7 @@ rr_dnskey_protocol(obj)
 
 U8
 rr_dnskey_algorithm(obj)
-    NetLDNS::RR::DNSKEY obj;
+    Net::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -812,7 +812,7 @@ rr_dnskey_algorithm(obj)
 
 SV *
 rr_dnskey_keydata(obj)
-    NetLDNS::RR::DNSKEY obj;
+    Net::LDNS::RR::DNSKEY obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
@@ -822,11 +822,11 @@ rr_dnskey_keydata(obj)
         RETVAL
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::RRSIG            PREFIX=rr_rrsig_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::RRSIG            PREFIX=rr_rrsig_
 
 char *
 rr_rrsig_typecovered(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -836,7 +836,7 @@ rr_rrsig_typecovered(obj)
 
 U8
 rr_rrsig_algorithm(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -844,7 +844,7 @@ rr_rrsig_algorithm(obj)
 
 U8
 rr_rrsig_labels(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -852,7 +852,7 @@ rr_rrsig_labels(obj)
 
 U32
 rr_rrsig_origttl(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U32(obj,3);
     OUTPUT:
@@ -860,7 +860,7 @@ rr_rrsig_origttl(obj)
 
 U32
 rr_rrsig_expiration(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U32(obj,4);
     OUTPUT:
@@ -868,7 +868,7 @@ rr_rrsig_expiration(obj)
 
 U32
 rr_rrsig_inception(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U32(obj,5);
     OUTPUT:
@@ -876,7 +876,7 @@ rr_rrsig_inception(obj)
 
 U16
 rr_rrsig_keytag(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U16(obj,6);
     OUTPUT:
@@ -884,7 +884,7 @@ rr_rrsig_keytag(obj)
 
 char *
 rr_rrsig_signer(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_STRING(obj,7);
     OUTPUT:
@@ -894,7 +894,7 @@ rr_rrsig_signer(obj)
 
 SV *
 rr_rrsig_signature(obj)
-    NetLDNS::RR::RRSIG obj;
+    Net::LDNS::RR::RRSIG obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,8);
@@ -904,11 +904,11 @@ rr_rrsig_signature(obj)
         RETVAL
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC             PREFIX=rr_nsec_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC             PREFIX=rr_nsec_
 
 char *
 rr_nsec_next(obj)
-    NetLDNS::RR::NSEC obj;
+    Net::LDNS::RR::NSEC obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -916,7 +916,7 @@ rr_nsec_next(obj)
 
 char *
 rr_nsec_typelist(obj)
-    NetLDNS::RR::NSEC obj;
+    Net::LDNS::RR::NSEC obj;
     CODE:
         RETVAL = D_STRING(obj,1);
     OUTPUT:
@@ -926,7 +926,7 @@ rr_nsec_typelist(obj)
 
 SV *
 rr_nsec_typehref(obj)
-    NetLDNS::RR::NSEC obj;
+    Net::LDNS::RR::NSEC obj;
     CODE:
     {
         char *typestring = D_STRING(obj,1);
@@ -954,17 +954,17 @@ rr_nsec_typehref(obj)
         RETVAL
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3            PREFIX=rr_nsec3_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3            PREFIX=rr_nsec3_
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::PTR              PREFIX=rr_ptr_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::PTR              PREFIX=rr_ptr_
 
 char *
 rr_ptr_ptrdname(obj)
-    NetLDNS::RR::PTR obj;
+    Net::LDNS::RR::PTR obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -973,11 +973,11 @@ rr_ptr_ptrdname(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::CNAME            PREFIX=rr_cname_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::CNAME            PREFIX=rr_cname_
 
 char *
 rr_cname_cname(obj)
-    NetLDNS::RR::CNAME obj;
+    Net::LDNS::RR::CNAME obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -986,11 +986,11 @@ rr_cname_cname(obj)
         Safefree(RETVAL);
 
 
-MODULE = NetLDNS        PACKAGE = NetLDNS::RR::TXT              PREFIX=rr_txt_
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::TXT              PREFIX=rr_txt_
 
 char *
 rr_txt_txtdata(obj)
-    NetLDNS::RR::TXT obj;
+    Net::LDNS::RR::TXT obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:

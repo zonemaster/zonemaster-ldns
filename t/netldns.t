@@ -1,20 +1,20 @@
 use Test::More;
 use Devel::Peek;
 
-BEGIN { use_ok('NetLDNS')}
+BEGIN { use_ok('Net::LDNS')}
 
-my $s = NetLDNS->new('8.8.8.8');
-isa_ok($s, 'NetLDNS');
+my $s = Net::LDNS->new('8.8.8.8');
+isa_ok($s, 'Net::LDNS');
 my $p = $s->query('nic.se', 'MX');
-isa_ok($p, 'NetLDNS::Packet');
+isa_ok($p, 'Net::LDNS::Packet');
 is($p->rcode, 'NOERROR', 'expected rcode');
 
 my $p2 = $s->query('iis.se','NS','IN');
-isa_ok($p2, 'NetLDNS::Packet');
+isa_ok($p2, 'Net::LDNS::Packet');
 is($p2->rcode, 'NOERROR');
 is($p2->opcode, 'QUERY', 'expected opcode');
-my $pround = NetLDNS::Packet->new_from_wireformat($p2->wireformat);
-isa_ok($pround, 'NetLDNS::Packet');
+my $pround = Net::LDNS::Packet->new_from_wireformat($p2->wireformat);
+isa_ok($pround, 'Net::LDNS::Packet');
 is($pround->opcode, $p2->opcode, 'roundtrip opcode OK');
 is($pround->rcode, $p2->rcode, 'roundtrip rcode OK');
 
@@ -47,7 +47,7 @@ my @answer = $p2->answer;
 is(scalar(@answer), 3, 'expected number of NS records in answer');
 my %known_ns = map {$_ => 1} qw[ns.nic.se. i.ns.se. ns3.nic.se.];
 foreach my $rr (@answer) {
-    isa_ok($rr, 'NetLDNS::RR::NS');
+    isa_ok($rr, 'Net::LDNS::RR::NS');
     is($rr->owner, 'iis.se.', 'expected owner name');
     ok($rr->ttl > 0, 'positive TTL ('.$rr->ttl.')');
     is($rr->type, 'NS', 'type is NS');
@@ -61,7 +61,7 @@ foreach my $rr ($p->answer) {
     ok($known_mx{$rr->exchange}, 'known MX exchange ('.$rr->exchange.')');
 }
 
-my $lroot = NetLDNS->new('199.7.83.42');
+my $lroot = Net::LDNS->new('199.7.83.42');
 my $se = $lroot->query('se', 'NS');
 
 my @se_q = $se->question;
