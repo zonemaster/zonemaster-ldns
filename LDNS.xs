@@ -9,8 +9,8 @@
 #include <ldns/ldns.h>
 typedef ldns_resolver *Net__LDNS;
 typedef ldns_pkt *Net__LDNS__Packet;
-typedef ldns_rr *Net__LDNS__RR;
 typedef ldns_rr_list *Net__LDNS__RRList;
+typedef ldns_rr *Net__LDNS__RR;
 typedef ldns_rr *Net__LDNS__RR__NS;
 typedef ldns_rr *Net__LDNS__RR__A;
 typedef ldns_rr *Net__LDNS__RR__AAAA;
@@ -459,6 +459,7 @@ packet_string(obj)
     Net::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt2str(obj);
+        RETVAL[strlen(RETVAL)-1] = '\0';
     OUTPUT:
         RETVAL
     CLEANUP:
@@ -591,6 +592,7 @@ rr_string(obj)
     Net::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr2str(obj);
+        RETVAL[strlen(RETVAL)-1] = '\0';
     OUTPUT:
         RETVAL
     CLEANUP:
