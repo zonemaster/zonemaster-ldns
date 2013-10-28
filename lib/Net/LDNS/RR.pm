@@ -15,12 +15,18 @@ use Net::LDNS::RR::RRSIG;
 use Net::LDNS::RR::SOA;
 use Net::LDNS::RR::TXT;
 
-use overload '<=>' => \&do_compare, 'cmp' => \&do_compare;
+use overload '<=>' => \&do_compare, 'cmp' => \&do_compare, '""' => \&to_string;
 
 sub do_compare {
     my ( $self, $other, $swapped ) = @_;
 
     return $self->compare($other);
+}
+
+sub to_string {
+    my ($self) = @_;
+
+    return $self->string;
 }
 
 1;

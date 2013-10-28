@@ -88,4 +88,6 @@ is($made eq $made2, 1, 'indirect comparison works');
 is($made <=> $made3, 1, 'indirect comparison works');
 is($made cmp $made4, -1, 'indirect comparison works');
 
+is("$made", "nic.se.	3600	IN	NS	a.ns.se.");
+
 done_testing;
