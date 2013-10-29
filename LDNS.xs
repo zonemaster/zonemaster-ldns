@@ -958,6 +958,97 @@ rr_nsec_typehref(obj)
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3            PREFIX=rr_nsec3_
 
+U8
+rr_nsec3_algorithm(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+        RETVAL = ldns_nsec3_algorithm(obj);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_nsec3_flags(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+        RETVAL = ldns_nsec3_flags(obj);
+    OUTPUT:
+        RETVAL
+
+bool
+rr_nsec3_optout(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+        RETVAL = ldns_nsec3_optout(obj);
+    OUTPUT:
+        RETVAL
+
+U16
+rr_nsec3_iterations(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+        RETVAL = ldns_nsec3_iterations(obj);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_nsec3_salt(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    PPCODE:
+        if(ldns_nsec3_salt_length(obj) > 0)
+        {
+            ldns_rdf *buf = ldns_nsec3_salt(obj);
+            fprintf(stderr, "Salt length: %d\n", ldns_nsec3_salt_length(obj));
+            ST(0) = sv_2mortal(newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf)));
+            ldns_rdf_free(buf);
+        }
+
+SV *
+rr_nsec3_next_owner(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+        ldns_rdf *buf = ldns_nsec3_next_owner(obj);
+        RETVAL = newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf));
+    OUTPUT:
+        RETVAL
+
+char *
+rr_nsec3_typelist(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+        RETVAL = ldns_rdf2str(ldns_nsec3_bitmap(obj));
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        Safefree(RETVAL);
+
+SV *
+rr_nsec3_typehref(obj)
+    Net::LDNS::RR::NSEC3 obj;
+    CODE:
+    {
+        char *typestring = ldns_rdf2str(ldns_nsec3_bitmap(obj));
+        size_t pos;
+        HV *res = newHV();
+
+        pos = 0;
+        while(typestring[pos] != '\0')
+        {
+            pos++;
+            if(typestring[pos] == ' ')
+            {
+                typestring[pos] = '\0';
+                if(hv_store(res,typestring,pos,newSViv(1),0)==NULL)
+                {
+                    croak("Failed to store to hash");
+                }
+                typestring += pos+1;
+                pos = 0;
+            }
+        }
+        RETVAL = newRV_noinc((SV *)res);
+    }
+    OUTPUT:
+        RETVAL
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 

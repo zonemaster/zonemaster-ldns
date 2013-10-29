@@ -90,4 +90,16 @@ is($made cmp $made4, -1, 'indirect comparison works');
 
 is("$made", "nic.se.	3600	IN	NS	a.ns.se.");
 
+my $nsec3 = Net::LDNS::RR->new_from_string('VD0J8N54V788IUBJL9CN5MUD416BS5I6.com. 86400 IN NSEC3 1 1 0 - VD0N3HDL5MG940MOUBCF5MNLKGDT9RFT NS DS RRSIG');
+isa_ok($nsec3, 'Net::LDNS::RR::NSEC3');
+is($nsec3->algorithm, 1);
+is($nsec3->flags, 1);
+ok($nsec3->optout);
+is($nsec3->iterations, 0);
+is($nsec3->salt, undef);
+is(encode_base64($nsec3->next_owner), "FPtBccW1LaCSAtjy2PLa9aQb1O39\n");
+is($nsec3->typelist, 'NS DS RRSIG ');
+
+is_deeply([sort keys %{$nsec3->typehref}], [qw(DS NS RRSIG)]);
+
 done_testing;
