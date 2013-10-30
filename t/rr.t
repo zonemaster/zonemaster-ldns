@@ -102,4 +102,12 @@ is($nsec3->typelist, 'NS DS RRSIG ');
 
 is_deeply([sort keys %{$nsec3->typehref}], [qw(DS NS RRSIG)]);
 
+my $nsec3param = Net::LDNS::RR->new_from_string('whitehouse.gov.		3600	IN	NSEC3PARAM 1 0 1 B2C19AB526819347');
+isa_ok($nsec3param, 'Net::LDNS::RR::NSEC3PARAM');
+is($nsec3param->algorithm, 1);
+is($nsec3param->flags, 0);
+is($nsec3param->iterations, 1);
+is(encode_base64($nsec3param->salt), "CLLBmrUmgZNH\n");
+is($nsec3param->owner, 'whitehouse.gov.');
+
 done_testing;

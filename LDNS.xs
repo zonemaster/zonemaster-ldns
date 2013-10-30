@@ -607,6 +607,14 @@ rr_compare(obj1,obj2)
     OUTPUT:
         RETVAL
 
+size_t
+rr_rd_count(obj)
+    Net::LDNS::RR obj;
+    CODE:
+        RETVAL = ldns_rr_rd_count(obj);
+    OUTPUT:
+        RETVAL
+
 void
 rr_DESTROY(obj)
     Net::LDNS::RR obj;
@@ -1052,6 +1060,40 @@ rr_nsec3_typehref(obj)
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 
+U8
+rr_nsec3param_algorithm(obj)
+    Net::LDNS::RR::NSEC3PARAM obj;
+    CODE:
+        RETVAL = D_U8(obj,0);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_nsec3param_flags(obj)
+    Net::LDNS::RR::NSEC3PARAM obj;
+    CODE:
+        RETVAL = D_U8(obj,1);
+    OUTPUT:
+        RETVAL
+
+
+U16
+rr_nsec3param_iterations(obj)
+    Net::LDNS::RR::NSEC3PARAM obj;
+    CODE:
+        RETVAL = D_U16(obj,2);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_nsec3param_salt(obj)
+    Net::LDNS::RR::NSEC3PARAM obj;
+    PPCODE:
+        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+        if(ldns_rdf_size(rdf) > 0)
+        {
+            mPUSHs(newSVpvn((char *)ldns_rdf_data(rdf), ldns_rdf_size(rdf)));
+        }
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::PTR              PREFIX=rr_ptr_
 
