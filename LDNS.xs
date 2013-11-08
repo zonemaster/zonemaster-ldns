@@ -89,107 +89,79 @@ query(obj, dname, rrtype="A", rrclass="IN")
     OUTPUT:
         RETVAL
 
-void
-set_recursive(obj,re)
-    Net::LDNS obj;
-    bool re;
-    CODE:
-        ldns_resolver_set_recursive(obj, re);
-
 bool
-recursive(obj)
+recursive(obj,...)
     Net::LDNS obj;
     CODE:
+        if(items>1) {
+            ldns_resolver_set_recursive(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_recursive(obj);
     OUTPUT:
         RETVAL
 
-void
-set_debug(obj,re)
-    Net::LDNS obj;
-    bool re;
-    CODE:
-        ldns_resolver_set_debug(obj, re);
-
 bool
-debug(obj)
+debug(obj,...)
     Net::LDNS obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_debug(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_debug(obj);
     OUTPUT:
         RETVAL
 
-void
-set_dnssec(obj,re)
-    Net::LDNS obj;
-    bool re;
-    CODE:
-        ldns_resolver_set_dnssec(obj, re);
-
 bool
-dnssec(obj)
+dnssec(obj,...)
     Net::LDNS obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_dnssec(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_dnssec(obj);
     OUTPUT:
         RETVAL
 
-void
-set_usevc(obj,re)
-    Net::LDNS obj;
-    bool re;
-    CODE:
-        ldns_resolver_set_usevc(obj, re);
-
 bool
-usevc(obj)
+usevc(obj,...)
     Net::LDNS obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_usevc(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_usevc(obj);
     OUTPUT:
         RETVAL
 
-void
-set_igntc(obj,re)
-    Net::LDNS obj;
-    bool re;
-    CODE:
-        ldns_resolver_set_igntc(obj, re);
-
 bool
-igntc(obj)
+igntc(obj,...)
     Net::LDNS obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_igntc(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_igntc(obj);
     OUTPUT:
         RETVAL
 
-void
-set_retry(obj,i)
-    Net::LDNS obj;
-    U8 i;
-    CODE:
-        ldns_resolver_set_retry(obj, i);
-
 U8
-retry(obj)
+retry(obj,...)
     Net::LDNS obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_retry(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_retry(obj);
     OUTPUT:
         RETVAL
 
-void
-set_retrans(obj,i)
-    Net::LDNS obj;
-    U8 i;
-    CODE:
-        ldns_resolver_set_retrans(obj, i);
-
 U8
-retrans(obj)
+retrans(obj,...)
     Net::LDNS obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_retrans(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_resolver_retrans(obj);
     OUTPUT:
         RETVAL

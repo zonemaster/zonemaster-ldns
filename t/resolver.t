@@ -4,35 +4,35 @@ use Net::LDNS;
 
 my $r = Net::LDNS->new('8.8.8.8');
 
-$r->set_recursive(0);
+$r->recursive(0);
 ok(!$r->recursive, 'recursive off');
-$r->set_recursive(1);
+$r->recursive(1);
 ok($r->recursive, 'recursive on');
 
-$r->set_retrans(17);
+$r->retrans(17);
 is($r->retrans, 17, 'retrans set');
 
-$r->set_retry(17);
+$r->retry(17);
 is($r->retry, 17, 'retry set');
 
-$r->set_debug(1);
+$r->debug(1);
 ok($r->debug, 'debug set');
-$r->set_debug(0);
+$r->debug(0);
 ok(!$r->debug, 'debug unset');
 
-$r->set_dnssec(1);
+$r->dnssec(1);
 ok($r->dnssec, 'dnssec set');
-$r->set_dnssec(0);
+$r->dnssec(0);
 ok(!$r->dnssec, 'dnssec unset');
 
-$r->set_usevc(1);
+$r->usevc(1);
 ok($r->usevc, 'usevc set');
-$r->set_usevc(0);
+$r->usevc(0);
 ok(!$r->usevc, 'usevc unset');
 
-$r->set_igntc(1);
+$r->igntc(1);
 ok($r->igntc, 'igntc set');
-$r->set_igntc(0);
+$r->igntc(0);
 ok(!$r->igntc, 'igntc unset');
 
 done_testing;
