@@ -35,4 +35,15 @@ ok($r->igntc, 'igntc set');
 $r->igntc(0);
 ok(!$r->igntc, 'igntc unset');
 
+my $res = new_ok('Net::LDNS');
+my $p = $res->query('www.iis.se');
+isa_ok($p, 'Net::LDNS::Packet');
+isa_ok($_, 'Net::LDNS::RR::A') for $p->answer;
+
+my $none = Net::LDNS->new(undef);
+isa_ok($none, 'Net::LDNS');
+my $pn = eval { $none->query('iis.se')};
+like($@, qr/No \(valid\) nameservers defined in the resolver/);
+ok(!$pn);
+
 done_testing;

@@ -42,17 +42,26 @@ new(class, ...)
     {
         int i;
 
-        RETVAL = ldns_resolver_new();
-        for (i=1;i<items;i++)
-        {
-            ldns_status s;
-            ldns_rdf *addr;
-
-            addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
-            s = ldns_resolver_push_nameserver(RETVAL,addr);
-            if(s != LDNS_STATUS_OK)
+        if (items == 1 ) {
+            ldns_resolver_new_frm_file(&RETVAL,NULL);
+        }
+        else {
+            RETVAL = ldns_resolver_new();
+            for (i=1;i<items;i++)
             {
-                croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));
+                ldns_status s;
+                ldns_rdf *addr;
+
+                if ( !SvOK(ST(i)) || !SvPOK(ST(i)) ) {
+                    continue;
+                }
+
+                addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
+                s = ldns_resolver_push_nameserver(RETVAL,addr);
+                if(s != LDNS_STATUS_OK)
+                {
+                    croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));
+                }
             }
         }
     }
@@ -70,6 +79,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
         ldns_rdf *domain;
         ldns_rr_type t;
         ldns_rr_class c;
+        ldns_status status;
 
         t = ldns_get_rr_type_by_name(rrtype);
         if(!t)
@@ -84,7 +94,11 @@ query(obj, dname, rrtype="A", rrclass="IN")
         }
 
         domain = ldns_dname_new_frm_str(dname);
-        RETVAL = ldns_resolver_query(obj, domain, t, c, LDNS_RD);
+        status = ldns_resolver_send(&RETVAL, obj, domain, t, c, LDNS_RD);
+        if ( status != LDNS_STATUS_OK) {
+            croak("%s", ldns_get_errorstr_by_id(status));
+            RETVAL = NULL;
+        }
     }
     OUTPUT:
         RETVAL
