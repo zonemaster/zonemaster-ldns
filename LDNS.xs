@@ -57,7 +57,13 @@ new(class, ...)
                 }
 
                 addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
-                s = ldns_resolver_push_nameserver(RETVAL,addr);
+                if ( addr == NULL) {
+                    addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(i)));
+                }
+                if ( addr == NULL ) {
+                    croak("Failed to parse IP address: %s", SvPV_nolen(ST(i)));
+                }
+                s = ldns_resolver_push_nameserver(RETVAL, addr);
                 if(s != LDNS_STATUS_OK)
                 {
                     croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));

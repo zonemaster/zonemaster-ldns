@@ -46,4 +46,8 @@ my $pn = eval { $none->query('iis.se')};
 like($@, qr/No \(valid\) nameservers defined in the resolver/);
 ok(!$pn);
 
+my $b0rken = eval { Net::LDNS->new('gurksallad') };
+ok(!$b0rken);
+like($@, qr/Failed to parse IP address: gurksallad/);
+
 done_testing;
