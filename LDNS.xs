@@ -502,6 +502,41 @@ packet_question(obj)
         }
     }
 
+bool
+packet_unique_push(obj,section,rr)
+    Net::LDNS::Packet obj;
+    char *section;
+    Net::LDNS::RR rr;
+    CODE:
+    {
+        ldns_pkt_section sec;
+        
+        if(foldEQ(section, "answer", 6))
+        {
+            sec = LDNS_SECTION_ANSWER;
+        }
+        else if(foldEQ(section, "additional", 10))
+        {
+            sec = LDNS_SECTION_ADDITIONAL;
+        }
+        else if(foldEQ(section, "authority", 9))
+        {
+            sec = LDNS_SECTION_AUTHORITY;
+        }
+        else if(foldEQ(section, "question", 8))
+        {
+            sec = LDNS_SECTION_QUESTION;
+        }
+        else
+        {
+            croak("Unknown section: %s", section);
+        }
+        
+        RETVAL = ldns_pkt_safe_push_rr(obj, sec, rr);
+    }
+    OUTPUT:
+        RETVAL
+
 Net::LDNS::RRList
 packet_all(obj)
     Net::LDNS::Packet obj;

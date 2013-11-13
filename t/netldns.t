@@ -64,14 +64,15 @@ foreach my $rr ($p->answer) {
 my $lroot = Net::LDNS->new('199.7.83.42');
 my $se = $lroot->query('se', 'NS');
 
-my @se_q = $se->question;
-my @se_ans = $se->answer;
-my @se_auth = $se->authority;
-my @se_add = $se->additional;
+is(scalar($se->question), 1, 'one question');
+is(scalar($se->answer), 0, 'zero answers');
+is(scalar($se->authority), 9, 'nine authority');
+is(scalar($se->additional), 16, 'sixteen additional');
 
-is(scalar(@se_q), 1, 'one question');
-is(scalar(@se_ans), 0, 'zero answers');
-is(scalar(@se_auth), 9, 'nine authority');
-is(scalar(@se_add), 16, 'sixteen additional');
+my $rr = Net::LDNS::RR->new_from_string('se. 172800	IN	SOA	catcher-in-the-rye.nic.se. registry-default.nic.se. 2013111305 1800 1800 864000 7200');
+ok($se->unique_push('answer', $rr), 'unique_push returns ok');
+is($se->answer, 1, 'one record in answer section');
+ok(!$se->unique_push('answer', $rr), 'unique_push returns false');
+is($se->answer, 1, 'still one record in answer section');
 
 done_testing;
