@@ -75,4 +75,7 @@ is($se->answer, 1, 'one record in answer section');
 ok(!$se->unique_push('answer', $rr), 'unique_push returns false');
 is($se->answer, 1, 'still one record in answer section');
 
+my $made = Net::LDNS::Packet->new('foo.com','SOA','IN');
+isa_ok($made, 'Net::LDNS::Packet');
+
 done_testing;

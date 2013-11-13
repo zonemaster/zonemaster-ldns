@@ -204,6 +204,41 @@ addr(obj)
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
 
+Net::LDNS::Packet
+packet_new(objclass,name,type="A",class="IN")
+    char *objclass;
+    char *name;
+    char *type;
+    char *class;
+    CODE:
+    {
+        ldns_rdf *rr_name;
+        ldns_rr_type rr_type;
+        ldns_rr_class rr_class;
+        
+        rr_type = ldns_get_rr_type_by_name(type);
+        if(!rr_type)
+        {
+            croak("Unknown RR type: %s", type);
+        }
+        
+        rr_class = ldns_get_rr_class_by_name(class);
+        if(!rr_class)
+        {
+            croak("Unknown RR class: %s", class);
+        }
+        
+        rr_name = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        if(rr_name == NULL)
+        {
+            croak("Name error for '%s'", name);
+        }
+        
+        RETVAL = ldns_pkt_query_new(rr_name, rr_type, rr_class,0);
+    }
+    OUTPUT:
+        RETVAL
+
 char *
 packet_addr(obj)
     Net::LDNS::Packet obj;
