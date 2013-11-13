@@ -6,6 +6,12 @@ use Net::LDNS;
 
 our %destroyed;
 
+sub data {
+    my ( $self ) = @_;
+
+    return $self->wireformat;
+}
+
 sub DESTROY {
     my ( $self ) = @_;
 

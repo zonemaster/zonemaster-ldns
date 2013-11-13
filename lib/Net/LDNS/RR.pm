@@ -15,7 +15,19 @@ use Net::LDNS::RR::RRSIG;
 use Net::LDNS::RR::SOA;
 use Net::LDNS::RR::TXT;
 
+use Carp;
+
 use overload '<=>' => \&do_compare, 'cmp' => \&do_compare, '""' => \&to_string;
+
+sub new {
+    my ( $class, $string ) = @_;
+
+    if ($string) {
+        return $class->new_from_string($string);
+    } else {
+        croak "Must provide string to create RR";
+    }
+}
 
 sub name {
     my ( $self ) = @_;
