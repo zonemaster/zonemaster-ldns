@@ -4,10 +4,10 @@ use Net::LDNS;
 
 my $r = Net::LDNS->new('8.8.8.8');
 
-$r->recursive(0);
-ok(!$r->recursive, 'recursive off');
-$r->recursive(1);
-ok($r->recursive, 'recursive on');
+$r->recurse(0);
+ok(!$r->recurse, 'recursive off');
+$r->recurse(1);
+ok($r->recurse, 'recursive on');
 
 $r->retrans(17);
 is($r->retrans, 17, 'retrans set');

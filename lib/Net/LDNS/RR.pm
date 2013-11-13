@@ -17,6 +17,12 @@ use Net::LDNS::RR::TXT;
 
 use overload '<=>' => \&do_compare, 'cmp' => \&do_compare, '""' => \&to_string;
 
+sub name {
+    my ( $self ) = @_;
+
+    return $self->owner;
+}
+
 sub do_compare {
     my ( $self, $other, $swapped ) = @_;
 

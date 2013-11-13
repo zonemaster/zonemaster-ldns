@@ -110,7 +110,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
         RETVAL
 
 bool
-recursive(obj,...)
+recurse(obj,...)
     Net::LDNS obj;
     CODE:
         if(items>1) {
