@@ -349,9 +349,20 @@ packet_answer(obj)
     {
         size_t i,n;
         ldns_rr_list *rrs;
+        I32 context = GIMME_V;
+
+        if (context == G_VOID)
+        {
+            return;
+        }
 
         rrs = ldns_pkt_answer(obj);
         n = ldns_rr_list_rr_count(rrs);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n);
+        }
 
         EXTEND(sp,n);
         for(i = 0; i < n; ++i)
@@ -378,9 +389,20 @@ packet_authority(obj)
     {
         size_t i,n;
         ldns_rr_list *rrs;
+        I32 context = GIMME_V;
+
+        if (context == G_VOID)
+        {
+            return;
+        }
 
         rrs = ldns_pkt_authority(obj);
         n = ldns_rr_list_rr_count(rrs);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n);
+        }
 
         EXTEND(sp,n);
         for(i = 0; i < n; ++i)
@@ -407,9 +429,20 @@ packet_additional(obj)
     {
         size_t i,n;
         ldns_rr_list *rrs;
+        I32 context = GIMME_V;
+
+        if (context == G_VOID)
+        {
+            return;
+        }
 
         rrs = ldns_pkt_additional(obj);
         n = ldns_rr_list_rr_count(rrs);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n);
+        }
 
         EXTEND(sp,n);
         for(i = 0; i < n; ++i)
@@ -436,9 +469,20 @@ packet_question(obj)
     {
         size_t i,n;
         ldns_rr_list *rrs;
+        I32 context = GIMME_V;
+
+        if (context == G_VOID)
+        {
+            return;
+        }
 
         rrs = ldns_pkt_question(obj);
         n = ldns_rr_list_rr_count(rrs);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n);
+        }
 
         EXTEND(sp,n);
         for(i = 0; i < n; ++i)
