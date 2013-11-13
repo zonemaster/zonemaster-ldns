@@ -187,12 +187,32 @@ retrans(obj,...)
         RETVAL
 
 void
-DESTROY(obj)
-        Net::LDNS obj;
-        CODE:
-            ldns_resolver_deep_free(obj);
+free(obj)
+    Net::LDNS obj;
+    CODE:
+        ldns_resolver_free(obj);
+
+char *
+addr(obj)
+    Net::LDNS obj;
+    CODE:
+        char buf[25];
+        snprintf(buf, 24, "%p", (void *)obj);
+        RETVAL = buf;
+    OUTPUT:
+        RETVAL
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
+
+char *
+packet_addr(obj)
+    Net::LDNS::Packet obj;
+    CODE:
+        char buf[25];
+        snprintf(buf, 24, "%p", (void *)obj);
+        RETVAL = buf;
+    OUTPUT:
+        RETVAL
 
 char *
 packet_rcode(obj)
@@ -503,7 +523,7 @@ packet_new_from_wireformat(class,buf)
         RETVAL
 
 void
-packet_DESTROY(obj)
+packet_free(obj)
     Net::LDNS::Packet obj;
     CODE:
         ldns_pkt_free(obj);
@@ -997,7 +1017,6 @@ rr_nsec3_salt(obj)
         if(ldns_nsec3_salt_length(obj) > 0)
         {
             ldns_rdf *buf = ldns_nsec3_salt(obj);
-            fprintf(stderr, "Salt length: %d\n", ldns_nsec3_salt_length(obj));
             ST(0) = sv_2mortal(newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf)));
             ldns_rdf_free(buf);
         }
