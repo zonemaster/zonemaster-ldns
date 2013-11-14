@@ -70,10 +70,13 @@ is(scalar($se->authority), 9, 'nine authority');
 is(scalar($se->additional), 16, 'sixteen additional');
 
 my $rr = Net::LDNS::RR->new_from_string('se. 172800	IN	SOA	catcher-in-the-rye.nic.se. registry-default.nic.se. 2013111305 1800 1800 864000 7200');
+my $rr2 = Net::LDNS::RR->new('se.			172800	IN	TXT	"SE zone update: 2013-11-13 15:08:28 +0000 (EPOCH 1384355308) (auto)"');
 ok($se->unique_push('answer', $rr), 'unique_push returns ok');
 is($se->answer, 1, 'one record in answer section');
 ok(!$se->unique_push('answer', $rr), 'unique_push returns false');
 is($se->answer, 1, 'still one record in answer section');
+ok($se->unique_push('answer', $rr2), 'unique_push returns ok again');
+is($se->answer, 2, 'two records in answer section');
 
 my $made = Net::LDNS::Packet->new('foo.com','SOA','IN');
 isa_ok($made, 'Net::LDNS::Packet');

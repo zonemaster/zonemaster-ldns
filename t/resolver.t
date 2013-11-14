@@ -39,6 +39,9 @@ my $res = new_ok('Net::LDNS');
 my $p = $res->query('www.iis.se');
 isa_ok($p, 'Net::LDNS::Packet');
 isa_ok($_, 'Net::LDNS::RR::A') for $p->answer;
+
+$res = Net::LDNS->new('194.146.106.22');
+$p = $res->query('www.iis.se');
 is(scalar($p->answer), 1, 'answer count in scalar context');
 is(scalar($p->authority), 3, 'authority count in scalar context');
 is(scalar($p->additional), 6, 'additional count in scalar context');

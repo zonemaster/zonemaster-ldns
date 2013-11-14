@@ -567,7 +567,7 @@ packet_unique_push(obj,section,rr)
             croak("Unknown section: %s", section);
         }
         
-        RETVAL = ldns_pkt_safe_push_rr(obj, sec, rr);
+        RETVAL = ldns_pkt_safe_push_rr(obj, sec, ldns_rr_clone(rr));
     }
     OUTPUT:
         RETVAL
