@@ -358,9 +358,28 @@ packet_querytime(obj)
         RETVAL
 
 char *
-packet_answerfrom(obj)
+packet_answerfrom(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if(items >= 2)
+        {
+            if(SvOK(ST(1)) && SvPOK(ST(1)))
+            {
+                ldns_rdf *address;
+                
+                address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(1)));
+                if(address == NULL)
+                {
+                    address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(1)));
+                }
+                if(address == NULL)
+                {
+                    croak("Failed to parse IP address: %s", SvPV_nolen(ST(1)));
+                }
+                
+                ldns_pkt_set_answerfrom(obj, address);
+            }
+        }
         RETVAL = ldns_rdf2str(ldns_pkt_answerfrom(obj));
     OUTPUT:
         RETVAL
@@ -368,9 +387,19 @@ packet_answerfrom(obj)
         Safefree(RETVAL);
 
 double
-packet_timestamp(obj)
+packet_timestamp(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if(items >= 2)
+        {
+            struct timeval tn;
+            double dec_part, int_part;
+            
+            dec_part = modf(SvNV(ST(1)), &int_part);
+            tn.tv_sec  = int_part;
+            tn.tv_usec = 1000000*dec_part;
+            ldns_pkt_set_timestamp(obj,tn);
+        }
         struct timeval t = ldns_pkt_timestamp(obj);
         RETVAL = (double)t.tv_sec;
         RETVAL += ((double)t.tv_usec)/1000000;
