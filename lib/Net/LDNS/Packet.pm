@@ -4,7 +4,21 @@ use 5.14.2;
 
 use Net::LDNS;
 
+use MIME::Base64;
+
 our %destroyed;
+
+sub TO_JSON {
+    my ( $self ) = @_;
+
+    return {
+        'Net::LDNS::Packet' => {
+            data       => encode_base64( $self->wireformat, '' ),
+            answerfrom => $self->answerfrom,
+            timestamp  => $self->timestamp,
+        }
+    };
+}
 
 sub data {
     my ( $self ) = @_;
@@ -15,11 +29,8 @@ sub data {
 sub DESTROY {
     my ( $self ) = @_;
 
-    if($destroyed{$self->addr}) {
-        # say STDERR "NOT DESTROYING PACKET: " . $self->addr;
-    }
-    else {
-        $destroyed{$self->addr} = 1;
+    if ( not $destroyed{ $self->addr } ) {
+        $destroyed{ $self->addr } = 1;
         $self->free;
     }
     return;

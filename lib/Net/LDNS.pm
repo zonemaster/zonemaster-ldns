@@ -7,17 +7,15 @@ require XSLoader;
 XSLoader::load(__PACKAGE__, $VERSION);
 
 use Net::LDNS::RR;
+use Net::LDNS::Packet;
 
 our %destroyed;
 
 sub DESTROY {
     my ($self) = @_;
 
-    if ($destroyed{$self->addr}) {
-        # say STDERR "NOT DESTROYING RESOLVER: " . $self->addr;
-    } else {
+    if (not $destroyed{$self->addr}) {
         $destroyed{$self->addr} = 1;
-        # say STDERR "DESTROYING RESOLVER: " . $self->addr;
         $self->free;
     }
 
