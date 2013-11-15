@@ -6,6 +6,8 @@ WriteMakefile(
     LIBS => [qw(-lldns)],
     PREREQ_PM => {
         'MIME::Base64' => 0,
+    },
+    TEST_REQUIRES => {
         'JSON::XS' => 0,
     },
 );
