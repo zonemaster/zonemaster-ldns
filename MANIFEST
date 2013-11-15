@@ -1,4 +1,4 @@
-LDNS.xs
+src/LDNS.xs
 lib/Net/LDNS.pm
 lib/Net/LDNS/Packet.pm
 lib/Net/LDNS/RR.pm
@@ -26,4 +26,4 @@ t/resolver.t
 t/rr.t
 t/rrlist.t
 t/serialize.t
-typemap
+src/typemap

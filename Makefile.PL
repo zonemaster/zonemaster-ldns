@@ -1,13 +1,15 @@
-use ExtUtils::MakeMaker;
+use inc::Module::Install;
 
-WriteMakefile(
-    NAME => 'Net::LDNS',
-    VERSION_FROM => 'lib/Net/LDNS.pm',
-    LIBS => [qw(-lldns)],
-    PREREQ_PM => {
-        'MIME::Base64' => 0,
-    },
-    TEST_REQUIRES => {
-        'JSON::XS' => 0,
-    },
-);
+name 'Net-LDNS';
+version_from 'lib/Net/LDNS.pm';
+license 'bsd';
+
+requires perl => '5.012004';
+requires 'MIME::Base64';
+test_requires 'JSON::XS';
+
+use_ppport 3.20;
+cc_libs 'ldns';
+cc_src_paths 'src';
+
+WriteAll;
