@@ -48,3 +48,62 @@ sub to_string {
 }
 
 1;
+
+=head1 NAME
+
+Net::LDNS::RR - common baseclass for all classes representing resource records.
+
+=head1 SYNOPSIS
+
+    my $rr = Net::LDNS::RR->new('www.iis.se IN A 91.226.36.46');
+
+=head1 OVERLOADS
+
+This class overloads stringify and comparisons ('""', '<=>' and 'cmp').
+
+=head1 CLASS METHOD
+
+=over
+
+=item new($string)
+
+Creates a new RR object of a suitable subclass, given a string representing an RR in common presentation format.
+
+=back
+
+=head1 INSTANCE METHODS
+
+=over
+
+=item owner()
+
+=item name()
+
+These two both return the owner name of the RR.
+
+=item ttl()
+
+Returns the ttl of the RR.
+
+=item type()
+
+Return the type of the RR.
+
+=item class()
+
+Returns the class of the RR.
+
+=item string()
+
+Returns a string with the RR in presentation format.
+
+=item do_compare($other)
+
+Calls the XS C<compare> method with the arguments it needs, rather than the ones overloading gives.
+
+=item to_string
+
+Calls the XS C<string> method with the arguments it needs, rather than the ones overloading gives. Functionally identical to L<string()> from the
+Perl level, except for being a tiny little bit slower.
+
+=back
