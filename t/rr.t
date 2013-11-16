@@ -23,6 +23,7 @@ $p = $s->query('a.ns.se');
 foreach my $rr ($p->answer) {
     isa_ok($rr, 'Net::LDNS::RR::A');
     is($rr->address, '192.36.144.107', 'expected address string');
+    is($rr->type, 'A');
 }
 
 $p = $s->query('a.ns.se', 'AAAA');
@@ -109,5 +110,8 @@ is($nsec3param->flags, 0);
 is($nsec3param->iterations, 1);
 is(encode_base64($nsec3param->salt), "CLLBmrUmgZNH\n");
 is($nsec3param->owner, 'whitehouse.gov.');
+
+my $srv = Net::LDNS::RR->new('_nicname._tcp.se.	172800	IN	SRV	0 0 43 whois.nic-se.se.');
+is($srv->type, 'SRV');
 
 done_testing;
