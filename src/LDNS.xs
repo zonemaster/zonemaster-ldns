@@ -956,6 +956,15 @@ rr_ds_hexdigest(obj)
         Safefree(RETVAL);
 
 
+bool
+rr_ds_verify(obj,other)
+    Net::LDNS::RR::DS obj;
+    Net::LDNS::RR other;
+    CODE:
+        RETVAL = ldns_rr_compare_ds(obj, other);
+    OUTPUT:
+        RETVAL
+
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
 U16

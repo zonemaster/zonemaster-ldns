@@ -36,4 +36,9 @@ Returns the cryptographic digest in binary form.
 
 Returns the cryptographic digest as a hexadecimal string.
 
+=item verify($other)
+
+Checks if the current object is derived from the other object (if it's a DNSKEY) or was derived from the same DNSKEY as the other object (if it's a
+DS). If used with any other type of RR, it always returns false.
+
 =back
