@@ -6,6 +6,7 @@
 #define NEED_newRV_noinc
 #include "ppport.h"
 
+#include <ctype.h>
 #include <ldns/ldns.h>
 typedef ldns_resolver *Net__LDNS;
 typedef ldns_pkt *Net__LDNS__Packet;
@@ -574,20 +575,26 @@ packet_unique_push(obj,section,rr)
     CODE:
     {
         ldns_pkt_section sec;
+        char lbuf[21];
+        char *p;
         
-        if(foldEQ(section, "answer", 6))
+        p = lbuf;
+        strncpy(lbuf, section, 20);
+        for(; *p; p++) *p = tolower(*p);
+
+        if(strncmp(lbuf, "answer", 6)==0)
         {
             sec = LDNS_SECTION_ANSWER;
         }
-        else if(foldEQ(section, "additional", 10))
+        else if(strncmp(lbuf, "additional", 10)==0)
         {
             sec = LDNS_SECTION_ADDITIONAL;
         }
-        else if(foldEQ(section, "authority", 9))
+        else if(strncmp(lbuf, "authority", 9)==0)
         {
             sec = LDNS_SECTION_AUTHORITY;
         }
-        else if(foldEQ(section, "question", 8))
+        else if(strncmp(lbuf, "question", 8)==0)
         {
             sec = LDNS_SECTION_QUESTION;
         }

@@ -82,7 +82,7 @@ ok($se->unique_push('answer', $rr), 'unique_push returns ok');
 is($se->answer, 1, 'one record in answer section');
 ok(!$se->unique_push('answer', $rr), 'unique_push returns false');
 is($se->answer, 1, 'still one record in answer section');
-ok($se->unique_push('answer', $rr2), 'unique_push returns ok again');
+ok($se->unique_push('ansWer', $rr2), 'unique_push returns ok again');
 is($se->answer, 2, 'two records in answer section');
 
 my $made = Net::LDNS::Packet->new('foo.com','SOA','IN');
