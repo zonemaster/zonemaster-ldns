@@ -12,6 +12,8 @@ isa_ok($key2, 'Net::LDNS::RR::DNSKEY');
 isa_ok($soa, 'Net::LDNS::RR::SOA');
 isa_ok($sig, 'Net::LDNS::RR::RRSIG');
 
+is($sig->keytag, $key2->keytag);
+
 ok($sig->verify([$soa], [$key1, $key2]), 'Signature verifies.');
 ok($sig->verify([$soa], [$key1]), 'Signature does not verify.');
 

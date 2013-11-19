@@ -1061,6 +1061,13 @@ rr_dnskey_keydata(obj)
     OUTPUT:
         RETVAL
 
+U16
+rr_dnskey_keytag(obj)
+    Net::LDNS::RR::DNSKEY obj;
+    CODE:
+        RETVAL = ldns_calc_keytag(obj);
+    OUTPUT:
+        RETVAL
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::RRSIG            PREFIX=rr_rrsig_
 
