@@ -1143,6 +1143,48 @@ rr_rrsig_signature(obj)
     OUTPUT:
         RETVAL
 
+bool
+rr_rrsig_verify(obj,rrset_in,keys_in)
+    Net::LDNS::RR::RRSIG obj;
+    AV *rrset_in;
+    AV *keys_in;
+    CODE:
+    {
+        ldns_rr_list *rrset = ldns_rr_list_new();
+        ldns_rr_list *keys  = ldns_rr_list_new();
+        ldns_rr_list *sig   = ldns_rr_list_new();
+        ldns_rr_list *good;
+        
+        ldns_rr_list_push_rr(sig, obj);
+        
+        for(size_t i = 0; i < av_len(rrset_in); ++i)
+        {
+            ldns_rr *rr;
+            SV **rrsv = av_fetch(rrset_in,i,1);
+            IV tmp = SvIV((SV*)SvRV(*rrsv));
+            rr = INT2PTR(ldns_rr *,tmp);
+            if(rr != NULL)
+            {
+                ldns_rr_list_push_rr(rrset, rr);
+            }
+        }
+
+        for(size_t i = 0; i < av_len(keys_in); ++i)
+        {
+            ldns_rr *rr;
+            SV **rrsv = av_fetch(keys_in,i,1);
+            IV tmp = SvIV((SV*)SvRV(*rrsv));
+            rr = INT2PTR(ldns_rr *,tmp);
+            if(rr != NULL)
+            {
+                ldns_rr_list_push_rr(keys, rr);
+            }
+        }
+
+        RETVAL = ldns_verify(rrset, sig, keys, good);
+    }
+    OUTPUT:
+        RETVAL
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC             PREFIX=rr_nsec_
 
