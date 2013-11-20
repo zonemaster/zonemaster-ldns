@@ -7,14 +7,14 @@ my $key2 = Net::LDNS::RR->new("iis.se.	1591	IN	DNSKEY	256 3 5 BQEAAAABuWpCewwMRD
 my $soa  = Net::LDNS::RR->new("iis.se.	3600	IN	SOA	ns.nic.se. hostmaster.iis.se. 1384853101 10800 3600 1814400 14400");
 my $sig  = Net::LDNS::RR->new("iis.se.	3600	IN	RRSIG	SOA 5 2 3600 20131129082501 20131119082501 59213 iis.se. ShhhfRT82jfA/J1AAqiie/4r7JuiYOpK6dIwugOtlf0/UpVsOYEIukpe Bq9i7fsa0GNWz/o9gqF8DnsCHzgxZnAngTrJpZAlsrC/FP/6v8WfnFsP LDw9g6Ow8Z6TL9JmZr22YPp27Rwujdb5AnzdurEvQxIAqW66CCCy2pc9 //s=");
 
-isa_ok($key1, 'Net::LDNS::RR::DNSKEY');
-isa_ok($key2, 'Net::LDNS::RR::DNSKEY');
-isa_ok($soa, 'Net::LDNS::RR::SOA');
-isa_ok($sig, 'Net::LDNS::RR::RRSIG');
-
+# isa_ok($key1, 'Net::LDNS::RR::DNSKEY');
+# isa_ok($key2, 'Net::LDNS::RR::DNSKEY');
+# isa_ok($soa, 'Net::LDNS::RR::SOA');
+# isa_ok($sig, 'Net::LDNS::RR::RRSIG');
+# 
 is($sig->keytag, $key2->keytag);
 
 ok($sig->verify([$soa], [$key1, $key2]), 'Signature verifies.');
-ok($sig->verify([$soa], [$key1]), 'Signature does not verify.');
+ok(!$sig->verify([$soa], [$key1]), 'Signature does not verify.');
 
 done_testing;

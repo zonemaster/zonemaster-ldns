@@ -2,6 +2,12 @@ package Net::LDNS::RR::RRSIG;
 
 use parent 'Net::LDNS::RR';
 
+sub verify {
+    my ( $self, $rrset, $keys ) = @_;
+
+    return $self->verify_time($rrset, $keys, time());
+}
+
 1;
 
 =head1 NAME

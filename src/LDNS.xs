@@ -1151,20 +1151,21 @@ rr_rrsig_signature(obj)
         RETVAL
 
 bool
-rr_rrsig_verify(obj,rrset_in,keys_in)
+rr_rrsig_verify_time(obj,rrset_in,keys_in, when)
     Net::LDNS::RR::RRSIG obj;
     AV *rrset_in;
     AV *keys_in;
+    time_t when;
     CODE:
     {
         ldns_rr_list *rrset = ldns_rr_list_new();
         ldns_rr_list *keys  = ldns_rr_list_new();
         ldns_rr_list *sig   = ldns_rr_list_new();
-        ldns_rr_list *good;
-        
+        ldns_rr_list *good  = ldns_rr_list_new();
+
         ldns_rr_list_push_rr(sig, obj);
-        
-        for(size_t i = 0; i < av_len(rrset_in); ++i)
+
+        for(size_t i = 0; i <= av_len(rrset_in); ++i)
         {
             ldns_rr *rr;
             SV **rrsv = av_fetch(rrset_in,i,1);
@@ -1176,7 +1177,7 @@ rr_rrsig_verify(obj,rrset_in,keys_in)
             }
         }
 
-        for(size_t i = 0; i < av_len(keys_in); ++i)
+        for(size_t i = 0; i <= av_len(keys_in); ++i)
         {
             ldns_rr *rr;
             SV **rrsv = av_fetch(keys_in,i,1);
@@ -1188,7 +1189,14 @@ rr_rrsig_verify(obj,rrset_in,keys_in)
             }
         }
 
-        RETVAL = ldns_verify(rrset, sig, keys, good);
+        ldns_status s = ldns_verify_time(rrset, sig, keys, when, good);
+
+        RETVAL = (s == LDNS_STATUS_OK);
+
+        ldns_rr_list_free(rrset);
+        ldns_rr_list_free(keys);
+        ldns_rr_list_free(sig);
+        ldns_rr_list_free(good);
     }
     OUTPUT:
         RETVAL
