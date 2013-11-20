@@ -17,4 +17,7 @@ is($sig->keytag, $key2->keytag);
 ok($sig->verify([$soa], [$key1, $key2]), 'Signature verifies.');
 ok(!$sig->verify([$soa], [$key1]), 'Signature does not verify.');
 
+is($sig->verify_str([$soa], [$key1, $key2]), 'All OK', 'Expected successful verification message.');
+is($sig->verify_str([$soa], [$key1]), 'No keys with the keytag and algorithm from the RRSIG found', 'Expected unsuccessful verification message.');
+
 done_testing;

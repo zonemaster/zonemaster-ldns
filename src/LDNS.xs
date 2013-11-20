@@ -1151,11 +1151,12 @@ rr_rrsig_signature(obj)
         RETVAL
 
 bool
-rr_rrsig_verify_time(obj,rrset_in,keys_in, when)
+rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
     Net::LDNS::RR::RRSIG obj;
     AV *rrset_in;
     AV *keys_in;
     time_t when;
+    const char *msg;
     CODE:
     {
         ldns_rr_list *rrset = ldns_rr_list_new();
@@ -1192,6 +1193,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when)
         ldns_status s = ldns_verify_time(rrset, sig, keys, when, good);
 
         RETVAL = (s == LDNS_STATUS_OK);
+        msg = ldns_get_errorstr_by_id(s);
 
         ldns_rr_list_free(rrset);
         ldns_rr_list_free(keys);
@@ -1200,6 +1202,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when)
     }
     OUTPUT:
         RETVAL
+        msg
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC             PREFIX=rr_nsec_
 
