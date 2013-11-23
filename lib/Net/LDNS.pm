@@ -1,6 +1,6 @@
 package Net::LDNS;
 
-use 5.14.2;
+use 5.12.4;
 
 our $VERSION = '0.1';
 require XSLoader;

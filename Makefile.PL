@@ -10,7 +10,7 @@ perl_version '5.012004';
 requires 'MIME::Base64';
 test_requires 'JSON::XS';
 
-use_ppport 3.20;
+use_ppport 3.19;
 cc_libs 'ldns';
 cc_src_paths 'src';
 

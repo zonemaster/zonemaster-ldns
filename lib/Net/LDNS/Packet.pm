@@ -1,6 +1,6 @@
 package Net::LDNS::Packet;
 
-use 5.14.2;
+use 5.12.4;
 
 use Net::LDNS;
 
