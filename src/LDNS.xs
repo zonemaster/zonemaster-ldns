@@ -246,6 +246,51 @@ retrans(obj,...)
     OUTPUT:
         RETVAL
 
+SV *
+name2addr(obj,name)
+    Net::LDNS obj;
+    const char *name;
+    PPCODE:
+    {
+        ldns_rr_list *addrs;
+        ldns_rdf *dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        size_t n, i;
+        I32 context;
+
+        context = GIMME_V;
+
+        if(context == G_VOID)
+        {
+            XSRETURN_NO;
+        }
+
+        if(dname==NULL)
+        {
+            croak("Name error for '%s'", name);
+        }
+
+        addrs = ldns_get_rr_list_addr_by_name(obj,dname,LDNS_RR_CLASS_IN,0);
+        n = ldns_rr_list_rr_count(addrs);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n);
+        }
+        else
+        {
+            for(i = 0; i < n; ++i)
+            {
+                ldns_rr *rr = ldns_rr_list_rr(addrs,i);
+                ldns_rdf *addr_rdf = ldns_rr_a_address(rr);
+                const char *addr_str = ldns_rdf2str(addr_rdf);
+
+                SV* sv = newSVpv(addr_str,0);
+                mXPUSHs(sv);
+                Safefree(addr_str);
+            }
+        }
+    }
+
 void
 free(obj)
     Net::LDNS obj;

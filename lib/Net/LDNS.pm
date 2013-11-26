@@ -54,6 +54,11 @@ make up a list of servers to send queries to. If an argument cannot be parsed as
 Send a query for the given triple. If type or class are not provided they default to A and IN, respectively. Returns a L<Net::LDNS::Packet> or
 undef.
 
+=item name2addr($name)
+
+Asks this resolver to look up A and AAAA records for the given name, and return a list of the IP addresses (as strings). In scalar context, returns
+the number of addresses found.
+
 =item recurse($flag)
 
 Returns the setting of the recursion flag. If given an argument, it will be treated as a boolean and the flag set accordingly.
