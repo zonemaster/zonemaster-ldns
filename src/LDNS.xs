@@ -102,7 +102,7 @@ new(class, ...)
     {
         int i;
 
-        if (items == 1 ) {
+        if (items == 1 ) { /* Called without arguments, use resolv.conf */
             ldns_resolver_new_frm_file(&RETVAL,NULL);
         }
         else {
@@ -113,7 +113,7 @@ new(class, ...)
                 ldns_rdf *addr;
 
                 if ( !SvOK(ST(i)) || !SvPOK(ST(i)) ) {
-                    continue;
+                    continue; /* Skip non-strings */
                 }
 
                 addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
@@ -1164,8 +1164,10 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         ldns_rr_list *sig   = ldns_rr_list_new();
         ldns_rr_list *good  = ldns_rr_list_new();
 
+        // Make a list with only the RRSIG
         ldns_rr_list_push_rr(sig, obj);
 
+        // Take RRs out of the array and stick in a list
         for(size_t i = 0; i <= av_len(rrset_in); ++i)
         {
             ldns_rr *rr;
@@ -1178,6 +1180,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
             }
         }
 
+        // Again, for the keys
         for(size_t i = 0; i <= av_len(keys_in); ++i)
         {
             ldns_rr *rr;
@@ -1190,6 +1193,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
             }
         }
 
+        // And verify using the lists
         ldns_status s = ldns_verify_time(rrset, sig, keys, when, good);
 
         RETVAL = (s == LDNS_STATUS_OK);
