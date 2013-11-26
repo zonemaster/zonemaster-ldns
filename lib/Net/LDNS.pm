@@ -59,6 +59,10 @@ undef.
 Asks this resolver to look up A and AAAA records for the given name, and return a list of the IP addresses (as strings). In scalar context, returns
 the number of addresses found.
 
+=item addr2name($addr)
+
+Takes an IP address, asks the resolver to do PTR lookups and returns the names found. In scalar context, returns the number of names found.
+
 =item recurse($flag)
 
 Returns the setting of the recursion flag. If given an argument, it will be treated as a boolean and the flag set accordingly.

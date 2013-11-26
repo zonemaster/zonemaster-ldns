@@ -291,6 +291,56 @@ name2addr(obj,name)
         }
     }
 
+SV *
+addr2name(obj,addr_in)
+    Net::LDNS obj;
+    const char *addr_in;
+    PPCODE:
+    {
+        ldns_rr_list *names;
+        ldns_rdf *addr_rdf;
+        size_t n, i;
+        I32 context;
+
+        context = GIMME_V;
+
+        if(context == G_VOID)
+        {
+            XSRETURN_NO;
+        }
+
+        addr_rdf = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, addr_in);
+        if(addr_rdf==NULL)
+        {
+            addr_rdf = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, addr_in);
+        }
+        if(addr_rdf==NULL)
+        {
+            croak("Failed to parse address: %s", addr_in);
+        }
+
+        names = ldns_get_rr_list_name_by_addr(obj,addr_rdf,LDNS_RR_CLASS_IN,0);
+        n = ldns_rr_list_rr_count(names);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n);
+        }
+        else
+        {
+            for(i = 0; i < n; ++i)
+            {
+                ldns_rr *rr = ldns_rr_list_rr(names,i);
+                ldns_rdf *name_rdf = ldns_rr_rdf(rr,0);
+                const char *name_str = ldns_rdf2str(name_rdf);
+
+                SV* sv = newSVpv(name_str,0);
+                mXPUSHs(sv);
+                Safefree(name_str);
+            }
+        }
+    }
+
 void
 free(obj)
     Net::LDNS obj;
