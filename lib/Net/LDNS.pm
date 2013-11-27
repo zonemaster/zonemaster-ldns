@@ -94,4 +94,23 @@ Get and optionally set the number of retries.
 
 Get and optionally set the number of seconds between retries.
 
+=item axfr_start($domain,$class)
+
+Set this resolver object up for a zone transfer of the specified domain. If C<$class> is not given, it defaults to IN.
+
+=item axfr_next()
+
+Get the next RR in the zone transfer. L<axfr_start()> must have been done before this is called, and after this is called L<axfr_complete()>
+should be used to check if there are more records to get. If there's any problem, an exception will be thrown. Basically, the sequence should be
+something like:
+
+    $res->axfr_start('example.org');
+    do {
+        push @rrlist, $res->axfr_next;
+    } until $res->axfr_complete;
+
+=item axfr_complete()
+
+Returns false if there is a started zone transfer with more records to get, and true if the started transfer has completed.
+
 =back

@@ -350,6 +350,67 @@ addr2name(obj,addr_in)
         }
     }
 
+bool
+axfr_start(obj,dname,class="IN")
+    Net::LDNS obj;
+    const char *dname;
+    const char *class;
+    CODE:
+    {
+        ldns_rdf *domain = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, dname);
+        ldns_rr_class cl = ldns_get_rr_class_by_name(class);
+        ldns_status s;
+
+        if(domain==NULL)
+        {
+            croak("Name error for '%s", dname);
+        }
+
+        if(!cl)
+        {
+            croak("Unknown RR class: %s", class);
+        }
+
+        s = ldns_axfr_start(obj, domain, cl);
+
+        RETVAL = (s==LDNS_STATUS_OK);
+    }
+    OUTPUT:
+        RETVAL
+
+SV *
+axfr_next(obj)
+    Net::LDNS obj;
+    CODE:
+    {
+        ldns_rr *rr = ldns_axfr_next(obj);
+        char rrclass[30];
+        char *type;
+
+        if(rr==NULL)
+        {
+            croak("AXFR error");
+        }
+
+        type = ldns_rr_type2str(ldns_rr_get_type(rr));
+        snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
+
+        SV* rr_sv = newSV(0);
+        sv_setref_pv(rr_sv, rrclass, rr);
+        RETVAL = rr_sv;
+        Safefree(type);
+    }
+    OUTPUT:
+        RETVAL
+
+bool
+axfr_complete(obj)
+    Net::LDNS obj;
+    CODE:
+        RETVAL = ldns_axfr_complete(obj);
+    OUTPUT:
+        RETVAL
+
 void
 DESTROY(obj)
     Net::LDNS obj;
