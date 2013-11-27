@@ -411,6 +411,14 @@ axfr_complete(obj)
     OUTPUT:
         RETVAL
 
+Net::LDNS::Packet
+axfr_last_packet(obj)
+    Net::LDNS obj;
+    CODE:
+        RETVAL = ldns_axfr_last_pkt(obj);
+    OUTPUT:
+        RETVAL
+
 void
 DESTROY(obj)
     Net::LDNS obj;

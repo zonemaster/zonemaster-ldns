@@ -113,4 +113,9 @@ something like:
 
 Returns false if there is a started zone transfer with more records to get, and true if the started transfer has completed.
 
+=item axfr_last_packet()
+
+If L<axfr_next()> threw an exception, this method returns the L<Net::LDNS::Packet> that made it do so. The packet's RCODE is likely to say what
+the problem was (for example, NOTAUTH or NXDOMAIN).
+
 =back
