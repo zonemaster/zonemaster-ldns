@@ -32,4 +32,9 @@ Returns the algorithm number.
 
 Returns the cryptographic key in binary form.
 
+=item ds($hash)
+
+Returns a L<Net::LDNS::RR::DS> record matching this key. The argument must be one of the strings 'sha1', 'sha256', 'sha384' or 'gost'. GOST may not
+be available, depending on how you ldns library was compiled.
+
 =back

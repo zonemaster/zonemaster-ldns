@@ -1164,6 +1164,46 @@ rr_dnskey_keytag(obj)
     OUTPUT:
         RETVAL
 
+Net::LDNS::RR::DS
+rr_dnskey_ds(obj, hash)
+    Net::LDNS::RR::DNSKEY obj;
+    const char *hash;
+    CODE:
+    {
+        char lbuf[21];
+        char *p;
+        ldns_hash htype;
+        
+        p = lbuf;
+        strncpy(lbuf, hash, 20);
+        for(; *p; p++) *p = tolower(*p);
+        
+        if(strEQ(lbuf,"sha1"))
+        {
+            htype = LDNS_SHA1;
+        }
+        else if(strEQ(lbuf, "sha256"))
+        {
+            htype = LDNS_SHA256;
+        }
+        else if(strEQ(lbuf, "sha384"))
+        {
+            htype = LDNS_SHA384;
+        }
+        else if(strEQ(lbuf,"gost"))
+        {
+            htype = LDNS_HASH_GOST;
+        }
+        else
+        {
+            croak("Unknown hash type: %s", hash);
+        }
+        
+        RETVAL = ldns_key_rr2ds(obj,htype);
+    }
+    OUTPUT:
+        RETVAL
+
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::RRSIG            PREFIX=rr_rrsig_
 
 char *

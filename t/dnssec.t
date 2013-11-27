@@ -20,4 +20,22 @@ ok(!$sig->verify([$soa], [$key1]), 'Signature does not verify.');
 is($sig->verify_str([$soa], [$key1, $key2]), 'All OK', 'Expected successful verification message.');
 is($sig->verify_str([$soa], [$key1]), 'No keys with the keytag and algorithm from the RRSIG found', 'Expected unsuccessful verification message.');
 
+my $ds1 = $key1->ds('sha1');
+isa_ok($ds1, 'Net::LDNS::RR::DS','sha1');
+ok($ds1->verify($key1)) if $ds1;
+
+my $ds2 = $key1->ds('sha256');
+isa_ok($ds2, 'Net::LDNS::RR::DS','sha256');
+ok($ds2->verify($key1)) if $ds2;
+
+my $ds3 = $key1->ds('sha384');
+isa_ok($ds3, 'Net::LDNS::RR::DS','sha384');
+ok($ds3->verify($key1)) if $ds3;
+
+my $ds4 = $key1->ds('gost');
+if ($ds4) { # We may not have GOST available.
+    isa_ok($ds4, 'Net::LDNS::RR::DS','gost');
+    ok($ds4->verify($key1)) if $ds4;
+}
+
 done_testing;
