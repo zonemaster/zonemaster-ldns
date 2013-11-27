@@ -153,6 +153,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
         ldns_rr_type t;
         ldns_rr_class c;
         ldns_status status;
+        ldns_pkt *pkt;
 
         t = ldns_get_rr_type_by_name(rrtype);
         if(!t)
@@ -167,11 +168,12 @@ query(obj, dname, rrtype="A", rrclass="IN")
         }
 
         domain = ldns_dname_new_frm_str(dname);
-        status = ldns_resolver_send(&RETVAL, obj, domain, t, c, LDNS_RD);
+        status = ldns_resolver_send(&pkt, obj, domain, t, c, LDNS_RD);
         if ( status != LDNS_STATUS_OK) {
             croak("%s", ldns_get_errorstr_by_id(status));
             RETVAL = NULL;
         }
+        RETVAL = ldns_pkt_clone(pkt);
     }
     OUTPUT:
         RETVAL
@@ -349,20 +351,10 @@ addr2name(obj,addr_in)
     }
 
 void
-free(obj)
+DESTROY(obj)
     Net::LDNS obj;
     CODE:
         ldns_resolver_free(obj);
-
-char *
-addr(obj)
-    Net::LDNS obj;
-    CODE:
-        char buf[25];
-        snprintf(buf, 24, "%p", (void *)obj);
-        RETVAL = buf;
-    OUTPUT:
-        RETVAL
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
 
@@ -398,16 +390,6 @@ packet_new(objclass,name,type="A",class="IN")
         
         RETVAL = ldns_pkt_query_new(rr_name, rr_type, rr_class,0);
     }
-    OUTPUT:
-        RETVAL
-
-char *
-packet_addr(obj)
-    Net::LDNS::Packet obj;
-    CODE:
-        char buf[25];
-        snprintf(buf, 24, "%p", (void *)obj);
-        RETVAL = buf;
     OUTPUT:
         RETVAL
 
@@ -834,7 +816,7 @@ packet_new_from_wireformat(class,buf)
         RETVAL
 
 void
-packet_free(obj)
+packet_DESTROY(obj)
     Net::LDNS::Packet obj;
     CODE:
         ldns_pkt_free(obj);

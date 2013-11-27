@@ -6,8 +6,6 @@ use Net::LDNS;
 
 use MIME::Base64;
 
-our %destroyed;
-
 sub TO_JSON {
     my ( $self ) = @_;
 
@@ -24,16 +22,6 @@ sub data {
     my ( $self ) = @_;
 
     return $self->wireformat;
-}
-
-sub DESTROY {
-    my ( $self ) = @_;
-
-    if ( not $destroyed{ $self->addr } ) {
-        $destroyed{ $self->addr } = 1;
-        $self->free;
-    }
-    return;
 }
 
 1;

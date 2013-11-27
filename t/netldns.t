@@ -36,8 +36,6 @@ ok($p2->querytime > 0);
 is($p2->answerfrom, '8.8.8.8', 'expected answerfrom');
 $p2->answerfrom('1.2.3.4');
 is($p2->answerfrom, '1.2.3.4', 'setting answerfrom works');
-my $diff = $p2->timestamp - time();
-ok(($diff >= 0 and $diff < 1), 'timestamp looks reasonable');
 
 $p2->timestamp(4711);
 is($p2->timestamp, 4711, 'setting timestamp works');
