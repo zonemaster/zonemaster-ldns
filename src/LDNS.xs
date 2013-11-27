@@ -95,6 +95,13 @@ MODULE = Net::LDNS        PACKAGE = Net::LDNS
 
 PROTOTYPES: ENABLE
 
+const char *
+lib_version()
+    CODE:
+        RETVAL = ldns_version();
+    OUTPUT:
+        RETVAL
+
 Net::LDNS
 new(class, ...)
     char *class;

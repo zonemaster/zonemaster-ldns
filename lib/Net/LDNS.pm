@@ -38,7 +38,17 @@ sub DESTROY {
 
 C<Net::LDNS> represents a resolver, which is the part of the system responsible for sending queries and receiving answers to them.
 
-=head1 METHODS
+=head1 FUNCTION
+
+=over
+
+=item lib_version()
+
+Returns the ldns version string.
+
+=back
+
+=head1 CLASS METHOD
 
 =over
 
@@ -48,6 +58,12 @@ Creates a new resolver object. If given no arguments, if will pick up nameserver
 equivalent). If given a single argument that is C<undef>, it will not know of any nameservers and all attempts to send queries will throw
 exceptions. If given one or more arguments that are not C<undef>, attempts to parse them as IPv4 and IPv6 addresses will be made, and if successful
 make up a list of servers to send queries to. If an argument cannot be parsed as an IP address, an exception will be thrown.
+
+=back
+
+=head1 INSTANCE METHODS
+
+=over
 
 =item query($name, $type, $class)
 

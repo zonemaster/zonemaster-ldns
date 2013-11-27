@@ -3,6 +3,9 @@ use Devel::Peek;
 
 BEGIN { use_ok('Net::LDNS')}
 
+my $lib_v = Net::LDNS::lib_version();
+ok($lib_v >= 1.16, 'ldns version at least 1.16');
+
 my $s = Net::LDNS->new('8.8.8.8');
 isa_ok($s, 'Net::LDNS');
 my $p = $s->query('nic.se', 'MX');
