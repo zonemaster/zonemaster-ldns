@@ -94,6 +94,22 @@ typedef ldns_rr *Net__LDNS__RR__X25;
 #define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
 #define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
 
+SV *
+rr2sv(ldns_rr *rr)
+{
+   char rrclass[30];
+   char *type;
+
+   type = ldns_rr_type2str(ldns_rr_get_type(rr));
+   snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
+   Safefree(type);
+
+   SV* rr_sv = newSV(0);
+   sv_setref_pv(rr_sv, rrclass, rr);
+
+   return rr_sv;
+}
+
 MODULE = Net::LDNS        PACKAGE = Net::LDNS
 
 PROTOTYPES: ENABLE
@@ -387,8 +403,6 @@ axfr_next(obj)
     CODE:
     {
         ldns_rr *rr;
-        char rrclass[30];
-        char *type;
 
         /* ldns unfortunately prints to standard error, so close it while we call them */
         int err_fd = fileno(stderr);
@@ -403,13 +417,7 @@ axfr_next(obj)
             croak("AXFR error");
         }
 
-        type = ldns_rr_type2str(ldns_rr_get_type(rr));
-        snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
-
-        SV* rr_sv = newSV(0);
-        sv_setref_pv(rr_sv, rrclass, rr);
-        RETVAL = rr_sv;
-        Safefree(type);
+        RETVAL = rr2sv(rr);
     }
     OUTPUT:
         RETVAL
@@ -652,21 +660,9 @@ packet_answer(obj)
             XSRETURN_IV(n);
         }
 
-        EXTEND(sp,n);
         for(i = 0; i < n; ++i)
         {
-            char rrclass[30];
-            char *type;
-
-            ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
-
-            type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
-
-            SV* rr_sv = sv_newmortal();
-            sv_setref_pv(rr_sv, rrclass, rr);
-            PUSHs(rr_sv);
-            Safefree(type);
+            mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
         }
     }
 
@@ -692,21 +688,9 @@ packet_authority(obj)
             XSRETURN_IV(n);
         }
 
-        EXTEND(sp,n);
         for(i = 0; i < n; ++i)
         {
-            char rrclass[30];
-            char *type;
-
-            ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
-
-            type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
-
-            SV* rr_sv = sv_newmortal();
-            sv_setref_pv(rr_sv, rrclass, rr);
-            PUSHs(rr_sv);
-            Safefree(type);
+            mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
         }
     }
 
@@ -732,21 +716,9 @@ packet_additional(obj)
             XSRETURN_IV(n);
         }
 
-        EXTEND(sp,n);
         for(i = 0; i < n; ++i)
         {
-            char rrclass[30];
-            char *type;
-
-            ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
-
-            type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
-
-            SV* rr_sv = sv_newmortal();
-            sv_setref_pv(rr_sv, rrclass, rr);
-            PUSHs(rr_sv);
-            Safefree(type);
+            mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
         }
     }
 
@@ -772,21 +744,9 @@ packet_question(obj)
             XSRETURN_IV(n);
         }
 
-        EXTEND(sp,n);
         for(i = 0; i < n; ++i)
         {
-            char rrclass[40];
-            char *type;
-
-            ldns_rr *rr = ldns_rr_clone(ldns_rr_list_rr(rrs,i));
-
-            type = ldns_rr_type2str(ldns_rr_get_type(rr));
-            snprintf(rrclass, 39, "Net::LDNS::RR::%s", type);
-
-            SV* rr_sv = sv_newmortal();
-            sv_setref_pv(rr_sv, rrclass, rr);
-            PUSHs(rr_sv);
-            Safefree(type);
+            mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
         }
     }
 
