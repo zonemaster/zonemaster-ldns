@@ -391,14 +391,12 @@ axfr_next(obj)
         char *type;
 
         /* ldns unfortunately prints to standard error, so close it while we call them */
-        int save_fd = dup(fileno(stderr));
-        fclose(stderr);
+        int err_fd = fileno(stderr);
+        int save_fd = dup(err_fd);
+        fflush(stderr);
+        close(err_fd);
         rr = ldns_axfr_next(obj);
-        stderr = fdopen(save_fd,"a");
-        if(stderr==NULL)
-        {
-            croak("Failed to reopen standard error: %s", strerror(errno));
-        }
+        dup2(save_fd,err_fd);
 
         if(rr==NULL)
         {
