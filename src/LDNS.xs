@@ -105,7 +105,14 @@ rr2sv(ldns_rr *rr)
    Safefree(type);
 
    SV* rr_sv = newSV(0);
-   sv_setref_pv(rr_sv, rrclass, rr);
+   if (strncmp(type, "TYPE", 4)==0)
+   {
+       sv_setref_pv(rr_sv, "Net::LDNS::RR", rr);
+   }
+   else
+   {
+       sv_setref_pv(rr_sv, rrclass, rr);
+   }
 
    return rr_sv;
 }
