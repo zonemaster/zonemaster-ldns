@@ -6,8 +6,11 @@
 #define NEED_newRV_noinc
 #include "ppport.h"
 
+#include <stdio.h>
+#include <unistd.h>
 #include <ctype.h>
 #include <ldns/ldns.h>
+
 typedef ldns_resolver *Net__LDNS;
 typedef ldns_pkt *Net__LDNS__Packet;
 typedef ldns_rr_list *Net__LDNS__RRList;
@@ -383,9 +386,19 @@ axfr_next(obj)
     Net::LDNS obj;
     CODE:
     {
-        ldns_rr *rr = ldns_axfr_next(obj);
+        ldns_rr *rr;
         char rrclass[30];
         char *type;
+
+        /* ldns unfortunately prints to standard error, so close it while we call them */
+        int save_fd = dup(fileno(stderr));
+        fclose(stderr);
+        rr = ldns_axfr_next(obj);
+        stderr = fdopen(save_fd,"a");
+        if(stderr==NULL)
+        {
+            croak("Failed to reopen standard error: %s", strerror(errno));
+        }
 
         if(rr==NULL)
         {
