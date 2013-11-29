@@ -15,6 +15,22 @@ A subclass of L<Net::LDNS::RR>, so it has all the methods of that class availabl
 
 =head1 METHODS
 
-No RDATA methods implemented yet.
+=over
+
+=item flags()
+
+Returns the flag field as a number.
+
+=item protocol()
+
+Returns the protocol number.
+
+=item algorithm()
+
+Returns the algorithm number.
+
+=item keydata()
+
+Returns the cryptographic key in binary form.
 
 =cut

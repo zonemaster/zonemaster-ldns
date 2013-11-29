@@ -1608,3 +1608,41 @@ rr_spf_spfdata(obj)
         RETVAL
     CLEANUP:
         Safefree(RETVAL);
+
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::KEY           PREFIX=rr_key_
+
+U16
+rr_key_flags(obj)
+    Net::LDNS::RR::KEY obj;
+    CODE:
+        RETVAL = D_U16(obj,0);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_key_protocol(obj)
+    Net::LDNS::RR::KEY obj;
+    CODE:
+        RETVAL = D_U8(obj,1);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_key_algorithm(obj)
+    Net::LDNS::RR::KEY obj;
+    CODE:
+        RETVAL = D_U8(obj,2);
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_key_keydata(obj)
+    Net::LDNS::RR::KEY obj;
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+    }
+    OUTPUT:
+        RETVAL
+
