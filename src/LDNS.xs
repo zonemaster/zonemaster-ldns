@@ -413,12 +413,21 @@ axfr_next(obj)
         ldns_rr *rr;
 
         /* ldns unfortunately prints to standard error, so close it while we call them */
-        int err_fd = fileno(stderr);
-        int save_fd = dup(err_fd);
-        fflush(stderr);
-        close(err_fd);
-        rr = ldns_axfr_next(obj);
-        dup2(save_fd,err_fd);
+        int err_fd = fileno(stderr);            /* Remember fd for stderr */
+        int save_fd = dup(err_fd);              /* Copy open fd for stderr */
+        int tmp_fd;
+
+        fflush(stderr);                         /* Print anything waiting */
+        close(err_fd);                          /* Close stderr */
+        tmp_fd = open("/dev/null",O_RDONLY);    /* Open something to allocate the now-free fd stderr used */
+        if(tmp_fd != err_fd)                    /* Did we get the one we expected? */
+        {
+            croak("Something is wrong, %d != %d", err_fd, tmp_fd);
+        }
+        rr = ldns_axfr_next(obj);               /* Shut up */
+        close(tmp_fd);                          /* Close the placeholder */
+        fflush(stderr);                         /* Flush anything ldns buffered */
+        dup2(save_fd,err_fd);                   /* And copy the open stderr back to where it should be */
 
         if(rr==NULL)
         {
