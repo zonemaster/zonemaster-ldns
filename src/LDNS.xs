@@ -71,6 +71,7 @@ typedef ldns_rr *Net__LDNS__RR__RKEY;
 typedef ldns_rr *Net__LDNS__RR__RP;
 typedef ldns_rr *Net__LDNS__RR__RRSIG;
 typedef ldns_rr *Net__LDNS__RR__RT;
+typedef ldns_rr *Net__LDNS__RR__SIG;
 typedef ldns_rr *Net__LDNS__RR__SINK;
 typedef ldns_rr *Net__LDNS__RR__SOA;
 typedef ldns_rr *Net__LDNS__RR__SPF;
@@ -1641,6 +1642,87 @@ rr_key_keydata(obj)
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+    }
+    OUTPUT:
+        RETVAL
+
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SIG            PREFIX=rr_sig_
+
+char *
+rr_sig_typecovered(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_STRING(obj,0);
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        Safefree(RETVAL);
+
+U8
+rr_sig_algorithm(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_U8(obj,1);
+    OUTPUT:
+        RETVAL
+
+U8
+rr_sig_labels(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_U8(obj,2);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_sig_origttl(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_U32(obj,3);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_sig_expiration(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_U32(obj,4);
+    OUTPUT:
+        RETVAL
+
+U32
+rr_sig_inception(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_U32(obj,5);
+    OUTPUT:
+        RETVAL
+
+U16
+rr_sig_keytag(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_U16(obj,6);
+    OUTPUT:
+        RETVAL
+
+char *
+rr_sig_signer(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+        RETVAL = D_STRING(obj,7);
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        Safefree(RETVAL);
+
+SV *
+rr_sig_signature(obj)
+    Net::LDNS::RR::SIG obj;
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj,8);
         RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
     }
     OUTPUT:

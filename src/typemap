@@ -58,6 +58,7 @@ Net::LDNS::RR::RKEY		    T_PTROBJ
 Net::LDNS::RR::RP		    T_PTROBJ
 Net::LDNS::RR::RRSIG	    T_PTROBJ
 Net::LDNS::RR::RT		    T_PTROBJ
+Net::LDNS::RR::SIG          T_PTROBJ
 Net::LDNS::RR::SINK		    T_PTROBJ
 Net::LDNS::RR::SOA		    T_PTROBJ
 Net::LDNS::RR::SPF		    T_PTROBJ
