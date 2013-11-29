@@ -1596,3 +1596,15 @@ rr_txt_txtdata(obj)
         RETVAL
     CLEANUP:
         Safefree(RETVAL);
+
+MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SPF              PREFIX=rr_spf_
+
+char *
+rr_spf_spfdata(obj)
+    Net::LDNS::RR::SPF obj;
+    CODE:
+        RETVAL = D_STRING(obj,0);
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        Safefree(RETVAL);

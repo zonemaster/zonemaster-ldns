@@ -118,4 +118,8 @@ is($nsec3param->owner, 'whitehouse.gov.');
 my $srv = Net::LDNS::RR->new('_nicname._tcp.se.	172800	IN	SRV	0 0 43 whois.nic-se.se.');
 is($srv->type, 'SRV');
 
+my $spf = Net::LDNS::RR->new('frobbit.se.		1127	IN	SPF	"v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"');
+isa_ok($spf, 'Net::LDNS::RR::SPF');
+is($spf->spfdata,'"v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"');
+
 done_testing;

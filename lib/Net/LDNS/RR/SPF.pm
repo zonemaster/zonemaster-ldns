@@ -15,6 +15,10 @@ A subclass of L<Net::LDNS::RR>, so it has all the methods of that class availabl
 
 =head1 METHODS
 
-No RDATA methods implemented yet.
+=over
 
-=cut
+=item spfdata()
+
+Returns the SPF string.
+
+=back
