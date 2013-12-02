@@ -13,5 +13,6 @@ test_requires 'JSON::XS';
 use_ppport 3.19;
 cc_libs 'ldns';
 cc_src_paths 'src';
+cc_assert_lib lib => 'ldns', header => 'ldns/ldns.h';
 
 WriteAll;
