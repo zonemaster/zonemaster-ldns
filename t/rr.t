@@ -111,8 +111,8 @@ my $nsec3param = Net::LDNS::RR->new_from_string('whitehouse.gov.		3600	IN	NSEC3P
 isa_ok($nsec3param, 'Net::LDNS::RR::NSEC3PARAM');
 is($nsec3param->algorithm, 1);
 is($nsec3param->flags, 0);
-is($nsec3param->iterations, 1);
-is(encode_base64($nsec3param->salt), "CLLBmrUmgZNH\n");
+is($nsec3param->iterations, 1, "Iterations");
+is(encode_base64($nsec3param->salt), "CLLBmrUmgZNH\n", "Salt");
 is($nsec3param->owner, 'whitehouse.gov.');
 
 my $srv = Net::LDNS::RR->new('_nicname._tcp.se.	172800	IN	SRV	0 0 43 whois.nic-se.se.');

@@ -103,7 +103,6 @@ rr2sv(ldns_rr *rr)
 
    type = ldns_rr_type2str(ldns_rr_get_type(rr));
    snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
-   Safefree(type);
 
    SV* rr_sv = newSV(0);
    if (strncmp(type, "TYPE", 4)==0)
@@ -115,6 +114,7 @@ rr2sv(ldns_rr *rr)
        sv_setref_pv(rr_sv, rrclass, rr);
    }
 
+   Safefree(type);
    return rr_sv;
 }
 
@@ -911,15 +911,15 @@ rr_new_from_string(class,str)
         sv_setref_pv(rr_sv, rrclass, rr);
         PUSHs(rr_sv);
 
-SV *
+char *
 rr_owner(obj)
     Net::LDNS::RR obj;
     CODE:
-        char *str = ldns_rdf2str(ldns_rr_owner(obj));
-        RETVAL = newSV(0);
-        sv_usepvn(RETVAL, str, strlen(str));
+        RETVAL = ldns_rdf2str(ldns_rr_owner(obj));
     OUTPUT:
         RETVAL
+    CLEANUP:
+        Safefree(RETVAL);
 
 U32
 rr_ttl(obj)
@@ -1340,6 +1340,8 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
     const char *msg;
     CODE:
     {
+        size_t i;
+        ldns_status s;
         ldns_rr_list *rrset = ldns_rr_list_new();
         ldns_rr_list *keys  = ldns_rr_list_new();
         ldns_rr_list *sig   = ldns_rr_list_new();
@@ -1349,7 +1351,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         ldns_rr_list_push_rr(sig, obj);
 
         // Take RRs out of the array and stick in a list
-        for(size_t i = 0; i <= av_len(rrset_in); ++i)
+        for(i = 0; i <= av_len(rrset_in); ++i)
         {
             ldns_rr *rr;
             SV **rrsv = av_fetch(rrset_in,i,1);
@@ -1362,7 +1364,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         }
 
         // Again, for the keys
-        for(size_t i = 0; i <= av_len(keys_in); ++i)
+        for(i = 0; i <= av_len(keys_in); ++i)
         {
             ldns_rr *rr;
             SV **rrsv = av_fetch(keys_in,i,1);
@@ -1375,7 +1377,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         }
 
         // And verify using the lists
-        ldns_status s = ldns_verify_time(rrset, sig, keys, when, good);
+        s = ldns_verify_time(rrset, sig, keys, when, good);
 
         RETVAL = (s == LDNS_STATUS_OK);
         msg = ldns_get_errorstr_by_id(s);
