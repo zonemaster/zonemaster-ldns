@@ -81,9 +81,10 @@ use overload '<=>' => \&do_compare, 'cmp' => \&do_compare, '""' => \&to_string;
 sub new {
     my ( $class, $string ) = @_;
 
-    if ($string) {
-        return $class->new_from_string($string);
-    } else {
+    if ( $string ) {
+        return $class->new_from_string( $string );
+    }
+    else {
         croak "Must provide string to create RR";
     }
 }
@@ -97,11 +98,11 @@ sub name {
 sub do_compare {
     my ( $self, $other, $swapped ) = @_;
 
-    return $self->compare($other);
+    return $self->compare( $other );
 }
 
 sub to_string {
-    my ($self) = @_;
+    my ( $self ) = @_;
 
     return $self->string;
 }

@@ -6,14 +6,14 @@ sub verify {
     my ( $self, $rrset, $keys ) = @_;
     my $msg;
 
-    return $self->verify_time($rrset, $keys, time(), $msg);
+    return $self->verify_time( $rrset, $keys, time(), $msg );
 }
 
 sub verify_str {
     my ( $self, $rrset, $keys ) = @_;
     my $msg;
 
-    $self->verify_time($rrset, $keys, time(), $msg);
+    $self->verify_time( $rrset, $keys, time(), $msg );
 
     return $msg;
 }

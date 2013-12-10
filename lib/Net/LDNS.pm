@@ -4,7 +4,7 @@ use 5.12.4;
 
 our $VERSION = '0.5';
 require XSLoader;
-XSLoader::load(__PACKAGE__, $VERSION);
+XSLoader::load( __PACKAGE__, $VERSION );
 
 use Net::LDNS::RR;
 use Net::LDNS::Packet;
