@@ -1,5 +1,11 @@
 use inc::Module::Install;
 
+BEGIN {
+    if ($Module::Install::AUTHOR) {
+        use Module::Install::XSUtil;
+    }
+}
+
 name 'Net-LDNS';
 version_from 'lib/Net/LDNS.pm';
 license 'bsd';

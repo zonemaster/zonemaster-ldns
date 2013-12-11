@@ -29,7 +29,7 @@ is(
     'Expected unsuccessful verification message.'
 );
 
-my $msg;
+my $msg = '';
 my $res = $sig->verify_time( [$soa], [ $key1, $key2 ], 1385628478, $msg );
 ok( $res, 'Verified OK in the past.' );
 is( $msg, 'All OK', 'Expected verification message' );

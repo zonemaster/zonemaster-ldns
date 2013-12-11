@@ -4,14 +4,14 @@ use parent 'Net::LDNS::RR';
 
 sub verify {
     my ( $self, $rrset, $keys ) = @_;
-    my $msg;
+    my $msg = '';
 
     return $self->verify_time( $rrset, $keys, time(), $msg );
 }
 
 sub verify_str {
     my ( $self, $rrset, $keys ) = @_;
-    my $msg;
+    my $msg = '';
 
     $self->verify_time( $rrset, $keys, time(), $msg );
 
