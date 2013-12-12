@@ -19,6 +19,6 @@ test_requires 'JSON::XS';
 use_ppport 3.19;
 cc_libs 'ldns';
 cc_src_paths 'src';
-cc_assert_lib lib => 'ldns', header => 'ldns/ldns.h';
+cc_assert_lib lib => 'ldns', header => 'ldns/ldns.h', function => 'if(atof(ldns_version())>=1.6) return 0; else return 1;';
 
 WriteAll;
