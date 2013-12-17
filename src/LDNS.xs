@@ -114,7 +114,8 @@ rr2sv(ldns_rr *rr)
        sv_setref_pv(rr_sv, rrclass, rr);
    }
 
-   Safefree(type);
+   free(type);
+
    return rr_sv;
 }
 
@@ -418,12 +419,8 @@ axfr_next(obj)
         int tmp_fd;
 
         fflush(stderr);                         /* Print anything waiting */
-        close(err_fd);                          /* Close stderr */
-        tmp_fd = open("/dev/null",O_RDONLY);    /* Open something to allocate the now-free fd stderr used */
-        if(tmp_fd != err_fd)                    /* Did we get the one we expected? */
-        {
-            croak("Something is wrong, %d != %d", err_fd, tmp_fd);
-        }
+        tmp_fd = open("/dev/null",O_RDWR);    /* Open something to allocate the now-free fd stderr used */
+        dup2(tmp_fd,err_fd);
         rr = ldns_axfr_next(obj);               /* Shut up */
         close(tmp_fd);                          /* Close the placeholder */
         fflush(stderr);                         /* Flush anything ldns buffered */
