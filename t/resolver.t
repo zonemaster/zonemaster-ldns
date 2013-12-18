@@ -46,7 +46,7 @@ subtest 'global' => sub {
 
 subtest 'sections' => sub {
     my $res = Net::LDNS->new( '194.146.106.22' );
-    my $p   = $res->query( 'www.iis.se' );
+    my $p   = eval { $res->query( 'www.iis.se' ) };
     plan skip_all => 'No response, cannot test' if not $p;
 
     is( scalar( $p->answer ),     1, 'answer count in scalar context' );
