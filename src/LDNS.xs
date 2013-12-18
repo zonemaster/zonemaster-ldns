@@ -319,11 +319,11 @@ name2addr(obj,name)
             {
                 ldns_rr *rr = ldns_rr_list_rr(addrs,i);
                 ldns_rdf *addr_rdf = ldns_rr_a_address(rr);
-                const char *addr_str = ldns_rdf2str(addr_rdf);
+                char *addr_str = ldns_rdf2str(addr_rdf);
 
                 SV* sv = newSVpv(addr_str,0);
                 mXPUSHs(sv);
-                Safefree(addr_str);
+                free(addr_str);
             }
         }
     }
@@ -369,11 +369,11 @@ addr2name(obj,addr_in)
             {
                 ldns_rr *rr = ldns_rr_list_rr(names,i);
                 ldns_rdf *name_rdf = ldns_rr_rdf(rr,0);
-                const char *name_str = ldns_rdf2str(name_rdf);
+                char *name_str = ldns_rdf2str(name_rdf);
 
                 SV* sv = newSVpv(name_str,0);
                 mXPUSHs(sv);
-                Safefree(name_str);
+                free(name_str);
             }
         }
     }
@@ -503,7 +503,7 @@ packet_rcode(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 char *
 packet_opcode(obj)
@@ -513,7 +513,7 @@ packet_opcode(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 U16
 packet_id(obj)
@@ -630,7 +630,7 @@ packet_answerfrom(obj,...)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 double
 packet_timestamp(obj,...)
@@ -822,7 +822,7 @@ packet_string(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 SV *
 packet_wireformat(obj)
@@ -841,7 +841,7 @@ packet_wireformat(obj)
         else
         {
             RETVAL = newSVpvn((const char *)buf,sz);
-            Safefree(buf);
+            free(buf);
         }
     }
     OUTPUT:
@@ -903,7 +903,7 @@ rr_new_from_string(class,str)
         }
         rrtype = ldns_rr_type2str(ldns_rr_get_type(rr));
         snprintf(rrclass, 39, "Net::LDNS::RR::%s", rrtype);
-        Safefree(rrtype);
+        free(rrtype);
         rr_sv = sv_newmortal();
         sv_setref_pv(rr_sv, rrclass, rr);
         PUSHs(rr_sv);
@@ -916,7 +916,7 @@ rr_owner(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 U32
 rr_ttl(obj)
@@ -934,7 +934,7 @@ rr_type(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 char *
 rr_class(obj)
@@ -944,7 +944,7 @@ rr_class(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 char *
 rr_string(obj)
@@ -955,7 +955,7 @@ rr_string(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 I32
 rr_compare(obj1,obj2)
@@ -992,7 +992,7 @@ rr_ns_nsdname(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::MX           PREFIX=rr_mx_
@@ -1013,7 +1013,7 @@ rr_mx_exchange(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::A                PREFIX=rr_a_
@@ -1026,7 +1026,7 @@ rr_a_address(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::AAAA             PREFIX=rr_aaaa_
@@ -1039,7 +1039,7 @@ rr_aaaa_address(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SOA              PREFIX=rr_soa_
@@ -1052,7 +1052,7 @@ rr_soa_mname(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 char *
 rr_soa_rname(obj)
@@ -1062,7 +1062,7 @@ rr_soa_rname(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 U32
 rr_soa_serial(obj)
@@ -1150,7 +1150,7 @@ rr_ds_hexdigest(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 bool
@@ -1257,7 +1257,7 @@ rr_rrsig_typecovered(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 U8
 rr_rrsig_algorithm(obj)
@@ -1315,7 +1315,7 @@ rr_rrsig_signer(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 SV *
 rr_rrsig_signature(obj)
@@ -1406,7 +1406,7 @@ rr_nsec_typelist(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 SV *
 rr_nsec_typehref(obj)
@@ -1500,7 +1500,7 @@ rr_nsec3_typelist(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 SV *
 rr_nsec3_typehref(obj)
@@ -1578,7 +1578,7 @@ rr_ptr_ptrdname(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::CNAME            PREFIX=rr_cname_
@@ -1591,7 +1591,7 @@ rr_cname_cname(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::TXT              PREFIX=rr_txt_
@@ -1604,7 +1604,7 @@ rr_txt_txtdata(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SPF              PREFIX=rr_spf_
 
@@ -1616,7 +1616,7 @@ rr_spf_spfdata(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::KEY           PREFIX=rr_key_
 
@@ -1665,7 +1665,7 @@ rr_sig_typecovered(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 U8
 rr_sig_algorithm(obj)
@@ -1723,7 +1723,7 @@ rr_sig_signer(obj)
     OUTPUT:
         RETVAL
     CLEANUP:
-        Safefree(RETVAL);
+        free(RETVAL);
 
 SV *
 rr_sig_signature(obj)
