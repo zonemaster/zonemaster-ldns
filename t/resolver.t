@@ -35,26 +35,38 @@ ok( $r->igntc, 'igntc set' );
 $r->igntc( 0 );
 ok( !$r->igntc, 'igntc unset' );
 
-my $res = new_ok( 'Net::LDNS' );
-my $p   = $res->query( 'www.iis.se' );
-isa_ok( $p, 'Net::LDNS::Packet' );
-isa_ok( $_, 'Net::LDNS::RR::A' ) for $p->answer;
+subtest 'global' => sub {
+    my $res = new_ok( 'Net::LDNS' );
+    my $p   = eval { $res->query( 'www.iis.se' ) } ;
+    plan skip_all => 'No response, cannot test' if not $p;
 
-$res = Net::LDNS->new( '194.146.106.22' );
-$p   = $res->query( 'www.iis.se' );
-is( scalar( $p->answer ),     1, 'answer count in scalar context' );
-is( scalar( $p->authority ),  3, 'authority count in scalar context' );
-is( scalar( $p->additional ), 6, 'additional count in scalar context' );
-is( scalar( $p->question ),   1, 'question count in scalar context' );
+    isa_ok( $p, 'Net::LDNS::Packet' );
+    isa_ok( $_, 'Net::LDNS::RR' ) for $p->answer;
+};
 
-my $none = Net::LDNS->new( undef );
-isa_ok( $none, 'Net::LDNS' );
-my $pn = eval { $none->query( 'iis.se' ) };
-like( $@, qr/No \(valid\) nameservers defined in the resolver/ );
-ok( !$pn );
+subtest 'sections' => sub {
+    my $res = Net::LDNS->new( '194.146.106.22' );
+    my $p   = $res->query( 'www.iis.se' );
+    plan skip_all => 'No response, cannot test' if not $p;
 
-my $b0rken = eval { Net::LDNS->new( 'gurksallad' ) };
-ok( !$b0rken );
-like( $@, qr/Failed to parse IP address: gurksallad/ );
+    is( scalar( $p->answer ),     1, 'answer count in scalar context' );
+    is( scalar( $p->authority ),  3, 'authority count in scalar context' );
+    is( scalar( $p->additional ), 6, 'additional count in scalar context' );
+    is( scalar( $p->question ),   1, 'question count in scalar context' );
+};
+
+subtest 'none' => sub {
+    my $none = Net::LDNS->new( undef );
+    isa_ok( $none, 'Net::LDNS' );
+    my $pn = eval { $none->query( 'iis.se' ) };
+    like( $@, qr/No \(valid\) nameservers defined in the resolver/ );
+    ok( !$pn );
+};
+
+subtest 'broken' => sub {
+    my $b0rken = eval { Net::LDNS->new( 'gurksallad' ) };
+    ok( !$b0rken );
+    like( $@, qr/Failed to parse IP address: gurksallad/ );
+};
 
 done_testing;

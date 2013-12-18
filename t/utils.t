@@ -2,7 +2,7 @@ use Test::More;
 
 BEGIN { use_ok( 'Net::LDNS' ) }
 
-my $res = new_ok( 'Net::LDNS' );
+my $res = new_ok( 'Net::LDNS', ['8.8.4.4'] );
 
 my @addrs = sort $res->name2addr( 'b.ns.se' );
 my $count = $res->name2addr( 'b.ns.se' );
