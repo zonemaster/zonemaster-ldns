@@ -13,7 +13,7 @@ use Net::LDNS::Packet;
 
 =head1 NAME
 
-    Net::LDNS - Perl wrapper module for the C<ldns> DNS library
+    Net::LDNS - DNS-talking module based on the ldns C library
 
 =head1 SYNOPSIS
 
