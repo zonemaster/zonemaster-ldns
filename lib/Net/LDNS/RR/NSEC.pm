@@ -2,6 +2,10 @@ package Net::LDNS::RR::NSEC;
 
 use parent 'Net::LDNS::RR';
 
+sub nxtdname {
+    return $_[0]->next;
+}
+
 1;
 
 =head1 NAME
@@ -19,6 +23,10 @@ A subclass of L<Net::LDNS::RR>, so it has all the methods of that class availabl
 =item next()
 
 Returns the next name.
+
+=item nxtdname()
+
+Alias for C<next()>.
 
 =item typelist()
 
