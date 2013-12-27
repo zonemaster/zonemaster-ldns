@@ -877,6 +877,47 @@ packet_DESTROY(obj)
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RRList           PREFIX=rrlist_
 
+size_t
+rrlist_count(obj)
+    Net::LDNS::RRList obj;
+    CODE:
+        RETVAL = ldns_rr_list_rr_count(obj);
+    OUTPUT:
+        RETVAL
+
+SV *
+rrlist_pop(obj)
+    Net::LDNS::RRList obj;
+    CODE:
+        ldns_rr *rr = ldns_rr_list_pop_rr(obj);
+        if(rr==NULL)
+        {
+            RETVAL = &PL_sv_no;
+        }
+        else
+        {
+            RETVAL = rr2sv(rr);
+        }
+    OUTPUT:
+        RETVAL
+
+bool
+rrlist_push(obj,rr)
+    Net::LDNS::RRList obj;
+    Net::LDNS::RR rr;
+    CODE:
+        RETVAL = ldns_rr_list_push_rr(obj,ldns_rr_clone(rr));
+    OUTPUT:
+        RETVAL
+
+bool
+rrlist_is_rrset(obj)
+    Net::LDNS::RRList obj;
+    CODE:
+        RETVAL = ldns_is_rrset(obj);
+    OUTPUT:
+        RETVAL
+
 void
 rrlist_DESTROY(obj)
     Net::LDNS::RRList obj;
