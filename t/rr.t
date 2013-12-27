@@ -77,10 +77,7 @@ subtest 'RRSIG' => sub {
         is( $rr->signer, 'se.' );
         is( $rr->labels, 1 );
         if ( $rr->typecovered eq 'DNSKEY' ) {
-            is( $rr->keytag, 59747 );
-        }
-        else {
-            is( $rr->keytag, 27646 );
+            is( $rr->keytag, 59747 ); # .SE KSK should not change very often
         }
     }
 };
