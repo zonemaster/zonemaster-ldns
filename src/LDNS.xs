@@ -524,65 +524,89 @@ packet_id(obj)
         RETVAL
 
 bool
-packet_qr(obj)
+packet_qr(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_qr(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_qr(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_aa(obj)
+packet_aa(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_aa(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_aa(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_tc(obj)
+packet_tc(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_tc(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_tc(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_rd(obj)
+packet_rd(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_rd(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_rd(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_cd(obj)
+packet_cd(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_cd(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_cd(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_ra(obj)
+packet_ra(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_ra(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_ra(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_ad(obj)
+packet_ad(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_ad(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_ad(obj);
     OUTPUT:
         RETVAL
 
 bool
-packet_do(obj)
+packet_do(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+        if ( items > 1 ) {
+            ldns_pkt_set_edns_do(obj, SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_edns_do(obj);
     OUTPUT:
         RETVAL

@@ -69,14 +69,20 @@ Returns the packet OPCODE.
 Returns the packet id number.
 
 =item aa()
+
 =item tc()
+
 =item rd()
+
 =item cd()
+
 =item ra()
+
 =item ad()
+
 =item do()
 
-Returns the equivalently named flags.
+Reads and/or sets the equivalently named flags.
 
 =item size()
 

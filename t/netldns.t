@@ -92,4 +92,10 @@ is( $se->answer, 2, 'two records in answer section' );
 my $made = Net::LDNS::Packet->new( 'foo.com', 'SOA', 'IN' );
 isa_ok( $made, 'Net::LDNS::Packet' );
 
+foreach my $flag (qw[do qr tc aa rd cd ra ad]) {
+    ok(!$made->$flag(), uc($flag).' not set');
+    $made->$flag(1);
+    ok($made->$flag(), uc($flag).' set');
+}
+
 done_testing;
