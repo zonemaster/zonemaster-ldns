@@ -1229,6 +1229,50 @@ rr_ds_verify(obj,other)
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
+U32
+rr_dnskey_keysize(obj)
+    Net::LDNS::RR::DNSKEY obj;
+    CODE:
+    {
+        U8 algorithm = D_U8(obj,2);
+        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+        uint8_t *data = ldns_rdf_data(rdf);
+        size_t total = ldns_rdf_size(rdf);
+
+        /* RSA variants */
+        if(algorithm==1||algorithm==5||algorithm==7||algorithm==8||algorithm==10)
+        {
+            size_t ex_len;
+    
+            if(data[0] == 0)
+            {
+                ex_len = 3+(U16)data[1];
+            }
+            else
+            {
+                ex_len = 1+(U8)data[0];
+            }
+            RETVAL = 8*(total-ex_len);
+        }
+        /* DSA variants */
+        else if(algorithm==3||algorithm==6)
+        {
+            RETVAL = (U8)data[0]; /* First octet is T value */
+        }
+        /* Diffie-Hellman */
+        else if(algorithm==2)
+        {
+            RETVAL = (U16)data[4];
+        }
+        /* No idea what this is */
+        else
+        {
+            RETVAL = 0;
+        }
+    }
+    OUTPUT:
+        RETVAL
+
 U16
 rr_dnskey_flags(obj)
     Net::LDNS::RR::DNSKEY obj;
@@ -1409,10 +1453,10 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         ldns_rr_list *sig   = ldns_rr_list_new();
         ldns_rr_list *good  = ldns_rr_list_new();
 
-        // Make a list with only the RRSIG
+        /* Make a list with only the RRSIG */
         ldns_rr_list_push_rr(sig, obj);
 
-        // Take RRs out of the array and stick in a list
+        /* Take RRs out of the array and stick in a list */
         for(i = 0; i <= av_len(rrset_in); ++i)
         {
             ldns_rr *rr;
@@ -1425,7 +1469,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
             }
         }
 
-        // Again, for the keys
+        /* Again, for the keys */
         for(i = 0; i <= av_len(keys_in); ++i)
         {
             ldns_rr *rr;
@@ -1438,7 +1482,7 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
             }
         }
 
-        // And verify using the lists
+        /* And verify using the lists */
         s = ldns_verify_time(rrset, sig, keys, when, good);
 
         RETVAL = (s == LDNS_STATUS_OK);

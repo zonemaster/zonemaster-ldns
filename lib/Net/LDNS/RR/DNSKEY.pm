@@ -37,4 +37,9 @@ Returns the cryptographic key in binary form.
 Returns a L<Net::LDNS::RR::DS> record matching this key. The argument must be one of the strings 'sha1', 'sha256', 'sha384' or 'gost'. GOST may not
 be available, depending on how you ldns library was compiled.
 
+=item keysize()
+
+The size of the key stored in the record. For RSA variants, it's the length in bits of the prime number. For DSA variants, it's the key's "T" value
+(see RFC2536). For DH, it's the value of the "prime length" field (and probably useless, since DH keys can't have signature records).
+
 =back
