@@ -1546,6 +1546,17 @@ rr_nsec_typehref(obj)
     OUTPUT:
         RETVAL
 
+bool
+rr_nsec_covers(obj,name)
+    Net::LDNS::RR::NSEC obj;
+    const char *name;
+    CODE:
+        ldns_rdf *dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        ldns_dname2canonical(dname);
+        ldns_rr2canonical(obj);
+        RETVAL = ldns_nsec_covers_name(obj,dname);
+    OUTPUT:
+        RETVAL
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3            PREFIX=rr_nsec3_
 
@@ -1636,6 +1647,29 @@ rr_nsec3_typehref(obj)
             }
         }
         RETVAL = newRV_noinc((SV *)res);
+    }
+    OUTPUT:
+        RETVAL
+
+bool
+rr_nsec3_covers(obj,name)
+    Net::LDNS::RR::NSEC3 obj;
+    const char *name;
+    CODE:
+    {
+        ldns_rdf *dname;
+        ldns_rdf *hashed;
+        ldns_rdf *chopped;
+
+        dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        ldns_dname2canonical(dname);
+        ldns_rr2canonical(obj);
+        hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
+        chopped = ldns_dname_left_chop(dname);
+        ldns_dname_cat(hashed,chopped);
+        RETVAL = ldns_nsec_covers_name(obj,hashed);
+        ldns_rdf_free(hashed);
+        ldns_rdf_free(chopped);
     }
     OUTPUT:
         RETVAL

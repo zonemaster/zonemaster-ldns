@@ -37,6 +37,8 @@ Returns a string with the typelist. The string has the type names separated by s
 Returns a reference to a hash, where the keys are the type names and the corresponding values are true. That is, if you look for a type in this hash
 you get a true value back if the record covers it and false if not.
 
+=item covers($name)
 
+Returns true or false depending on if the record covers the given name or not.
 
 =back

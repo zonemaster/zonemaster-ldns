@@ -48,4 +48,8 @@ Returns the typelist as a space-separated string.
 
 Returns the typelist as a reference to a hash where the included types are keys storing true values.
 
+=item covers($name)
+
+Returns true or false depending on if the record covers the given name or not.
+
 =back

@@ -55,4 +55,12 @@ if ( $ds4 ) {    # We may not have GOST available.
 is($key1->keysize, 2048, 'Key is 2048 bits long');
 is($key2->keysize, 1024, 'Key is 1024 bits long');
 
+my $nsec = Net::LDNS::RR->new('xx.se.			7200	IN	NSEC	xx0r.se. NS RRSIG NSEC');
+isa_ok($nsec, 'Net::LDNS::RR::NSEC');
+ok($nsec->covers('xx-example.se'), 'Covers xx-example.se');
+
+my $nsec3 = Net::LDNS::RR->new('NR2E513KM693MBTNVHH56ENF54F886T0.com. 86400 IN NSEC3 1 1 0 - NR2FUHQVR56LH70L6F971J3L6N1RH2TU NS DS RRSIG');
+isa_ok($nsec3, 'Net::LDNS::RR::NSEC3');
+ok($nsec3->covers('xx-example.com'), 'Covers xx-example.com');
+
 done_testing;
