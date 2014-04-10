@@ -1657,19 +1657,22 @@ rr_nsec3_covers(obj,name)
     const char *name;
     CODE:
     {
+        ldns_rr *clone;
         ldns_rdf *dname;
         ldns_rdf *hashed;
         ldns_rdf *chopped;
 
+        clone = ldns_rr_clone(obj);
         dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
         ldns_dname2canonical(dname);
-        ldns_rr2canonical(obj);
-        hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
+        ldns_rr2canonical(clone);
+        hashed = ldns_nsec3_hash_name_frm_nsec3(clone, dname);
         chopped = ldns_dname_left_chop(dname);
         ldns_dname_cat(hashed,chopped);
-        RETVAL = ldns_nsec_covers_name(obj,hashed);
+        RETVAL = ldns_nsec_covers_name(clone,hashed);
         ldns_rdf_free(hashed);
         ldns_rdf_free(chopped);
+        ldns_rr_free(clone);
     }
     OUTPUT:
         RETVAL
