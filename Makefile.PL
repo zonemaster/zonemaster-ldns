@@ -15,6 +15,7 @@ perl_version '5.012004';
 
 requires 'MIME::Base64';
 test_requires 'JSON::XS';
+test_requires 'Test::Fatal';
 
 use_ppport 3.19;
 cc_libs 'ldns';

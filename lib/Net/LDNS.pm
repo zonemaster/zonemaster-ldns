@@ -2,7 +2,7 @@ package Net::LDNS;
 
 use 5.12.4;
 
-our $VERSION = '0.58';
+our $VERSION = '0.59';
 require XSLoader;
 XSLoader::load( __PACKAGE__, $VERSION );
 

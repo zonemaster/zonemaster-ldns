@@ -196,6 +196,10 @@ query(obj, dname, rrtype="A", rrclass="IN")
         }
 
         domain = ldns_dname_new_frm_str(dname);
+        if(domain==NULL)
+        {
+            croak("Invalid domain name: %s", dname);
+        }
         status = ldns_resolver_send(&pkt, obj, domain, t, c, LDNS_RD);
         if ( status != LDNS_STATUS_OK) {
             croak("%s", ldns_get_errorstr_by_id(status));
