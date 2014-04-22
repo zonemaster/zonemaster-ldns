@@ -38,6 +38,7 @@ is( $p2->answerfrom, '8.8.8.8', 'expected answerfrom' );
 $p2->answerfrom( '1.2.3.4' );
 is( $p2->answerfrom, '1.2.3.4', 'setting answerfrom works' );
 
+ok($p2->timestamp > 0, 'has a timestamp to begin with');
 $p2->timestamp( 4711 );
 is( $p2->timestamp, 4711, 'setting timestamp works' );
 $p2->timestamp( 4711.4711 );

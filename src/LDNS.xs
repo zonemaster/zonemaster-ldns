@@ -206,6 +206,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
             RETVAL = NULL;
         }
         RETVAL = ldns_pkt_clone(pkt);
+        ldns_pkt_set_timestamp(RETVAL, ldns_pkt_timestamp(pkt));
     }
     OUTPUT:
         RETVAL
