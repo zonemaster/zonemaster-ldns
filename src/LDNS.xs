@@ -910,6 +910,18 @@ packet_edns_size(obj,...)
     OUTPUT:
         RETVAL
 
+U8
+packet_edns_rcode(obj,...)
+    Net::LDNS::Packet obj;
+    CODE:
+        if(items>=2)
+        {
+            ldns_pkt_set_edns_extended_rcode(obj, (U8)SvIV(ST(1)));
+        }
+        RETVAL = ldns_pkt_edns_extended_rcode(obj);
+    OUTPUT:
+        RETVAL
+
 void
 packet_DESTROY(obj)
     Net::LDNS::Packet obj;

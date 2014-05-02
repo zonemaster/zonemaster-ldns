@@ -92,6 +92,10 @@ Returns the length of the packet's wireformat form in octets.
 
 Gets and/or sets the EDNS0 UDP size.
 
+=item edns_rcode()
+
+Gets and/or sets the EDNS0 Extended RCODE field.
+
 =item querytime()
 
 Returns the time the query this packet is the answer to took to execute, i milliseconds.
