@@ -898,6 +898,18 @@ packet_new_from_wireformat(class,buf)
     OUTPUT:
         RETVAL
 
+U16
+packet_edns_size(obj,...)
+    Net::LDNS::Packet obj;
+    CODE:
+        if(items>=2)
+        {
+            ldns_pkt_set_edns_udp_size(obj, (U16)SvIV(ST(1)));
+        }
+        RETVAL = ldns_pkt_edns_udp_size(obj);
+    OUTPUT:
+        RETVAL
+
 void
 packet_DESTROY(obj)
     Net::LDNS::Packet obj;

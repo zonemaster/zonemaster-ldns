@@ -88,6 +88,10 @@ Reads and/or sets the equivalently named flags.
 
 Returns the length of the packet's wireformat form in octets.
 
+=item edns_size()
+
+Gets and/or sets the EDNS0 UDP size.
+
 =item querytime()
 
 Returns the time the query this packet is the answer to took to execute, i milliseconds.

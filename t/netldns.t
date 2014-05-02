@@ -99,4 +99,8 @@ foreach my $flag (qw[do qr tc aa rd cd ra ad]) {
     ok($made->$flag(), uc($flag).' set');
 }
 
+is($made->edns_size, 0, 'Initial EDNS0 UDP size is 0');
+$made->edns_size(4096);
+is($made->edns_size, 4096, 'EDNS0 UDP size set to 4096');
+
 done_testing;
