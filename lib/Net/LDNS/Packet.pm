@@ -132,4 +132,8 @@ Returns a string with the packet and its contents in common presentation format.
 
 Returns a Perl string holding the packet in wire format.
 
+=item type()
+
+Returns the ldns library's guess as to the content of the packet. One of the strings C<question>, C<referral>, C<answer>, C<nxdomain>, C<nodata> or C<unknown>.
+
 =back

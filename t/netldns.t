@@ -108,4 +108,6 @@ is($made->edns_rcode, 0, 'Extended RCODE is 0');
 $made->edns_rcode(1);
 is($made->edns_rcode, 1, 'Extended RCODE is 1');
 
+is($made->type, 'answer');
+
 done_testing;

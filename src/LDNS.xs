@@ -922,6 +922,42 @@ packet_edns_rcode(obj,...)
     OUTPUT:
         RETVAL
 
+SV *
+packet_type(obj)
+    Net::LDNS::Packet obj;
+    CODE:
+        ldns_pkt_type type = ldns_pkt_reply_type(obj);
+        switch (type){
+            case LDNS_PACKET_QUESTION:
+                RETVAL = newSVpvs_share("question");
+                break;
+
+            case LDNS_PACKET_REFERRAL:
+                RETVAL = newSVpvs_share("referral");
+                break;
+
+            case LDNS_PACKET_ANSWER:
+                RETVAL = newSVpvs_share("answer");
+                break;
+
+            case LDNS_PACKET_NXDOMAIN:
+                RETVAL = newSVpvs_share("nxdomain");
+                break;
+
+            case LDNS_PACKET_NODATA:
+                RETVAL = newSVpvs_share("nodata");
+                break;
+
+            case LDNS_PACKET_UNKNOWN:
+                RETVAL = newSVpvs_share("unknown");
+                break;
+
+            default:
+                croak("Packet type is not even unknown");
+        }
+    OUTPUT:
+        RETVAL
+
 void
 packet_DESTROY(obj)
     Net::LDNS::Packet obj;
