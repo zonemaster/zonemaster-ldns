@@ -44,6 +44,16 @@ is($r->timeout, 5, 'Expected default timeout');
 $r->timeout(3.33);
 is($r->timeout, 3.33, 'Expected set timeout');
 
+subtest 'recursion' => sub {
+    my $r = Net::LDNS->new( '8.8.4.4' );
+    my $p1 = $r->query( 'www.iis.se' );
+    is( scalar($p1->answer), 1);
+    $r->recurse(0);
+    my $p2 = $r->query( 'www.nic.se' );
+    is( scalar($p2->answer), 0, 'Got a reply');
+    ok(!$p2->rd, 'RD flag set');
+};
+
 subtest 'global' => sub {
     my $res = new_ok( 'Net::LDNS' );
     my $p   = eval { $res->query( 'www.iis.se' ) } ;

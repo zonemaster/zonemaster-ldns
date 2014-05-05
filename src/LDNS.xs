@@ -142,6 +142,7 @@ new(class, ...)
         }
         else {
             RETVAL = ldns_resolver_new();
+            ldns_resolver_set_recursive(RETVAL, 1);
             for (i=1;i<items;i++)
             {
                 ldns_status s;
@@ -182,6 +183,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
         ldns_rr_class c;
         ldns_status status;
         ldns_pkt *pkt;
+        uint16_t flags = 0;
 
         t = ldns_get_rr_type_by_name(rrtype);
         if(!t)
@@ -200,7 +202,18 @@ query(obj, dname, rrtype="A", rrclass="IN")
         {
             croak("Invalid domain name: %s", dname);
         }
-        status = ldns_resolver_send(&pkt, obj, domain, t, c, LDNS_RD);
+
+        if(ldns_resolver_recursive(obj))
+        {
+            flags |= LDNS_RD;
+        }
+
+        if(ldns_resolver_dnssec_cd(obj))
+        {
+            flags |= LDNS_CD;
+        }
+
+        status = ldns_resolver_send(&pkt, obj, domain, t, c, flags);
         if ( status != LDNS_STATUS_OK) {
             croak("%s", ldns_get_errorstr_by_id(status));
             RETVAL = NULL;
