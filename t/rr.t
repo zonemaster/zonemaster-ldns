@@ -1,10 +1,24 @@
 use Test::More;
+use Test::Fatal;
 use Devel::Peek;
 use MIME::Base64;
 
 BEGIN { use_ok( 'Net::LDNS' ) }
 
 my $s = Net::LDNS->new( '8.8.8.8' );
+
+subtest 'rdf' => sub {
+    my $p = $s->query( 'iis.se', 'SOA' );
+    plan skip_all => 'No response, cannot test' if not $p;
+
+    foreach my $rr ( $p->answer ) {
+        is( $rr->rd_count, 7 );
+        foreach my $n (0..($rr->rd_count-1)) {
+            ok(length($rr->rdf($n)) >= 4);
+        }
+        like( exception { $rr->rdf(7) }, qr/Trying to fetch nonexistent RDATA at position/, 'died on overflow');
+    }
+};
 
 subtest 'SOA' => sub {
     my $p = $s->query( 'iis.se', 'SOA' );
@@ -30,6 +44,7 @@ subtest 'A' => sub {
         isa_ok( $rr, 'Net::LDNS::RR::A' );
         is( $rr->address, '192.36.144.107', 'expected address string' );
         is( $rr->type, 'A' );
+        is( length($rr->rdf(0)), 4 );
     }
 };
 
@@ -40,6 +55,7 @@ subtest 'AAAA' => sub {
     foreach my $rr ( $p->answer ) {
         isa_ok( $rr, 'Net::LDNS::RR::AAAA' );
         is( $rr->address, '2a01:3f0:0:301::53', 'expected address string' );
+        is( length($rr->rdf(0)), 16 );
     }
 };
 

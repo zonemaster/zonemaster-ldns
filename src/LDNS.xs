@@ -1139,6 +1139,20 @@ rr_rd_count(obj)
     OUTPUT:
         RETVAL
 
+SV *
+rr_rdf(obj,n)
+    Net::LDNS::RR obj;
+    size_t n;
+    CODE:
+        ldns_rdf *rdf = ldns_rr_rdf(obj,n);
+        if(rdf==NULL)
+        {
+            croak("Trying to fetch nonexistent RDATA at position %lu", n);
+        }
+        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+    OUTPUT:
+        RETVAL
+
 void
 rr_DESTROY(obj)
     Net::LDNS::RR obj;

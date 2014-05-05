@@ -166,4 +166,14 @@ Calls the XS C<compare> method with the arguments it needs, rather than the ones
 Calls the XS C<string> method with the arguments it needs, rather than the ones overloading gives. Functionally identical to L<string()> from the
 Perl level, except for being a tiny little bit slower.
 
+=item rd_count()
+
+The number of RDATA objects in this RR.
+
+=item rdf($postion)
+
+The raw data of the RDATA object in the given position. The first item is in
+position 0. If an attempt is made to fetch RDATA from a position that doesn't
+have any, an exception will be thrown.
+
 =back
