@@ -35,6 +35,11 @@ ok( $r->igntc, 'igntc set' );
 $r->igntc( 0 );
 ok( !$r->igntc, 'igntc unset' );
 
+$r->edns_size( 4711 );
+is($r->edns_size, 4711 , 'ENDS0 UDP size set');
+$r->edns_size( 0 );
+is($r->edns_size, 0 , 'ENDS0 UDP size set to zero');
+
 subtest 'global' => sub {
     my $res = new_ok( 'Net::LDNS' );
     my $p   = eval { $res->query( 'www.iis.se' ) } ;

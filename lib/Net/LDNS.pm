@@ -2,7 +2,7 @@ package Net::LDNS;
 
 use 5.12.4;
 
-our $VERSION = '0.61';
+our $VERSION = '0.62';
 require XSLoader;
 XSLoader::load( __PACKAGE__, $VERSION );
 
@@ -93,6 +93,10 @@ Get and optionally set the number of retries.
 =item retrans($seconds)
 
 Get and optionally set the number of seconds between retries.
+
+=item edns_size($size)
+
+Get and optionally set the EDNS0 UDP maximum size.
 
 =item axfr_start($domain,$class)
 

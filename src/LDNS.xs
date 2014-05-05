@@ -288,6 +288,18 @@ retrans(obj,...)
     OUTPUT:
         RETVAL
 
+U16
+edns_size(obj,...)
+    Net::LDNS obj;
+    CODE:
+        if( items > 1 )
+        {
+            ldns_resolver_set_edns_udp_size(obj, (U16)SvIV(ST(1)));
+        }
+        RETVAL = ldns_resolver_edns_udp_size(obj);
+    OUTPUT:
+        RETVAL
+
 SV *
 name2addr(obj,name)
     Net::LDNS obj;
