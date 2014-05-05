@@ -40,6 +40,10 @@ is($r->edns_size, 4711 , 'ENDS0 UDP size set');
 $r->edns_size( 0 );
 is($r->edns_size, 0 , 'ENDS0 UDP size set to zero');
 
+is($r->timeout, 5, 'Expected default timeout');
+$r->timeout(3.33);
+is($r->timeout, 3.33, 'Expected set timeout');
+
 subtest 'global' => sub {
     my $res = new_ok( 'Net::LDNS' );
     my $p   = eval { $res->query( 'www.iis.se' ) } ;

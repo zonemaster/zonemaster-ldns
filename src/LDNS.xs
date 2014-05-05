@@ -469,6 +469,29 @@ axfr_last_packet(obj)
     OUTPUT:
         RETVAL
 
+double
+timeout(obj,...)
+    Net::LDNS obj;
+    CODE:
+        struct timeval tv;
+
+        if( items > 1)
+        {
+            double dec_part, int_part;
+            struct timeval tn;
+
+            dec_part = modf(SvNV(ST(1)), &int_part);
+            tn.tv_sec  = int_part;
+            tn.tv_usec = 1000000*dec_part;
+            ldns_resolver_set_timeout(obj, tn);
+        }
+
+        tv = ldns_resolver_timeout(obj);
+        RETVAL = (double)tv.tv_sec;
+        RETVAL += ((double)tv.tv_usec)/1000000;
+    OUTPUT:
+        RETVAL
+
 void
 DESTROY(obj)
     Net::LDNS obj;

@@ -122,4 +122,8 @@ Returns false if there is a started zone transfer with more records to get, and 
 If L<axfr_next()> threw an exception, this method returns the L<Net::LDNS::Packet> that made it do so. The packet's RCODE is likely to say what
 the problem was (for example, NOTAUTH or NXDOMAIN).
 
+=item timeout($time)
+
+Get and/or set the socket timeout for the resolver.
+
 =back
