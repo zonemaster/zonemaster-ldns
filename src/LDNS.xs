@@ -444,12 +444,13 @@ axfr_next(obj)
         ldns_rr *rr;
 
         /* ldns unfortunately prints to standard error, so close it while we call them */
+        /* EDIT: That behavior should be changed starting with ldns 1.6.17, but we'll keep the closing for a while */
         int err_fd = fileno(stderr);            /* Remember fd for stderr */
         int save_fd = dup(err_fd);              /* Copy open fd for stderr */
         int tmp_fd;
 
         fflush(stderr);                         /* Print anything waiting */
-        tmp_fd = open("/dev/null",O_RDWR);    /* Open something to allocate the now-free fd stderr used */
+        tmp_fd = open("/dev/null",O_RDWR);      /* Open something to allocate the now-free fd stderr used */
         dup2(tmp_fd,err_fd);
         rr = ldns_axfr_next(obj);               /* Shut up */
         close(tmp_fd);                          /* Close the placeholder */
