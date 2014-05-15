@@ -130,19 +130,21 @@ lib_version()
     OUTPUT:
         RETVAL
 
-Net::LDNS
+SV *
 new(class, ...)
     char *class;
     CODE:
     {
         int i;
+        ldns_resolver *res;
+        RETVAL = newSV(0);
 
         if (items == 1 ) { /* Called without arguments, use resolv.conf */
-            ldns_resolver_new_frm_file(&RETVAL,NULL);
+            ldns_resolver_new_frm_file(&res,NULL);
         }
         else {
-            RETVAL = ldns_resolver_new();
-            ldns_resolver_set_recursive(RETVAL, 1);
+            res = ldns_resolver_new();
+            ldns_resolver_set_recursive(res, 1);
             for (i=1;i<items;i++)
             {
                 ldns_status s;
@@ -159,13 +161,14 @@ new(class, ...)
                 if ( addr == NULL ) {
                     croak("Failed to parse IP address: %s", SvPV_nolen(ST(i)));
                 }
-                s = ldns_resolver_push_nameserver(RETVAL, addr);
+                s = ldns_resolver_push_nameserver(res, addr);
                 if(s != LDNS_STATUS_OK)
                 {
                     croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));
                 }
             }
         }
+        sv_setref_pv(RETVAL, class, res);
     }
     OUTPUT:
         RETVAL
@@ -514,7 +517,7 @@ DESTROY(obj)
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
 
-Net::LDNS::Packet
+SV *
 packet_new(objclass,name,type="A",class="IN")
     char *objclass;
     char *name;
@@ -525,6 +528,7 @@ packet_new(objclass,name,type="A",class="IN")
         ldns_rdf *rr_name;
         ldns_rr_type rr_type;
         ldns_rr_class rr_class;
+        ldns_pkt *pkt;
         
         rr_type = ldns_get_rr_type_by_name(type);
         if(!rr_type)
@@ -544,7 +548,9 @@ packet_new(objclass,name,type="A",class="IN")
             croak("Name error for '%s'", name);
         }
         
-        RETVAL = ldns_pkt_query_new(rr_name, rr_type, rr_class,0);
+        pkt = ldns_pkt_query_new(rr_name, rr_type, rr_class,0);
+        RETVAL = newSV(0);
+        sv_setref_pv(RETVAL, objclass, pkt);
     }
     OUTPUT:
         RETVAL
