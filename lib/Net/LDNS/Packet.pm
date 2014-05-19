@@ -96,6 +96,28 @@ Gets and/or sets the EDNS0 UDP size.
 
 Gets and/or sets the EDNS0 Extended RCODE field.
 
+=item needs_edns()
+
+This method returns true if the packet has the DO flag set, an EDNS0 size set,
+and EDNS0 extended RCODE set or if the OPT pseudo-RR has one or more RDATA
+fields. It can fail to correctly flag a packet with an OPT pseudo-RR as having
+EDNS, if the pseudo-RR specifies an UDP size of zero, an extended RCODE of zero
+and the DO flag is unset. Since any UDP size less than 512 must be interpreted
+as 512, packets like that should be very rare in practice if they exist at all.
+
+Note that the OPT pseudo-RR is not visible as an RR in the packet, nor is it
+included in the RR count header fields.
+
+=item has_edns()
+
+An alias for needs_edns().
+
+=item edns_version($version)
+
+Get or set the EDNS version in the packet. For incoming packets, returns 0 if
+the packet does not have an OPT pseudo-RR and 0 if it's an EDNS0 packet. It's
+thus rather pointless until such time as EDNS1 is defined.
+
 =item querytime()
 
 Returns the time the query this packet is the answer to took to execute, i milliseconds.
@@ -112,8 +134,11 @@ kind of value used by L<Time::HiRes::time()>). Conversion effects between floati
 value is probably not reliable at the microsecond level, even if you computer's clock happen to be.
 
 =item question()
+
 =item answer()
+
 =item authority()
+
 =item additional()
 
 Returns list of objects representing the RRs in the named section. They will be of classes appropriate to their types, but all will have

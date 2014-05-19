@@ -977,6 +977,28 @@ packet_edns_rcode(obj,...)
     OUTPUT:
         RETVAL
 
+U8
+packet_edns_version(obj,...)
+    Net::LDNS::Packet obj;
+    CODE:
+        if(items>=2)
+        {
+            ldns_pkt_set_edns_version(obj, (U8)SvIV(ST(1)));
+        }
+        RETVAL = ldns_pkt_edns_version(obj);
+    OUTPUT:
+        RETVAL
+
+bool
+packet_needs_edns(obj)
+    Net::LDNS::Packet obj;
+    ALIAS:
+        Net::LDNS::Packet::has_edns = 1
+    CODE:
+        RETVAL = ldns_pkt_edns(obj);
+    OUTPUT:
+        RETVAL
+
 SV *
 packet_type(obj)
     Net::LDNS::Packet obj;
