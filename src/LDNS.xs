@@ -11,6 +11,9 @@
 #include <ctype.h>
 #include <ldns/ldns.h>
 
+/* ldns does not have this in its header files, but it is in the published documentation and we need it */
+void ldns_axfr_abort(ldns_resolver *obj);
+
 typedef ldns_resolver *Net__LDNS;
 typedef ldns_pkt *Net__LDNS__Packet;
 typedef ldns_rr_list *Net__LDNS__RRList;
@@ -412,6 +415,89 @@ addr2name(obj,addr_in)
     }
 
 bool
+axfr(obj,dname,callback,class="IN")
+    Net::LDNS obj;
+    const char *dname;
+    SV *callback;
+    const char *class;
+    CODE:
+    {
+        ldns_rdf *domain = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, dname);
+        ldns_rr_class cl = ldns_get_rr_class_by_name(class);
+        ldns_status status;
+
+        if(SvTYPE(SvRV(callback)) != SVt_PVCV)
+        {
+            croak("Callback not a code reference");
+        }
+
+        if(domain==NULL)
+        {
+            croak("Name error for '%s", dname);
+        }
+
+        if(!cl)
+        {
+            croak("Unknown RR class: %s", class);
+        }
+
+        status = ldns_axfr_start(obj, domain, cl);
+
+        if(status != LDNS_STATUS_OK)
+        {
+            croak("AXFR setup error: %s", ldns_get_errorstr_by_id(status));
+        }
+
+        RETVAL = 1;
+        while (!ldns_axfr_complete(obj))
+        {
+            int count;
+            SV *ret;
+            ldns_rr *rr = ldns_axfr_next(obj);
+            if(rr==NULL)
+            {
+                ldns_pkt *pkt = ldns_axfr_last_pkt(obj);
+                if(pkt != NULL)
+                {
+                    croak("AXFR transfer error: %s", ldns_pkt_rcode2str(ldns_pkt_get_rcode(pkt)));
+                }
+                else {
+                    croak("AXFR transfer error: unknown problem");
+                }
+            }
+
+            /* Enter the Cargo Cult */
+            ENTER;
+            SAVETMPS;
+            PUSHMARK(SP);
+            mXPUSHs(rr2sv(rr));
+            PUTBACK;
+            count = call_sv(callback, G_SCALAR);
+            SPAGAIN;
+
+            if(count != 1)
+            {
+                croak("Callback did not return exactly one value in scalar context");
+            }
+
+            ret = POPs;
+
+            if(!SvTRUE(ret))
+            {
+                RETVAL = 0;
+                break;
+            }
+            PUTBACK;
+            FREETMPS;
+            LEAVE;
+            /* Callback magic ends */
+        }
+        ldns_axfr_abort(obj);
+    }
+    OUTPUT:
+        RETVAL
+
+bool
 axfr_start(obj,dname,class="IN")
     Net::LDNS obj;
     const char *dname;
@@ -513,6 +599,7 @@ void
 DESTROY(obj)
     Net::LDNS obj;
     CODE:
+        ldns_axfr_abort(obj);
         ldns_resolver_free(obj);
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
