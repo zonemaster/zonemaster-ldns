@@ -98,11 +98,32 @@ Get and optionally set the number of seconds between retries.
 
 Get and optionally set the EDNS0 UDP maximum size.
 
+=item axfr( $domain, $callback, $class )
+
+Perform an AXFR operation. C<$callback> must be a code reference, which will be
+called once for every received resource record with the RR object as its one
+and only argument. After every such call, the return value of the callback will
+be examined, and if the value is false the AXFR process will be aborted. The
+return value of the C<axfr()> method itself will be true if the transfer
+completed normally, and false if it was aborted because the callback returned a
+false value.
+
+If anything goes wrong during the process, an exception will be thrown.
+
+As an example, saving all the RRs received from an AXFR can be done like this:
+
+    my @rrs;
+    $resolver->axfr( $domain, sub { my ($rr) = @_; push @rrs, $rr; return 1;} );
+
 =item axfr_start($domain,$class)
+
+Deprecated. Use L<axfr()> instead.
 
 Set this resolver object up for a zone transfer of the specified domain. If C<$class> is not given, it defaults to IN.
 
 =item axfr_next()
+
+Deprecated. Use L<axfr()> instead.
 
 Get the next RR in the zone transfer. L<axfr_start()> must have been done before this is called, and after this is called L<axfr_complete()>
 should be used to check if there are more records to get. If there's any problem, an exception will be thrown. Basically, the sequence should be
@@ -115,9 +136,13 @@ something like:
 
 =item axfr_complete()
 
+Deprecated. Use L<axfr()> instead.
+
 Returns false if there is a started zone transfer with more records to get, and true if the started transfer has completed.
 
 =item axfr_last_packet()
+
+Deprecated. Use L<axfr()> instead.
 
 If L<axfr_next()> threw an exception, this method returns the L<Net::LDNS::Packet> that made it do so. The packet's RCODE is likely to say what
 the problem was (for example, NOTAUTH or NXDOMAIN).
