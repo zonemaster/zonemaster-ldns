@@ -63,7 +63,7 @@ my $nsec3 = Net::LDNS::RR->new('NR2E513KM693MBTNVHH56ENF54F886T0.com. 86400 IN N
 isa_ok($nsec3, 'Net::LDNS::RR::NSEC3');
 ok($nsec3->covers('xx-example.com'), 'Covers xx-example.com');
 
-my $res = Net::LDNS->new( '194.146.106.22' );
+$res = Net::LDNS->new( '194.146.106.22' );
 $res->dnssec( 1 );
 my $p1 = $res->query('www.iis.se', 'A');
 ok( $p1->needs_edns, 'Needs EDNS0');
