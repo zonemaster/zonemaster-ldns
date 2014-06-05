@@ -221,6 +221,15 @@ query(obj, dname, rrtype="A", rrclass="IN")
 
         status = ldns_resolver_send(&pkt, obj, domain, t, c, flags);
         if ( status != LDNS_STATUS_OK) {
+            /* Remove and reinsert nameserver to make ldns forget it failed */
+            ldns_status s;
+            ldns_rdf *ns = ldns_resolver_pop_nameserver(obj);
+            if (ns != NULL) {
+                s = ldns_resolver_push_nameserver(obj, ns);
+                if ( s != LDNS_STATUS_OK) {
+                    croak("Failed to reinsert nameserver after failure (ouch): %s", ldns_get_errorstr_by_id(s));
+                }
+            }
             croak("%s", ldns_get_errorstr_by_id(status));
             RETVAL = NULL;
         }

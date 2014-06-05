@@ -56,11 +56,15 @@ subtest 'recursion' => sub {
 
 subtest 'global' => sub {
     my $res = new_ok( 'Net::LDNS' );
-    my $p   = eval { $res->query( 'www.iis.se' ) } ;
-    plan skip_all => 'No response, cannot test' if not $p;
+    my $p = eval { $res->query( 'www.iis.se' ) } ;
 
-    isa_ok( $p, 'Net::LDNS::Packet' );
-    isa_ok( $_, 'Net::LDNS::RR' ) for $p->answer;
+    if (not $p) {
+        diag $@;
+    }
+    else {
+        isa_ok( $p, 'Net::LDNS::Packet' );
+        isa_ok( $_, 'Net::LDNS::RR' ) for $p->answer;
+    }
 };
 
 subtest 'sections' => sub {
