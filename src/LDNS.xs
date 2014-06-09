@@ -11,8 +11,11 @@
 #include <ctype.h>
 #include <ldns/ldns.h>
 
-/* ldns does not have this in its header files, but it is in the published documentation and we need it */
+/* ldns 1.6.17 does not have this in its header files, but it is in the published documentation and we need it */
+/* It looks like 1.6.18 will have it, but we'll fix that when it happens. */
+#if (LDNS_REVISION) >= ((1<<16)|(6<<8)|(17))
 void ldns_axfr_abort(ldns_resolver *obj);
+#endif
 
 typedef ldns_resolver *Net__LDNS;
 typedef ldns_pkt *Net__LDNS__Packet;
@@ -501,7 +504,9 @@ axfr(obj,dname,callback,class="IN")
             LEAVE;
             /* Callback magic ends */
         }
+#if (LDNS_REVISION) >= ((1<<16)|(6<<8)|(17))
         ldns_axfr_abort(obj);
+#endif
     }
     OUTPUT:
         RETVAL
@@ -608,7 +613,9 @@ void
 DESTROY(obj)
     Net::LDNS obj;
     CODE:
+#if (LDNS_REVISION) >= ((1<<16)|(6<<8)|(17))
         ldns_axfr_abort(obj);
+#endif
         ldns_resolver_free(obj);
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_

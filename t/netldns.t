@@ -5,6 +5,7 @@ use version;
 BEGIN { use_ok( 'Net::LDNS' ) }
 
 my $lib_v = version->parse(Net::LDNS::lib_version());
+diag "Using ldns version $lib_v";
 ok( $lib_v >= v1.6.16, 'ldns version at least 1.6.16' );
 
 my $s = Net::LDNS->new( '8.8.8.8' );
