@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 
+#define NEED_newSVpvn_share
 #define NEED_sv_2pv_flags
 #define NEED_newRV_noinc
 #include "ppport.h"
