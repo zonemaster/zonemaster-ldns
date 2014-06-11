@@ -248,7 +248,6 @@ recurse(obj,...)
     Net::LDNS obj;
     CODE:
         if(items>1) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_recursive(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_recursive(obj);
@@ -260,7 +259,6 @@ debug(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_debug(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_debug(obj);
@@ -272,7 +270,6 @@ dnssec(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_dnssec(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_dnssec(obj);
@@ -284,7 +281,6 @@ usevc(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_usevc(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_usevc(obj);
@@ -296,7 +292,6 @@ igntc(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_igntc(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_igntc(obj);
@@ -308,7 +303,6 @@ retry(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_retry(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_retry(obj);
@@ -320,7 +314,6 @@ retrans(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_retrans(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_retrans(obj);
@@ -333,7 +326,6 @@ edns_size(obj,...)
     CODE:
         if( items > 1 )
         {
-            SvGETMAGIC(ST(1));
             ldns_resolver_set_edns_udp_size(obj, (U16)SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_edns_udp_size(obj);
@@ -447,7 +439,6 @@ axfr(obj,dname,callback,class="IN")
         ldns_rr_class cl = ldns_get_rr_class_by_name(class);
         ldns_status status;
 
-        SvGETMAGIC(callback);
         if(SvTYPE(SvRV(callback)) != SVt_PVCV)
         {
             croak("Callback not a code reference");
@@ -607,7 +598,6 @@ timeout(obj,...)
             double dec_part, int_part;
             struct timeval tn;
 
-            SvGETMAGIC(ST(1));
             dec_part = modf(SvNV(ST(1)), &int_part);
             tn.tv_sec  = int_part;
             tn.tv_usec = 1000000*dec_part;
@@ -702,7 +692,6 @@ packet_qr(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_qr(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_qr(obj);
@@ -714,7 +703,6 @@ packet_aa(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_aa(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_aa(obj);
@@ -726,7 +714,6 @@ packet_tc(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_tc(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_tc(obj);
@@ -738,7 +725,6 @@ packet_rd(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_rd(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_rd(obj);
@@ -750,7 +736,6 @@ packet_cd(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_cd(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_cd(obj);
@@ -762,7 +747,6 @@ packet_ra(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_ra(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_ra(obj);
@@ -774,7 +758,6 @@ packet_ad(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_ad(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_ad(obj);
@@ -786,7 +769,6 @@ packet_do(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
-            SvGETMAGIC(ST(1));
             ldns_pkt_set_edns_do(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_edns_do(obj);
@@ -815,7 +797,6 @@ packet_answerfrom(obj,...)
     CODE:
         if(items >= 2)
         {
-            SvGETMAGIC(ST(1));
             if(SvOK(ST(1)) && SvPOK(ST(1)))
             {
                 ldns_rdf *address;
