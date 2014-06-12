@@ -35,13 +35,16 @@ C<Net::LDNS> represents a resolver, which is the part of the system responsible 
 
 =item lib_version()
 
-Returns the ldns version string.
+Returns the ldns version string. Can be exported, but is not by default.
 
 =item to_idn($name, ...)
 
 Takes a number of strings and returns a list of them converted to IDNA format.
 Assumes that the strings have been converted to Perl's internal encoding before
-it's called.
+it's called. Can be exported, but is not by default.
+
+This function requires that GNU libidn was present when L<Net::LDNS> was
+compiled. If not, calling C<to_idn> will result in an exception getting thrown.
 
 =back
 

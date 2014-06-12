@@ -11,7 +11,10 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <ldns/ldns.h>
+
+#ifdef WE_CAN_HAZ_IDN
 #include <idna.h>
+#endif
 
 /* ldns 1.6.17 does not have this in its header files, but it is in the published documentation and we need it */
 /* It looks like 1.6.18 will have it, but we'll fix that when it happens. */
@@ -135,6 +138,7 @@ SV *
 to_idn(...)
     PPCODE:
     {
+#ifdef WE_CAN_HAZ_IDN
         int i;
         for( i = 0; i<items; i++ )
         {
@@ -155,6 +159,9 @@ to_idn(...)
             }
             free(out);
         }
+#else
+        croak("libidn not installed");
+#endif
     }
 
 const char *

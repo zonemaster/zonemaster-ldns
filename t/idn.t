@@ -5,6 +5,11 @@ use Devel::Peek;
 
 BEGIN { use_ok( "Net::LDNS" => qw[to_idn] ) }
 
+if (exception {to_idn("whatever")} =~ /libidn not installed/) {
+    done_testing;
+    exit;
+}
+
 my $encoded = to_idn( decode( 'utf8', 'annaröd.se' ) );
 is( $encoded, 'xn--annard-0xa.se', 'One name encoded right' );
 
