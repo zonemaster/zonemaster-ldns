@@ -3,6 +3,10 @@ package Net::LDNS;
 use 5.10.1;
 
 our $VERSION = '0.65';
+
+use parent 'Exporter';
+our @EXPORT_OK = qw[to_idn ldns_version];
+
 require XSLoader;
 XSLoader::load( __PACKAGE__, $VERSION );
 
@@ -25,13 +29,19 @@ use Net::LDNS::Packet;
 
 C<Net::LDNS> represents a resolver, which is the part of the system responsible for sending queries and receiving answers to them.
 
-=head1 FUNCTION
+=head1 EXPORTABLE FUNCTIONS
 
 =over
 
 =item lib_version()
 
 Returns the ldns version string.
+
+=item to_idn($name, ...)
+
+Takes a number of strings and returns a list of them converted to IDNA format.
+Assumes that the strings have been converted to Perl's internal encoding before
+it's called.
 
 =back
 

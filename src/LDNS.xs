@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <ldns/ldns.h>
+#include <idna.h>
 
 /* ldns 1.6.17 does not have this in its header files, but it is in the published documentation and we need it */
 /* It looks like 1.6.18 will have it, but we'll fix that when it happens. */
@@ -129,6 +130,32 @@ rr2sv(ldns_rr *rr)
 MODULE = Net::LDNS        PACKAGE = Net::LDNS
 
 PROTOTYPES: ENABLE
+
+SV *
+to_idn(...)
+    PPCODE:
+    {
+        int i;
+        for( i = 0; i<items; i++ )
+        {
+            char *out;
+            int status;
+            SV *obj = ST(i);
+
+            status = idna_to_ascii_8z(SvPV_nolen(obj), &out, IDNA_ALLOW_UNASSIGNED);
+            if (status == IDNA_SUCCESS)
+            {
+                SV *new = newSVpv(out,0);
+                SvUTF8_on(new); /* We know the string is plain ASCII, so let Perl know too */
+                mXPUSHs(new);
+            }
+            else
+            {
+               croak("Error: %s\n", idna_strerror(status));
+            }
+            free(out);
+        }
+    }
 
 const char *
 lib_version()

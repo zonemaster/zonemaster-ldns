@@ -18,8 +18,9 @@ test_requires 'JSON::XS';
 test_requires 'Test::Fatal';
 
 use_ppport 3.19;
-cc_libs 'ldns';
+cc_libs 'ldns', 'idn';
 cc_src_paths 'src';
 cc_assert_lib lib => 'ldns', header => 'ldns/ldns.h', function => 'if(atof(ldns_version())>=1.6) return 0; else return 1;';
+cc_assert_lib lib => 'idn', header => 'idna.h', function => 'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;';
 
 WriteAll;
