@@ -12,6 +12,10 @@ The intention is that this module should be a viable alternative to Net::DNS. As
 
 The API should at the moment be considered slightly volatile. We have other code written to the current interface, so it's unlikely that we'll want to make any drastic changes, but at least until we start calling it version 1.0 it's a good idea to check for changes before upgrading.
 
+IDN
+===
+If GNU libidn is installed when this module is compiled, it will be used to add a simple function that converts strings from Perl's internal encoding to IDNA domain name format. In order to convert strings from whatever encoding you have to Perl's internal format, use L<Encode>. If you need any kind of control or options, use L<Net::LibIDN>. The included function here is only meant to assist in the most basic case, although that should cover a lot of real-world use cases.
+
 Installation
 ============
 Installation uses the normal `perl Makefile.PL && make && make test && make install` sequence. This assumes that `ldns` can be found in one of the places where the C compiler looks by default. `make test` assumes that it can send queries to the outside world.

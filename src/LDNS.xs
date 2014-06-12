@@ -164,6 +164,17 @@ to_idn(...)
 #endif
     }
 
+bool
+has_idn()
+    CODE:
+#ifdef WE_CAN_HAZ_IDN
+        RETVAL = 1;
+#else
+        RETVAL = 0;
+#endif
+    OUTPUT:
+        RETVAL
+
 const char *
 lib_version()
     CODE:

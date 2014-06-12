@@ -5,7 +5,8 @@ use 5.10.1;
 our $VERSION = '0.65';
 
 use parent 'Exporter';
-our @EXPORT_OK = qw[to_idn ldns_version];
+our @EXPORT_OK = qw[to_idn has_idn ldns_version];
+our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 require XSLoader;
 XSLoader::load( __PACKAGE__, $VERSION );
@@ -45,6 +46,10 @@ it's called. Can be exported, but is not by default.
 
 This function requires that GNU libidn was present when L<Net::LDNS> was
 compiled. If not, calling C<to_idn> will result in an exception getting thrown.
+
+=item has_idn()
+
+Takes no arguments. Returns true if libidn was present at compilation, false if not.
 
 =back
 

@@ -3,13 +3,15 @@ use Test::Fatal;
 use Encode;
 use Devel::Peek;
 
-BEGIN { use_ok( "Net::LDNS" => qw[to_idn] ) }
+BEGIN { use_ok( "Net::LDNS" => qw[:all] ) }
 
 if (exception {to_idn("whatever")} =~ /libidn not installed/) {
+    ok(!has_idn(), 'No IDN');
     done_testing;
     exit;
 }
 
+ok(has_idn(), 'Has IDN');
 my $encoded = to_idn( decode( 'utf8', 'annaröd.se' ) );
 is( $encoded, 'xn--annard-0xa.se', 'One name encoded right' );
 
