@@ -3,7 +3,7 @@ use Test::Fatal;
 
 BEGIN { use_ok( 'Net::LDNS' ) }
 
-my $res = Net::LDNS->new( '79.99.7.203' );
+my $res = Net::LDNS->new( '46.21.100.115' );
 my $res2 = Net::LDNS->new( '192.36.144.107' );
 
 my $counter = 0;
