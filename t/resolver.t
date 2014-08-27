@@ -67,16 +67,16 @@ subtest 'global' => sub {
     }
 };
 
-subtest 'sections' => sub {
-    my $res = Net::LDNS->new( '194.146.106.22' );
-    my $p   = eval { $res->query( 'www.iis.se' ) };
-    plan skip_all => 'No response, cannot test' if not $p;
-
-    is( scalar( $p->answer ),     1, 'answer count in scalar context' );
-    is( scalar( $p->authority ),  3, 'authority count in scalar context' );
-    is( scalar( $p->additional ), 6, 'additional count in scalar context' );
-    is( scalar( $p->question ),   1, 'question count in scalar context' );
-};
+# subtest 'sections' => sub {
+#     my $res = Net::LDNS->new( '194.146.106.22' );
+#     my $p   = eval { $res->query( 'www.iis.se' ) };
+#     plan skip_all => 'No response, cannot test' if not $p;
+# 
+#     is( scalar( $p->answer ),     1, 'answer count in scalar context' );
+#     is( scalar( $p->authority ),  3, 'authority count in scalar context' );
+#     is( scalar( $p->additional ), 6, 'additional count in scalar context' );
+#     is( scalar( $p->question ),   1, 'question count in scalar context' );
+# };
 
 subtest 'none' => sub {
     my $none = Net::LDNS->new( undef );
