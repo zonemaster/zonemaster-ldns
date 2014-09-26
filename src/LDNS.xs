@@ -183,6 +183,55 @@ lib_version()
         RETVAL
 
 SV *
+load_zonefile(filename)
+    char *filename;
+    PPCODE:
+    {
+		ldns_zone *zone;
+		ldns_status s;
+		ldns_rr *soa;
+		ldns_rr_list *rrs;
+		ldns_rdf *root = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME,".");
+        I32 context = GIMME_V;
+		size_t i,n;
+
+        if (context == G_VOID)
+        {
+            return;
+        }
+
+        FILE *fp = fopen(filename, "r");
+		if(!fp)
+		{
+	    	croak("%s",strerror(errno));
+		}
+
+		s = ldns_zone_new_frm_fp(&zone, fp, root, 3600, LDNS_RR_CLASS_IN);
+		if(s != LDNS_STATUS_OK)
+		{
+			croak("%s",ldns_get_errorstr_by_id(s));
+		}
+
+		soa = ldns_zone_soa(zone);
+		rrs = ldns_zone_rrs(zone);
+
+        n = ldns_rr_list_rr_count(rrs);
+
+        if (context == G_SCALAR)
+        {
+            XSRETURN_IV(n+1); /* Add one for SOA */
+        }
+
+        mXPUSHs(rr2sv(ldns_rr_clone(soa)));
+        for(i = 0; i < n; ++i)
+        {
+            mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
+        }
+		ldns_zone_deep_free(zone);
+		ldns_rdf_free(root);
+    }
+
+SV *
 new(class, ...)
     char *class;
     CODE:

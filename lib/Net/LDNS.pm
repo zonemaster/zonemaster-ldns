@@ -2,10 +2,10 @@ package Net::LDNS;
 
 use 5.10.1;
 
-our $VERSION = '0.66';
+our $VERSION = '0.67';
 
 use parent 'Exporter';
-our @EXPORT_OK = qw[to_idn has_idn ldns_version];
+our @EXPORT_OK = qw[to_idn has_idn ldns_version load_zonefile];
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 require XSLoader;
@@ -50,6 +50,10 @@ compiled. If not, calling C<to_idn> will result in an exception getting thrown.
 =item has_idn()
 
 Takes no arguments. Returns true if libidn was present at compilation, false if not.
+
+=item load_zonefile($filename)
+
+Load all resource records in a zone file, returning them as a list.
 
 =back
 
