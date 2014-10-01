@@ -754,9 +754,47 @@ packet_new(objclass,name,type="A",class="IN")
         RETVAL
 
 char *
-packet_rcode(obj)
+packet_rcode(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+		if ( items > 1 ) {
+			if ( strnEQ("NOERROR", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_NOERROR);
+			}
+			else if ( strnEQ("FORMERR", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_FORMERR);
+			}
+			else if ( strnEQ("SERVFAIL", SvPV_nolen(ST(1)), 8) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_SERVFAIL);
+			}
+			else if ( strnEQ("NXDOMAIN", SvPV_nolen(ST(1)), 8) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_NXDOMAIN);
+			}
+			else if ( strnEQ("NOTIMPL", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_NOTIMPL);
+			}
+			else if ( strnEQ("REFUSED", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_REFUSED);
+			}
+			else if ( strnEQ("YXDOMAIN", SvPV_nolen(ST(1)), 8) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_YXDOMAIN);
+			}
+			else if ( strnEQ("YXRRSET", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_YXRRSET);
+			}
+			else if ( strnEQ("NXRRSET", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_NXRRSET);
+			}
+			else if ( strnEQ("NOTAUTH", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_NOTAUTH);
+			}
+			else if ( strnEQ("NOTZONE", SvPV_nolen(ST(1)), 7) ) {
+				ldns_pkt_set_rcode(obj, LDNS_RCODE_NOTZONE);
+			}
+			else {
+				croak("Unknown RCODE: %s", SvPV_nolen(ST(1)));
+			}
+		}
         RETVAL = ldns_pkt_rcode2str(ldns_pkt_get_rcode(obj));
     OUTPUT:
         RETVAL
@@ -764,9 +802,29 @@ packet_rcode(obj)
         free(RETVAL);
 
 char *
-packet_opcode(obj)
+packet_opcode(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+		if ( items > 1 ) {
+			if ( strnEQ("QUERY", SvPV_nolen(ST(1)), 5) ) {
+				ldns_pkt_set_opcode(obj, LDNS_PACKET_QUERY);
+			}
+			else if ( strnEQ("IQUERY", SvPV_nolen(ST(1)), 6) ) {
+				ldns_pkt_set_opcode(obj, LDNS_PACKET_IQUERY);
+			}
+			else if ( strnEQ("STATUS", SvPV_nolen(ST(1)), 6) ) {
+				ldns_pkt_set_opcode(obj, LDNS_PACKET_STATUS);
+			}
+			else if ( strnEQ("NOTIFY", SvPV_nolen(ST(1)), 6) ) {
+				ldns_pkt_set_opcode(obj, LDNS_PACKET_NOTIFY);
+			}
+			else if ( strnEQ("UPDATE", SvPV_nolen(ST(1)), 6) ) {
+				ldns_pkt_set_opcode(obj, LDNS_PACKET_UPDATE);
+			}
+			else {
+				croak("Unknown OPCODE: %s", SvPV_nolen(ST(1)));
+			}
+		}
         RETVAL = ldns_pkt_opcode2str(ldns_pkt_get_opcode(obj));
     OUTPUT:
         RETVAL
@@ -774,9 +832,12 @@ packet_opcode(obj)
         free(RETVAL);
 
 U16
-packet_id(obj)
+packet_id(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+		if ( items > 1 ) {
+			ldns_pkt_set_id(obj, (U16)SvIV(ST(1)));
+		}
         RETVAL = ldns_pkt_id(obj);
     OUTPUT:
         RETVAL
@@ -878,9 +939,12 @@ packet_size(obj)
         RETVAL
 
 U32
-packet_querytime(obj)
+packet_querytime(obj,...)
     Net::LDNS::Packet obj;
     CODE:
+		if ( items > 1 ) {
+			ldns_pkt_set_querytime(obj, (U32)SvIV(ST(1)));
+		}
         RETVAL = ldns_pkt_querytime(obj);
     OUTPUT:
         RETVAL

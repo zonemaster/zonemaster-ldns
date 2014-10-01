@@ -56,17 +56,22 @@ Creates a new L<Net::LDNS::Packet> object from the given wireformat data, if pos
 
 =over
 
-=item rcode()
+=item rcode([$string])
 
-Returns the packet RCODE.
+Returns the packet RCODE. If given an argument, tries to set the RCODE to the
+relevant value. If the given string isn't recognized as an RCODE, an exception
+will be thrown.
 
-=item opcode()
+=item opcode([$string])
 
-Returns the packet OPCODE.
+Returns the packet OPCODE. If given an argument, tries to set the OPCODE to the
+relevant value. If the given string isn't recognized as an OPCODE, an exception
+will be thrown.
 
-=item id()
+=item id([$value])
 
-Returns the packet id number.
+Returns the packet id number. If given an argument, sets the ID value to that
+value.
 
 =item aa()
 
@@ -118,9 +123,10 @@ Get or set the EDNS version in the packet. For incoming packets, returns 0 if
 the packet does not have an OPT pseudo-RR and 0 if it's an EDNS0 packet. It's
 thus rather pointless until such time as EDNS1 is defined.
 
-=item querytime()
+=item querytime([$value])
 
-Returns the time the query this packet is the answer to took to execute, i milliseconds.
+Returns the time the query this packet is the answer to took to execute, in
+milliseconds. If given a value, sets the querytime to that value.
 
 =item answerfrom($ipaddr)
 

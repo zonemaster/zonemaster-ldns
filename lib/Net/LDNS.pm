@@ -2,7 +2,7 @@ package Net::LDNS;
 
 use 5.10.1;
 
-our $VERSION = '0.67';
+our $VERSION = '0.68';
 
 use parent 'Exporter';
 our @EXPORT_OK = qw[to_idn has_idn ldns_version load_zonefile];
