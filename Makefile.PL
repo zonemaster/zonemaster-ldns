@@ -1,11 +1,31 @@
 use inc::Module::Install;
 use Devel::CheckLib;
+use Getopt::Long;
+use File::Spec::Functions;
 
 BEGIN {
     if ($Module::Install::AUTHOR) {
         use Module::Install::XSUtil;
     }
 }
+
+my $headdir;
+my $libdir;
+my $prefix;
+
+GetOptions(
+    'headers=s' => \$headdir,
+    'libs=s' => \$libdir,
+    'prefix=s' => \$prefix,
+);
+
+if ($prefix) {
+    $headdir = catdir($prefix, 'include');
+    $libdir = catdir($prefix, 'lib');
+}
+
+cc_include_paths($headdir) if $headdir;
+cc_libs('-L' . $libdir) if $libdir;
 
 name 'Net-LDNS';
 version_from 'lib/Net/LDNS.pm';
@@ -16,7 +36,7 @@ perl_version '5.010001';
 
 configure_requires 'Devel::CheckLib';
 requires 'MIME::Base64';
-test_requires 'JSON::XS';
+test_requires 'JSON::PP';
 test_requires 'Test::Fatal';
 
 use_ppport 3.19;
