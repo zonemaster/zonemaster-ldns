@@ -24,4 +24,9 @@ is($p->id(2147488359), 4711, 'Wraparound ID');
 is($p->querytime(4711), 4711, 'Setting query time');
 is($p->querytime(2147488359), 2147488359, 'Setting larger query time');
 
+is($p->answerfrom, undef, 'No answerfrom');
+$p->answerfrom('127.0.0.1');
+is($p->answerfrom, '127.0.0.1', 'Localhost');
+
+
 done_testing();

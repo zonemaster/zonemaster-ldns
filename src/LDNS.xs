@@ -106,6 +106,26 @@ typedef ldns_rr *Net__LDNS__RR__X25;
 #define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
 #define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
 
+#if 0
+void
+randomize_capitalization(char *in)
+{
+	char *str;
+	str = in;
+	while(*str) {
+		if(Drand01() < 0.5)
+		{
+			*str = tolower(*str);
+		}
+		else
+		{
+			*str = toupper(*str);
+		}
+		str++;
+	}
+}
+#endif
+
 SV *
 rr2sv(ldns_rr *rr)
 {
@@ -1870,6 +1890,16 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         ldns_rr_list *keys  = ldns_rr_list_new();
         ldns_rr_list *sig   = ldns_rr_list_new();
         ldns_rr_list *good  = ldns_rr_list_new();
+
+		if(av_len(rrset_in)==-1)
+		{
+			croak("RRset is empty");
+		}
+
+		if(av_len(keys_in)==-1)
+		{
+			croak("Key list is empty");
+		}
 
         /* Make a list with only the RRSIG */
         ldns_rr_list_push_rr(sig, obj);
