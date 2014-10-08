@@ -12,7 +12,7 @@ is( $count, 2, 'expected count' );
 
 my @names = sort $res->addr2name( '8.8.8.8' );
 $count = $res->addr2name( '8.8.8.8' );
-is_deeply( \@names, ['google-public-dns-a.google.com.'], 'expected names' );
+is_deeply( [map {lc($_)} @names], ['google-public-dns-a.google.com.'], 'expected names' );
 is( $count, 1, 'expected name count' );
 
 done_testing;

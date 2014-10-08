@@ -26,8 +26,8 @@ subtest 'SOA' => sub {
 
     foreach my $rr ( $p->answer ) {
         isa_ok( $rr, 'Net::LDNS::RR::SOA' );
-        is( $rr->mname, 'ns.nic.se.' );
-        is( $rr->rname, 'hostmaster.iis.se.' );
+        is( lc($rr->mname), 'ns.nic.se.' );
+        is( lc($rr->rname), 'hostmaster.iis.se.' );
         ok( $rr->serial >= 1381471502, 'serial' );
         is( $rr->refresh, 10800,   'refresh' );
         is( $rr->retry,   3600,    'retry' );
@@ -173,7 +173,7 @@ subtest 'NSEC3PARAM' => sub {
     is( $nsec3param->flags,      0 );
     is( $nsec3param->iterations, 1, "Iterations" );
     is( encode_base64( $nsec3param->salt ), "CLLBmrUmgZNH\n", "Salt" );
-    is( $nsec3param->owner, 'whitehouse.gov.' );
+    is( lc($nsec3param->owner), 'whitehouse.gov.' );
 };
 
 subtest 'SRV' => sub {

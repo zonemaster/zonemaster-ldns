@@ -58,17 +58,17 @@ is( scalar( @answer ), 3, 'expected number of NS records in answer' );
 my %known_ns = map { $_ => 1 } qw[ns.nic.se. i.ns.se. ns3.nic.se.];
 foreach my $rr ( @answer ) {
     isa_ok( $rr, 'Net::LDNS::RR::NS' );
-    is( $rr->owner, 'iis.se.', 'expected owner name' );
+    is( lc($rr->owner), 'iis.se.', 'expected owner name' );
     ok( $rr->ttl > 0, 'positive TTL (' . $rr->ttl . ')' );
     is( $rr->type,  'NS', 'type is NS' );
     is( $rr->class, 'IN', 'class is IN' );
-    ok( $known_ns{ $rr->nsdname }, 'known nsdname (' . $rr->nsdname . ')' );
+    ok( $known_ns{ lc($rr->nsdname) }, 'known nsdname (' . $rr->nsdname . ')' );
 }
 
 my %known_mx = map { $_ => 1 } qw[mx1.iis.se. mx2.iis.se. ];
 foreach my $rr ( $p->answer ) {
     is( $rr->preference, 10, 'expected MX preference' );
-    ok( $known_mx{ $rr->exchange }, 'known MX exchange (' . $rr->exchange . ')' );
+    ok( $known_mx{ lc($rr->exchange) }, 'known MX exchange (' . $rr->exchange . ')' );
 }
 
 my $lroot = Net::LDNS->new( '199.7.83.42' );

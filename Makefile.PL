@@ -12,11 +12,13 @@ BEGIN {
 my $headdir;
 my $libdir;
 my $prefix;
+my $randomize;
 
 GetOptions(
     'headers=s' => \$headdir,
     'libs=s' => \$libdir,
     'prefix=s' => \$prefix,
+    'randomize!' => \$randomize,
 );
 
 if ($prefix) {
@@ -48,6 +50,13 @@ if (check_lib(lib => 'idn', header => 'idna.h', function => 'if(strcmp(IDNA_ACE_
 {
     cc_libs 'idn';
     cc_define '-DWE_CAN_HAZ_IDN';
+}
+
+if ($randomize) {
+    cc_define '-DRANDOMIZE';
+    print(("=" x 65) . "\n");
+    print "Compiling with randomzied capitalization.\n";
+    print(("=" x 65) . "\n");
 }
 
 WriteAll;
