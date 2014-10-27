@@ -25,6 +25,11 @@ ok( $r->dnssec, 'dnssec set' );
 $r->dnssec( 0 );
 ok( !$r->dnssec, 'dnssec unset' );
 
+$r->cd( 1 );
+ok( $r->cd, 'dnssec set' );
+$r->cd( 0 );
+ok( !$r->cd, 'dnssec unset' );
+
 $r->usevc( 1 );
 ok( $r->usevc, 'usevc set' );
 $r->usevc( 0 );

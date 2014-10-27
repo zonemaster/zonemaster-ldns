@@ -392,6 +392,17 @@ dnssec(obj,...)
         RETVAL
 
 bool
+cd(obj,...)
+    Net::LDNS obj;
+    CODE:
+        if ( items > 1 ) {
+            ldns_resolver_set_dnssec_cd(obj, SvIV(ST(1)));
+        }
+        RETVAL = ldns_resolver_dnssec_cd(obj);
+    OUTPUT:
+        RETVAL
+
+bool
 usevc(obj,...)
     Net::LDNS obj;
     CODE:
