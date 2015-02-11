@@ -13,9 +13,8 @@
 #ifndef _UTIL_H
 #define _UTIL_H
 
-#include <inttypes.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "EXTERN.h"
+#include "perl.h"
 #include <ldns/common.h>
 #include <time.h>
 #include <stdio.h>
@@ -27,8 +26,8 @@ extern "C" {
 #define dprintf(X,Y) fprintf(stderr, (X), (Y))
 /* #define	dprintf(X, Y)  */
 
-#define LDNS_VERSION "1.6.17"
-#define LDNS_REVISION ((1<<16)|(6<<8)|(17))
+#define LDNS_VERSION "1.6.18"
+#define LDNS_REVISION ((1<<16)|(6<<8)|(18))
 
 /**
  * splint static inline workaround
