@@ -106,50 +106,8 @@ typedef ldns_rr *Net__LDNS__RR__X25;
 #define D_U16(what,where) ldns_rdf2native_int16(ldns_rr_rdf(what,where))
 #define D_U32(what,where) ldns_rdf2native_int32(ldns_rr_rdf(what,where))
 
-char *
-randomize_capitalization(char *in)
-{
-#ifdef RANDOMIZE
-	char *str;
-	str = in;
-	while(*str) {
-		if(Drand01() < 0.5)
-		{
-			*str = tolower(*str);
-		}
-		else
-		{
-			*str = toupper(*str);
-		}
-		str++;
-	}
-#endif
-	return in;
-}
-
-SV *
-rr2sv(ldns_rr *rr)
-{
-   char rrclass[30];
-   char *type;
-
-   type = ldns_rr_type2str(ldns_rr_get_type(rr));
-   snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
-
-   SV* rr_sv = newSV(0);
-   if (strncmp(type, "TYPE", 4)==0)
-   {
-       sv_setref_pv(rr_sv, "Net::LDNS::RR", rr);
-   }
-   else
-   {
-       sv_setref_pv(rr_sv, rrclass, rr);
-   }
-
-   free(type);
-
-   return rr_sv;
-}
+SV *rr2sv(ldns_rr *rr);
+char *randomize_capitalization(char *in);
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS
 
