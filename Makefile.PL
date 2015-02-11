@@ -4,7 +4,7 @@ use Getopt::Long;
 use File::Spec::Functions;
 
 BEGIN {
-    if ($Module::Install::AUTHOR) {
+    if ( $Module::Install::AUTHOR ) {
         use Module::Install::XSUtil;
     }
 }
@@ -15,21 +15,21 @@ my $prefix;
 my $randomize;
 
 GetOptions(
-    'headers=s' => \$headdir,
-    'libs=s' => \$libdir,
-    'prefix=s' => \$prefix,
+    'headers=s'  => \$headdir,
+    'libs=s'     => \$libdir,
+    'prefix=s'   => \$prefix,
     'randomize!' => \$randomize,
 );
 
-if ($prefix) {
-    $headdir = catdir($prefix, 'include');
-    $libdir = catdir($prefix, 'lib');
+if ( $prefix ) {
+    $headdir = catdir( $prefix, 'include' );
+    $libdir  = catdir( $prefix, 'lib' );
 }
 
-cc_include_paths($headdir) if $headdir;
-cc_libs('-L' . $libdir) if $libdir;
+cc_include_paths( $headdir ) if $headdir;
+cc_libs( '-L' . $libdir ) if $libdir;
 
-cc_include_paths('include');
+cc_include_paths( 'include' );
 
 name 'Net-LDNS';
 version_from 'lib/Net/LDNS.pm';
@@ -44,20 +44,36 @@ test_requires 'JSON::PP';
 test_requires 'Test::Fatal';
 
 use_ppport 3.19;
-cc_libs 'ssl';
+cc_libs 'crypto';
 cc_src_paths 'src';
 
-if (check_lib(lib => 'idn', header => 'idna.h', function => 'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;'))
+my %assert_args = (
+    lib      => 'crypto',
+    header   => 'openssl/crypto.h',
+    function => 'if(SSLeay()>0x010000000L) return 0; else return 1;'
+);
+$assert_args{LIBS} = '-L' . $libdir  if $libdir;
+$assert_args{INC}  = '-I' . $headdir if $headdir;
+
+cc_assert_lib %assert_args;
+
+if (
+    check_lib(
+        lib      => 'idn',
+        header   => 'idna.h',
+        function => 'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;'
+    )
+  )
 {
     cc_libs 'idn';
     cc_define '-DWE_CAN_HAZ_IDN';
 }
 
-if ($randomize) {
+if ( $randomize ) {
     cc_define '-DRANDOMIZE';
-    print(("=" x 65) . "\n");
+    print( ( "=" x 65 ) . "\n" );
     print "Compiling with randomzied capitalization.\n";
-    print(("=" x 65) . "\n");
+    print( ( "=" x 65 ) . "\n" );
 }
 
 WriteAll;
