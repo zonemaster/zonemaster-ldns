@@ -1,5 +1,5 @@
-/* ldns/config.h.  Generated from config.h.in by configure.  */
-/* ldns/config.h.in.  Generated from configure.ac by autoheader.  */
+#include "EXTERN.h"
+#include "perl.h"
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
@@ -201,7 +201,11 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strlcpy' function. */
+#ifdef HAS_STRLCPY
 #define HAVE_STRLCPY 1
+#else
+#undef HAVE_STRLCPY
+#endif
 
 /* Define to 1 if you have the `strtoul' function. */
 #define HAVE_STRTOUL 1
