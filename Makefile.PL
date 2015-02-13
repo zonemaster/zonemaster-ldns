@@ -50,12 +50,28 @@ cc_src_paths 'src';
 my %assert_args = (
     lib      => 'crypto',
     header   => 'openssl/crypto.h',
-    function => 'if(SSLeay()>0x010000000L) return 0; else return 1;'
+    function => 'if(SSLeay()) return 0; else return 1;'
 );
 $assert_args{LIBS} = '-L' . $libdir  if $libdir;
 $assert_args{INC}  = '-I' . $headdir if $headdir;
 
 cc_assert_lib %assert_args;
+
+if (not check_ecdsa(%assert_args)) {
+    print "Your OpenSSL does not seem to support ECDSA.\n";
+    exit;
+}
+else {
+    print "ECDSA support detected.\n";
+}
+
+if (not check_gost(%assert_args)) {
+    print "Your OpenSSL does not seem to support GOST.\n";
+    exit;
+}
+else {
+    print "GOST support detected.\n";
+}
 
 if (
     check_lib(
@@ -67,6 +83,7 @@ if (
 {
     cc_libs 'idn';
     cc_define '-DWE_CAN_HAZ_IDN';
+    print "IDNA support detected.\n";
 }
 
 if ( $randomize ) {
@@ -77,3 +94,50 @@ if ( $randomize ) {
 }
 
 WriteAll;
+
+sub check_ecdsa {
+    my %args = @_;
+
+    $args{header} = [ 'openssl/crypto.h', 'openssl/ecdsa.h' ];
+    $args{function} = q[if(ECDSA_SIG_new()) return 0; else return 1;];
+
+    return check_lib(%args);
+}
+
+sub check_gost {
+    my %args = @_;
+
+    $args{header} = [ 'openssl/crypto.h', 'openssl/ecdsa.h', 'openssl/engine.h' ];
+    $args{function} = <<'CODE';
+    const EVP_PKEY_ASN1_METHOD* meth;
+    ENGINE* e;
+
+    meth = EVP_PKEY_asn1_find_str(NULL, "gost2001", -1);
+    if(meth) {
+       return 0;
+    }
+
+    e = ENGINE_by_id("gost");
+    if(!e) {
+       ENGINE_load_builtin_engines();
+       ENGINE_load_dynamic();
+       e = ENGINE_by_id("gost");
+    }
+    if(!e) {
+       return 1;
+    }
+    if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+       return 1;
+    }
+
+    meth = EVP_PKEY_asn1_find_str(&e, "gost2001", -1);
+    if(!meth) {
+       return 1;
+    }
+
+    return 0;
+
+CODE
+
+    return check_lib(%args);
+}
