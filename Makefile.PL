@@ -67,7 +67,6 @@ else {
 
 if (not check_gost(%assert_args)) {
     print "Your OpenSSL does not seem to support GOST.\n";
-    exit;
 }
 else {
     print "GOST support detected.\n";
