@@ -47,10 +47,8 @@ isa_ok( $ds3, 'Net::LDNS::RR::DS', 'sha384' );
 ok( $ds3->verify( $key1 ) ) if $ds3;
 
 my $ds4 = $key1->ds( 'gost' );
-if ( $ds4 ) {    # We may not have GOST available.
-    isa_ok( $ds4, 'Net::LDNS::RR::DS', 'gost' );
-    ok( $ds4->verify( $key1 ) ) if $ds4;
-}
+isa_ok( $ds4, 'Net::LDNS::RR::DS', 'gost' );
+ok( $ds4->verify( $key1 ) ) if $ds4;
 
 is($key1->keysize, 2048, 'Key is 2048 bits long');
 is($key2->keysize, 1024, 'Key is 1024 bits long');
