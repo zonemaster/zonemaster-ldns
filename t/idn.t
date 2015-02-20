@@ -23,6 +23,6 @@ is_deeply(
     'Many encoded right'
 );
 
-like( exception { to_idn( decode( 'utf8', "ö" x 63 ) ) }, qr/Punycode failed/, 'Boom today' );
+like( exception { to_idn( decode( 'utf8', "ö" x 63 ) ) }, qr/Punycode/, 'Boom today' );
 
 done_testing;

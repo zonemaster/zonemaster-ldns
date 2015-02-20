@@ -47,7 +47,7 @@ is($r->edns_size, 0 , 'ENDS0 UDP size set to zero');
 
 is($r->timeout, 5, 'Expected default timeout');
 $r->timeout(3.33);
-is($r->timeout, 3.33, 'Expected set timeout');
+ok(($r->timeout - 3.33) < 0.01, 'Expected set timeout');
 
 subtest 'recursion' => sub {
     my $r = Net::LDNS->new( '8.8.4.4' );
