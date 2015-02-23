@@ -70,6 +70,7 @@ if (not check_gost(%assert_args)) {
 }
 else {
     print "GOST support detected.\n";
+    cc_define '-DUSE_GOST';
 }
 
 if (

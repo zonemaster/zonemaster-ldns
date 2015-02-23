@@ -316,7 +316,7 @@
 #define USE_ECDSA 1
 
 /* Define this to enable GOST support. */
-#define USE_GOST 1
+/* #define USE_GOST 1 */
 
 /* Define this to enable SHA256 and SHA512 support. */
 #define USE_SHA2 1
