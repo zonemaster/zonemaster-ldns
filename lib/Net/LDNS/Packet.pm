@@ -73,6 +73,8 @@ will be thrown.
 Returns the packet id number. If given an argument, sets the ID value to that
 value.
 
+=item qr()
+
 =item aa()
 
 =item tc()

@@ -120,9 +120,14 @@ Get and optionally set the number of retries.
 
 Get and optionally set the number of seconds between retries.
 
+=item port($port)
+
+Get and optionally set the destination port for requests.
+
 =item edns_size($size)
 
 Get and optionally set the EDNS0 UDP maximum size.
+
 
 =item axfr( $domain, $callback, $class )
 
