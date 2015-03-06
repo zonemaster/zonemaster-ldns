@@ -128,7 +128,7 @@ thus rather pointless until such time as EDNS1 is defined.
 =item querytime([$value])
 
 Returns the time the query this packet is the answer to took to execute, in
-milliseconds. If given a value, sets the querytime to that value.
+(fractional) seconds. If given a value, sets the querytime to that value.
 
 =item answerfrom($ipaddr)
 
