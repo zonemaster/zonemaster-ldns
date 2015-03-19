@@ -158,7 +158,7 @@ new(class, ...)
     OUTPUT:
         RETVAL
 
-Net::LDNS::Packet
+SV *
 query(obj, dname, rrtype="A", rrclass="IN")
     Net::LDNS obj;
     char *dname;
@@ -215,8 +215,10 @@ query(obj, dname, rrtype="A", rrclass="IN")
             croak("%s", ldns_get_errorstr_by_id(status));
             RETVAL = NULL;
         }
-        RETVAL = ldns_pkt_clone(pkt);
-        ldns_pkt_set_timestamp(RETVAL, ldns_pkt_timestamp(pkt));
+        ldns_pkt *clone = ldns_pkt_clone(pkt);
+        ldns_pkt_set_timestamp(clone, ldns_pkt_timestamp(pkt));
+        RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::Packet", clone);
+        net_ldns_remember_packet(RETVAL);
     }
     OUTPUT:
         RETVAL
@@ -1065,11 +1067,13 @@ packet_unique_push(obj,section,rr)
     OUTPUT:
         RETVAL
 
-Net::LDNS::RRList
+SV *
 packet_all(obj)
     Net::LDNS::Packet obj;
     CODE:
-        RETVAL = ldns_pkt_all_noquestion(obj);
+        ldns_rr_list *list = ldns_pkt_all_noquestion(obj);
+        RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::RRList", list);
+        net_ldns_remember_rrlist(RETVAL);
     OUTPUT:
         RETVAL
 
@@ -1217,6 +1221,13 @@ packet_DESTROY(obj)
     CODE:
         ldns_pkt_free(obj);
 
+void
+packet_CLONE(class)
+    char *class;
+	CODE:
+		net_ldns_clone_packets();
+
+
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RRList           PREFIX=rrlist_
 
 size_t
@@ -1265,6 +1276,13 @@ rrlist_DESTROY(obj)
     Net::LDNS::RRList obj;
     CODE:
         ldns_rr_list_deep_free(obj);
+
+void
+rrlist_CLONE(class)
+    char *class;
+	CODE:
+		net_ldns_clone_rrlists();
+
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR           PREFIX=rr_
 

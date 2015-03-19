@@ -2,6 +2,8 @@
 
 #define RESOLVER_HASH_NAME "Net::LDNS::__resolvers__"
 #define RR_HASH_NAME "Net::LDNS::__rrs__"
+#define RRLIST_HASH_NAME "Net::LDNS::__rrlists__"
+#define PACKET_HASH_NAME "Net::LDNS::__packets__"
 
 void
 net_ldns_remember_resolver(SV *rv)
@@ -13,6 +15,18 @@ void
 net_ldns_remember_rr(SV *rv)
 {
     net_ldns_remember(rv, RR_HASH_NAME);
+}
+
+void
+net_ldns_remember_rrlist(SV *rv)
+{
+    net_ldns_remember(rv, RRLIST_HASH_NAME);
+}
+
+void
+net_ldns_remember_packet(SV *rv)
+{
+    net_ldns_remember(rv, PACKET_HASH_NAME);
 }
 
 void
@@ -70,6 +84,56 @@ net_ldns_clone_rrs()
         {
             ldns_rr *old = INT2PTR(ldns_rr *, SvIV((SV *)SvRV(val)));
             ldns_rr *new = ldns_rr_clone(old);
+            sv_setiv_mg(SvRV(val), PTR2IV(new));
+        }
+        else
+        {
+            SV *key = hv_iterkeysv(entry);
+            hv_delete_ent(hash, key, G_DISCARD, 0);
+        }
+    }
+}
+
+void
+net_ldns_clone_rrlists()
+{
+    HV *hash;
+    HE *entry;
+
+    hash = get_hv(RRLIST_HASH_NAME, GV_ADD);
+    hv_iterinit(hash);
+    while ( (entry = hv_iternext(hash)) != NULL )
+    {
+        SV *val = hv_iterval(hash, entry);
+        if(val!=NULL)
+        {
+            ldns_rr_list *old = INT2PTR(ldns_rr_list *, SvIV((SV *)SvRV(val)));
+            ldns_rr_list *new = ldns_rr_list_clone(old);
+            sv_setiv_mg(SvRV(val), PTR2IV(new));
+        }
+        else
+        {
+            SV *key = hv_iterkeysv(entry);
+            hv_delete_ent(hash, key, G_DISCARD, 0);
+        }
+    }
+}
+
+void
+net_ldns_clone_packets()
+{
+    HV *hash;
+    HE *entry;
+
+    hash = get_hv(PACKET_HASH_NAME, GV_ADD);
+    hv_iterinit(hash);
+    while ( (entry = hv_iternext(hash)) != NULL )
+    {
+        SV *val = hv_iterval(hash, entry);
+        if(val!=NULL)
+        {
+            ldns_pkt *old = INT2PTR(ldns_pkt *, SvIV((SV *)SvRV(val)));
+            ldns_pkt *new = ldns_pkt_clone(old);
             sv_setiv_mg(SvRV(val), PTR2IV(new));
         }
         else
