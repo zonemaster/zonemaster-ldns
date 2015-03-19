@@ -154,6 +154,17 @@ has_idn()
     OUTPUT:
         RETVAL
 
+bool
+has_gost()
+	CODE:
+#ifdef USE_GOST
+		RETVAL = 1;
+#else
+		RETVAL = 0;
+#endif
+	OUTPUT:
+		RETVAL
+
 const char *
 lib_version()
     CODE:

@@ -51,6 +51,10 @@ compiled. If not, calling C<to_idn> will result in an exception getting thrown.
 
 Takes no arguments. Returns true if libidn was present at compilation, false if not.
 
+=item has_gost()
+
+Takes no arguments. Returns true if GOST support was present at compilation, false if not.
+
 =item load_zonefile($filename)
 
 Load all resource records in a zone file, returning them as a list.
