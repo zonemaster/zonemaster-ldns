@@ -1,5 +1,8 @@
 Revision history for Net::LDNS
 
+0.73 2015-03-19
+ - Thread safety.
+
 0.71 2015-02-18
  - Ship the ldns code with the module rather than relying on an externally installed library.
 

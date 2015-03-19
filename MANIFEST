@@ -8,6 +8,7 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Module/Install/XSUtil.pm
+include/LDNS.h
 include/ldns/buffer.h
 include/ldns/common.h
 include/ldns/config.h
@@ -173,4 +174,5 @@ t/resolver.t
 t/rr.t
 t/rrlist.t
 t/serialize.t
+t/threads.t
 t/utils.t
