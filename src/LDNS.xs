@@ -622,7 +622,8 @@ DESTROY(rv)
         ldns_resolver_free(obj);
 
 void
-CLONE()
+CLONE(class)
+    char *class;
 	CODE:
 		net_ldns_clone_resolvers();
 
