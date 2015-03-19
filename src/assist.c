@@ -1,23 +1,37 @@
 #include <LDNS.h>
 
 #define RESOLVER_HASH_NAME "Net::LDNS::__resolvers__"
+#define RR_HASH_NAME "Net::LDNS::__rrs__"
 
 void
-    net_ldns_remember_resolver(SV *rv)
+net_ldns_remember_resolver(SV *rv)
+{
+    net_ldns_remember(rv, RESOLVER_HASH_NAME);
+}
+
+void
+net_ldns_remember_rr(SV *rv)
+{
+    net_ldns_remember(rv, RR_HASH_NAME);
+}
+
+void
+net_ldns_remember(SV *rv, const char *hashname)
 {
     HV *hash;
     SV *val;
     STRLEN keylen;
     char *keystr;
 
-    hash = get_hv(RESOLVER_HASH_NAME, GV_ADD);
+    hash = get_hv(hashname, GV_ADD);
     val = newRV_inc(SvRV(rv));
     keystr = SvPV(val,keylen);
     sv_rvweaken(val);
     hv_store(hash, keystr, keylen, val, 0);
 }
 
-void net_ldns_clone_resolvers()
+void
+net_ldns_clone_resolvers()
 {
     HV *hash;
     HE *entry;
@@ -41,8 +55,33 @@ void net_ldns_clone_resolvers()
     }
 }
 
+void
+net_ldns_clone_rrs()
+{
+    HV *hash;
+    HE *entry;
+
+    hash = get_hv(RR_HASH_NAME, GV_ADD);
+    hv_iterinit(hash);
+    while ( (entry = hv_iternext(hash)) != NULL )
+    {
+        SV *val = hv_iterval(hash, entry);
+        if(val!=NULL)
+        {
+            ldns_rr *old = INT2PTR(ldns_rr *, SvIV((SV *)SvRV(val)));
+            ldns_rr *new = ldns_rr_clone(old);
+            sv_setiv_mg(SvRV(val), PTR2IV(new));
+        }
+        else
+        {
+            SV *key = hv_iterkeysv(entry);
+            hv_delete_ent(hash, key, G_DISCARD, 0);
+        }
+    }
+}
+
 char *
-    randomize_capitalization(char *in)
+randomize_capitalization(char *in)
 {
 #ifdef RANDOMIZE
     char *str;
@@ -63,7 +102,7 @@ char *
 }
 
 SV *
-    rr2sv(ldns_rr *rr)
+rr2sv(ldns_rr *rr)
 {
     char rrclass[30];
     char *type;
@@ -83,5 +122,6 @@ SV *
 
     free(type);
 
+    net_ldns_remember_rr(rr_sv);
     return rr_sv;
 }

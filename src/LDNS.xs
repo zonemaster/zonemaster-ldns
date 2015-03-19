@@ -1289,6 +1289,7 @@ rr_new_from_string(class,str)
         free(rrtype);
         rr_sv = sv_newmortal();
         sv_setref_pv(rr_sv, rrclass, rr);
+        net_ldns_remember_rr(rr_sv);
         PUSHs(rr_sv);
 
 char *
@@ -1377,6 +1378,11 @@ rr_DESTROY(obj)
     CODE:
         ldns_rr_free(obj);
 
+void
+rr_CLONE(class)
+    char *class;
+	CODE:
+		net_ldns_clone_rrs();
 
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NS           PREFIX=rr_ns_
