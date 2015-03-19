@@ -1,7 +1,17 @@
-#include "EXTERN.h"
-#include "perl.h"
-#include "XSUB.h"
-#include <ldns/ldns.h>
+#include <LDNS.h>
+
+void
+net_ldns_remember_resolver(SV *rv)
+{
+	fprintf(stderr,"Remember: %s\n", SvPV_nolen(rv));
+}
+
+void
+net_ldns_forget_resolver(SV *rv)
+{
+	fprintf(stderr,"Forget: %s\n", SvPV_nolen(rv));
+}
+
 
 char *
 randomize_capitalization(char *in)
