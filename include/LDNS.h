@@ -109,4 +109,4 @@ typedef ldns_rr *Net__LDNS__RR__X25;
 SV *rr2sv(ldns_rr *rr);
 char *randomize_capitalization(char *in);
 void net_ldns_remember_resolver(SV *rv);
-void net_ldns_forget_resolver(SV *rv);
+void net_ldns_clone_resolvers();

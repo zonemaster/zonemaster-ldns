@@ -100,6 +100,8 @@ load_zonefile(filename)
 
         if (context == G_SCALAR)
         {
+            ldns_zone_deep_free(zone);
+            ldns_rdf_free(root);
             XSRETURN_IV(n+1); /* Add one for SOA */
         }
 
@@ -616,9 +618,13 @@ DESTROY(rv)
 		Net__LDNS obj;
 		IV tmp = SvIV((SV *)SvRV(rv));
 		obj = INT2PTR(Net__LDNS,tmp);
-		net_ldns_forget_resolver(rv);
         ldns_axfr_abort(obj);
         ldns_resolver_free(obj);
+
+void
+CLONE()
+	CODE:
+		net_ldns_clone_resolvers();
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
 
