@@ -153,7 +153,9 @@ new(class, ...)
             }
         }
         sv_setref_pv(RETVAL, class, res);
+#ifdef USE_ITHREADS
 		net_ldns_remember_resolver(RETVAL);
+#endif
     }
     OUTPUT:
         RETVAL
@@ -218,7 +220,9 @@ query(obj, dname, rrtype="A", rrclass="IN")
         ldns_pkt *clone = ldns_pkt_clone(pkt);
         ldns_pkt_set_timestamp(clone, ldns_pkt_timestamp(pkt));
         RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::Packet", clone);
+#ifdef USE_ITHREADS
         net_ldns_remember_packet(RETVAL);
+#endif
     }
     OUTPUT:
         RETVAL
@@ -623,11 +627,15 @@ DESTROY(rv)
         ldns_axfr_abort(obj);
         ldns_resolver_free(obj);
 
+#ifdef USE_ITHREADS
+
 void
 CLONE(class)
     char *class;
 	CODE:
 		net_ldns_clone_resolvers();
+
+#endif
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
 
@@ -1073,7 +1081,9 @@ packet_all(obj)
     CODE:
         ldns_rr_list *list = ldns_pkt_all_noquestion(obj);
         RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::RRList", list);
+#ifdef USE_ITHREADS
         net_ldns_remember_rrlist(RETVAL);
+#endif
     OUTPUT:
         RETVAL
 
@@ -1221,12 +1231,15 @@ packet_DESTROY(obj)
     CODE:
         ldns_pkt_free(obj);
 
+#ifdef USE_ITHREADS
+
 void
 packet_CLONE(class)
     char *class;
 	CODE:
 		net_ldns_clone_packets();
 
+#endif
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RRList           PREFIX=rrlist_
 
@@ -1277,12 +1290,15 @@ rrlist_DESTROY(obj)
     CODE:
         ldns_rr_list_deep_free(obj);
 
+#ifdef USE_ITHREADS
+
 void
 rrlist_CLONE(class)
     char *class;
 	CODE:
 		net_ldns_clone_rrlists();
 
+#endif
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR           PREFIX=rr_
 
@@ -1307,7 +1323,9 @@ rr_new_from_string(class,str)
         free(rrtype);
         rr_sv = sv_newmortal();
         sv_setref_pv(rr_sv, rrclass, rr);
+#ifdef USE_ITHREADS
         net_ldns_remember_rr(rr_sv);
+#endif
         PUSHs(rr_sv);
 
 char *
@@ -1396,12 +1414,15 @@ rr_DESTROY(obj)
     CODE:
         ldns_rr_free(obj);
 
+#ifdef USE_ITHREADS
+
 void
 rr_CLONE(class)
     char *class;
 	CODE:
 		net_ldns_clone_rrs();
 
+#endif
 
 MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NS           PREFIX=rr_ns_
 

@@ -109,13 +109,14 @@ typedef ldns_rr *Net__LDNS__RR__X25;
 SV *rr2sv(ldns_rr *rr);
 char *randomize_capitalization(char *in);
 
+#ifdef USE_ITHREADS
 void net_ldns_remember_resolver(SV *rv);
 void net_ldns_remember_rr(SV *rv);
 void net_ldns_remember_rrlist(SV *rv);
 void net_ldns_remember_packet(SV *rv);
 void net_ldns_remember(SV *rv, const char *hashname);
-
 void net_ldns_clone_resolvers();
 void net_ldns_clone_rrs();
 void net_ldns_clone_rrlists();
 void net_ldns_clone_packets();
+#endif

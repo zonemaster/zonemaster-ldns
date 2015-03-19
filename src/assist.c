@@ -1,5 +1,6 @@
 #include <LDNS.h>
 
+#ifdef USE_ITHREADS
 #define RESOLVER_HASH_NAME "Net::LDNS::__resolvers__"
 #define RR_HASH_NAME "Net::LDNS::__rrs__"
 #define RRLIST_HASH_NAME "Net::LDNS::__rrlists__"
@@ -144,6 +145,8 @@ net_ldns_clone_packets()
     }
 }
 
+#endif
+
 char *
 randomize_capitalization(char *in)
 {
@@ -186,6 +189,9 @@ rr2sv(ldns_rr *rr)
 
     free(type);
 
+#ifdef USE_ITHREADS
     net_ldns_remember_rr(rr_sv);
+#endif
+
     return rr_sv;
 }

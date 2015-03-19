@@ -23,9 +23,6 @@ if ($can_use_threads) {
 
     $_->join for threads->list;
 
-} else {
-    plan skip_all => 'No threads in this perl.';
 }
-
 
 done_testing;
