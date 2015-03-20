@@ -618,12 +618,9 @@ timeout(obj,...)
         RETVAL
 
 void
-DESTROY(rv)
-    SV *rv;
+DESTROY(obj)
+    Net::LDNS obj;
     CODE:
-		Net__LDNS obj;
-		IV tmp = SvIV((SV *)SvRV(rv));
-		obj = INT2PTR(Net__LDNS,tmp);
         ldns_axfr_abort(obj);
         ldns_resolver_deep_free(obj);
 
