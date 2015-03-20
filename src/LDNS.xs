@@ -150,6 +150,7 @@ new(class, ...)
                 {
                     croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));
                 }
+                ldns_rdf_deep_free(addr);
             }
         }
         sv_setref_pv(RETVAL, class, res);
@@ -220,6 +221,8 @@ query(obj, dname, rrtype="A", rrclass="IN")
         ldns_pkt *clone = ldns_pkt_clone(pkt);
         ldns_pkt_set_timestamp(clone, ldns_pkt_timestamp(pkt));
         RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::Packet", clone);
+        ldns_rdf_deep_free(domain);
+        ldns_pkt_free(pkt);
 #ifdef USE_ITHREADS
         net_ldns_remember_packet(RETVAL);
 #endif
@@ -346,7 +349,7 @@ name2addr(obj,name)
     PPCODE:
     {
         ldns_rr_list *addrs;
-        ldns_rdf *dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        ldns_rdf *dname;
         size_t n, i;
         I32 context;
 
@@ -357,6 +360,7 @@ name2addr(obj,name)
             XSRETURN_NO;
         }
 
+        dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
         if(dname==NULL)
         {
             croak("Name error for '%s'", name);
@@ -364,10 +368,12 @@ name2addr(obj,name)
 
         addrs = ldns_get_rr_list_addr_by_name(obj,dname,LDNS_RR_CLASS_IN,0);
         n = ldns_rr_list_rr_count(addrs);
+        ldns_rdf_deep_free(dname);
 
         if (context == G_SCALAR)
         {
-            XSRETURN_IV(n);
+          ldns_rr_list_deep_free(addrs);
+          XSRETURN_IV(n);
         }
         else
         {
@@ -381,6 +387,7 @@ name2addr(obj,name)
                 mXPUSHs(sv);
                 free(addr_str);
             }
+            ldns_rr_list_deep_free(addrs);
         }
     }
 
@@ -413,11 +420,13 @@ addr2name(obj,addr_in)
         }
 
         names = ldns_get_rr_list_name_by_addr(obj,addr_rdf,LDNS_RR_CLASS_IN,0);
+        ldns_rdf_deep_free(addr_rdf);
         n = ldns_rr_list_rr_count(names);
 
         if (context == G_SCALAR)
         {
-            XSRETURN_IV(n);
+          ldns_rr_list_deep_free(names);
+          XSRETURN_IV(n);
         }
         else
         {
@@ -431,6 +440,7 @@ addr2name(obj,addr_in)
                 mXPUSHs(sv);
                 free(name_str);
             }
+            ldns_rr_list_deep_free(names);
         }
     }
 
@@ -448,20 +458,24 @@ axfr(obj,dname,callback,class="IN")
 
         if(SvTYPE(SvRV(callback)) != SVt_PVCV)
         {
-            croak("Callback not a code reference");
+          ldns_rdf_deep_free(domain);
+          croak("Callback not a code reference");
         }
 
         if(domain==NULL)
         {
-            croak("Name error for '%s", dname);
+          ldns_rdf_deep_free(domain);
+          croak("Name error for '%s", dname);
         }
 
         if(!cl)
         {
-            croak("Unknown RR class: %s", class);
+          ldns_rdf_deep_free(domain);
+          croak("Unknown RR class: %s", class);
         }
 
         status = ldns_axfr_start(obj, domain, cl);
+        ldns_rdf_deep_free(domain);
 
         if(status != LDNS_STATUS_OK)
         {
@@ -484,6 +498,7 @@ axfr(obj,dname,callback,class="IN")
                 else {
                     croak("AXFR transfer error: unknown problem");
                 }
+                ldns_pkt_deep_free(pkt);
             }
 
             /* Enter the Cargo Cult */
@@ -512,9 +527,7 @@ axfr(obj,dname,callback,class="IN")
             LEAVE;
             /* Callback magic ends */
         }
-#if (LDNS_REVISION) >= ((1<<16)|(6<<8)|(17))
         ldns_axfr_abort(obj);
-#endif
     }
     OUTPUT:
         RETVAL
@@ -651,25 +664,25 @@ packet_new(objclass,name,type="A",class="IN")
         ldns_rr_type rr_type;
         ldns_rr_class rr_class;
         ldns_pkt *pkt;
-        
+
         rr_type = ldns_get_rr_type_by_name(type);
         if(!rr_type)
         {
             croak("Unknown RR type: %s", type);
         }
-        
+
         rr_class = ldns_get_rr_class_by_name(class);
         if(!rr_class)
         {
             croak("Unknown RR class: %s", class);
         }
-        
+
         rr_name = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
         if(rr_name == NULL)
         {
             croak("Name error for '%s'", name);
         }
-        
+
         pkt = ldns_pkt_query_new(rr_name, rr_type, rr_class,0);
         RETVAL = newSV(0);
         sv_setref_pv(RETVAL, objclass, pkt);
@@ -882,7 +895,7 @@ packet_answerfrom(obj,...)
             if(SvOK(ST(1)) && SvPOK(ST(1)))
             {
                 ldns_rdf *address;
-                
+
                 address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(1)));
                 if(address == NULL)
                 {
@@ -892,7 +905,7 @@ packet_answerfrom(obj,...)
                 {
                     croak("Failed to parse IP address: %s", SvPV_nolen(ST(1)));
                 }
-                
+
                 ldns_pkt_set_answerfrom(obj, address);
             }
         }
@@ -910,7 +923,7 @@ packet_timestamp(obj,...)
         {
             struct timeval tn;
             double dec_part, int_part;
-            
+
             dec_part = modf(SvNV(ST(1)), &int_part);
             tn.tv_sec  = int_part;
             tn.tv_usec = 1000000*dec_part;
@@ -1044,7 +1057,7 @@ packet_unique_push(obj,section,rr)
         ldns_pkt_section sec;
         char lbuf[21];
         char *p;
-        
+
         p = lbuf;
         strncpy(lbuf, section, 20);
         for(; *p; p++) *p = tolower(*p);
@@ -1069,7 +1082,7 @@ packet_unique_push(obj,section,rr)
         {
             croak("Unknown section: %s", section);
         }
-        
+
         RETVAL = ldns_pkt_safe_push_rr(obj, sec, ldns_rr_clone(rr));
     }
     OUTPUT:
@@ -1629,7 +1642,7 @@ rr_dnskey_keysize(obj)
         if(algorithm==1||algorithm==5||algorithm==7||algorithm==8||algorithm==10)
         {
             size_t ex_len;
-    
+
             if(data[0] == 0)
             {
                 ex_len = 3+(U16)data[1];
@@ -1711,11 +1724,11 @@ rr_dnskey_ds(obj, hash)
         char lbuf[21];
         char *p;
         ldns_hash htype;
-        
+
         p = lbuf;
         strncpy(lbuf, hash, 20);
         for(; *p; p++) *p = tolower(*p);
-        
+
         if(strEQ(lbuf,"sha1"))
         {
             htype = LDNS_SHA1;
@@ -1736,7 +1749,7 @@ rr_dnskey_ds(obj, hash)
         {
             croak("Unknown hash type: %s", hash);
         }
-        
+
         RETVAL = ldns_key_rr2ds(obj,htype);
     }
     OUTPUT:
@@ -1839,15 +1852,15 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         ldns_rr_list *sig   = ldns_rr_list_new();
         ldns_rr_list *good  = ldns_rr_list_new();
 
-		if(av_len(rrset_in)==-1)
-		{
-			croak("RRset is empty");
-		}
+        if(av_len(rrset_in)==-1)
+        {
+           croak("RRset is empty");
+        }
 
-		if(av_len(keys_in)==-1)
-		{
-			croak("Key list is empty");
-		}
+        if(av_len(keys_in)==-1)
+        {
+           croak("Key list is empty");
+        }
 
         /* Make a list with only the RRSIG */
         ldns_rr_list_push_rr(sig, obj);
@@ -1951,6 +1964,7 @@ rr_nsec_covers(obj,name)
         ldns_dname2canonical(dname);
         ldns_rr2canonical(obj);
         RETVAL = ldns_nsec_covers_name(obj,dname);
+        ldns_rdf_deep_free(dname);
     OUTPUT:
         RETVAL
 
