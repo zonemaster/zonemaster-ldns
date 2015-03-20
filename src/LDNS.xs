@@ -101,7 +101,7 @@ load_zonefile(filename)
         if (context == G_SCALAR)
         {
             ldns_zone_deep_free(zone);
-            ldns_rdf_free(root);
+            ldns_rdf_deep_free(root);
             XSRETURN_IV(n+1); /* Add one for SOA */
         }
 
@@ -111,7 +111,7 @@ load_zonefile(filename)
             mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
         }
 		ldns_zone_deep_free(zone);
-		ldns_rdf_free(root);
+		ldns_rdf_deep_free(root);
     }
 
 SV *
@@ -625,7 +625,7 @@ DESTROY(rv)
 		IV tmp = SvIV((SV *)SvRV(rv));
 		obj = INT2PTR(Net__LDNS,tmp);
         ldns_axfr_abort(obj);
-        ldns_resolver_free(obj);
+        ldns_resolver_deep_free(obj);
 
 #ifdef USE_ITHREADS
 
@@ -1987,7 +1987,7 @@ rr_nsec3_salt(obj)
         {
             ldns_rdf *buf = ldns_nsec3_salt(obj);
             ST(0) = sv_2mortal(newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf)));
-            ldns_rdf_free(buf);
+            ldns_rdf_deep_free(buf);
         }
 
 SV *
@@ -2057,8 +2057,8 @@ rr_nsec3_covers(obj,name)
         chopped = ldns_dname_left_chop(dname);
         ldns_dname_cat(hashed,chopped);
         RETVAL = ldns_nsec_covers_name(clone,hashed);
-        ldns_rdf_free(hashed);
-        ldns_rdf_free(chopped);
+        ldns_rdf_deep_free(hashed);
+        ldns_rdf_deep_free(chopped);
         ldns_rr_free(clone);
     }
     OUTPUT:
