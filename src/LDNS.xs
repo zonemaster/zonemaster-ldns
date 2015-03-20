@@ -2047,6 +2047,7 @@ rr_nsec3_typehref(obj)
     CODE:
     {
         char *typestring = ldns_rdf2str(ldns_nsec3_bitmap(obj));
+        char *copy = typestring;
         size_t pos;
         HV *res = newHV();
 
@@ -2066,6 +2067,7 @@ rr_nsec3_typehref(obj)
             }
         }
         RETVAL = newRV_noinc((SV *)res);
+        free(copy);
     }
     OUTPUT:
         RETVAL
