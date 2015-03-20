@@ -146,11 +146,11 @@ new(class, ...)
                     croak("Failed to parse IP address: %s", SvPV_nolen(ST(i)));
                 }
                 s = ldns_resolver_push_nameserver(res, addr);
+                ldns_rdf_deep_free(addr);
                 if(s != LDNS_STATUS_OK)
                 {
                     croak("Adding nameserver failed: %s", ldns_get_errorstr_by_id(s));
                 }
-                ldns_rdf_deep_free(addr);
             }
         }
         sv_setref_pv(RETVAL, class, res);
@@ -215,6 +215,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
                     croak("Failed to reinsert nameserver after failure (ouch): %s", ldns_get_errorstr_by_id(s));
                 }
             }
+            ldns_rdf_deep_free(domain);
             croak("%s", ldns_get_errorstr_by_id(status));
             RETVAL = NULL;
         }
@@ -493,12 +494,14 @@ axfr(obj,dname,callback,class="IN")
                 ldns_pkt *pkt = ldns_axfr_last_pkt(obj);
                 if(pkt != NULL)
                 {
-                    croak("AXFR transfer error: %s", ldns_pkt_rcode2str(ldns_pkt_get_rcode(pkt)));
+                   char *msg = ldns_pkt_rcode2str(ldns_pkt_get_rcode(pkt));
+                   SV *msg_sv = newSVpvf("AXFR transfer error: %s", msg);
+                   free(msg);
+                   croak_sv(msg_sv);
                 }
                 else {
                     croak("AXFR transfer error: unknown problem");
                 }
-                ldns_pkt_deep_free(pkt);
             }
 
             /* Enter the Cargo Cult */
