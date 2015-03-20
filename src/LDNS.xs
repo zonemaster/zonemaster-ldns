@@ -1445,8 +1445,10 @@ rr_DESTROY(obj)
 void
 rr_CLONE(class)
     char *class;
-	CODE:
-		net_ldns_clone_rrs();
+    CODE:
+        if(strEQ(class,"Net::LDNS::RR")) {
+            net_ldns_clone_rrs();
+        }
 
 #endif
 

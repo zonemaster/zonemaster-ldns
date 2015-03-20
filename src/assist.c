@@ -112,7 +112,8 @@ net_ldns_clone_rrs()
     while ( (entry = hv_iternext(hash)) != NULL )
     {
         SV *val = hv_iterval(hash, entry);
-        if(val!=NULL)
+        SV *key = hv_iterkeysv(entry);
+        if(SvOK(val))
         {
             ldns_rr *old = INT2PTR(ldns_rr *, SvIV((SV *)SvRV(val)));
             ldns_rr *new = ldns_rr_clone(old);
@@ -120,7 +121,6 @@ net_ldns_clone_rrs()
         }
         else
         {
-            SV *key = hv_iterkeysv(entry);
             hv_delete_ent(hash, key, G_DISCARD, 0);
         }
     }
@@ -137,7 +137,7 @@ net_ldns_clone_rrlists()
     while ( (entry = hv_iternext(hash)) != NULL )
     {
         SV *val = hv_iterval(hash, entry);
-        if(val!=NULL)
+        if(SvOK(val))
         {
             ldns_rr_list *old = INT2PTR(ldns_rr_list *, SvIV((SV *)SvRV(val)));
             ldns_rr_list *new = ldns_rr_list_clone(old);
@@ -162,7 +162,7 @@ net_ldns_clone_packets()
     while ( (entry = hv_iternext(hash)) != NULL )
     {
         SV *val = hv_iterval(hash, entry);
-        if(val!=NULL)
+        if(SvOK(val))
         {
             ldns_pkt *old = INT2PTR(ldns_pkt *, SvIV((SV *)SvRV(val)));
             ldns_pkt *new = ldns_pkt_clone(old);
