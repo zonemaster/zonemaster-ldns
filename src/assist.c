@@ -9,6 +9,8 @@
 void
 net_ldns_forget()
 {
+    int i;
+
     const char *names[] = {
        RESOLVER_HASH_NAME,
        RR_HASH_NAME,
@@ -17,7 +19,7 @@ net_ldns_forget()
        NULL
     };
 
-    for(int i=0; names[i]; i++)
+    for(i=0; names[i]; i++)
     {
         HV *hash;
         HE *entry;
