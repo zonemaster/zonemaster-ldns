@@ -217,6 +217,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
                 if ( s != LDNS_STATUS_OK) {
                     croak("Failed to reinsert nameserver after failure (ouch): %s", ldns_get_errorstr_by_id(s));
                 }
+                ldns_rdf_deep_free(ns);
             }
             ldns_rdf_deep_free(domain);
             croak("%s", ldns_get_errorstr_by_id(status));
