@@ -7,6 +7,35 @@
 #define PACKET_HASH_NAME "Net::LDNS::__packets__"
 
 void
+net_ldns_forget()
+{
+    const char *names[] = {
+       RESOLVER_HASH_NAME,
+       RR_HASH_NAME,
+       RRLIST_HASH_NAME,
+       PACKET_HASH_NAME,
+       NULL
+    };
+
+    for(int i=0; names[i]; i++)
+    {
+        HV *hash;
+        HE *entry;
+
+        hash = get_hv(names[i], GV_ADD);
+        while ( (entry = hv_iternext(hash)) != NULL )
+        {
+            SV *val = hv_iterval(hash, entry);
+            if(!SvOK(val))
+            {
+                SV *key = hv_iterkeysv(entry);
+                hv_delete_ent(hash, key, G_DISCARD, 0);
+            }
+        }
+    }
+}
+
+void
 net_ldns_remember_resolver(SV *rv)
 {
     net_ldns_remember(rv, RESOLVER_HASH_NAME);
@@ -56,7 +85,7 @@ net_ldns_clone_resolvers()
     while ( (entry = hv_iternext(hash)) != NULL )
     {
         SV *val = hv_iterval(hash, entry);
-        if(val!=NULL)
+        if(SvOK(val))
         {
             ldns_resolver *old = INT2PTR(ldns_resolver *, SvIV((SV *)SvRV(val)));
             ldns_resolver *new = ldns_resolver_clone(old);

@@ -621,6 +621,9 @@ void
 DESTROY(obj)
     Net::LDNS obj;
     CODE:
+#ifdef USE_ITHREADS
+        net_ldns_forget();
+#endif
         ldns_axfr_abort(obj);
         ldns_resolver_deep_free(obj);
 
@@ -1226,6 +1229,9 @@ void
 packet_DESTROY(obj)
     Net::LDNS::Packet obj;
     CODE:
+#ifdef USE_ITHREADS
+        net_ldns_forget();
+#endif
         ldns_pkt_free(obj);
 
 #ifdef USE_ITHREADS
@@ -1285,6 +1291,9 @@ void
 rrlist_DESTROY(obj)
     Net::LDNS::RRList obj;
     CODE:
+#ifdef USE_ITHREADS
+        net_ldns_forget();
+#endif
         ldns_rr_list_deep_free(obj);
 
 #ifdef USE_ITHREADS
@@ -1409,6 +1418,9 @@ void
 rr_DESTROY(obj)
     Net::LDNS::RR obj;
     CODE:
+#ifdef USE_ITHREADS
+        net_ldns_forget();
+#endif
         ldns_rr_free(obj);
 
 #ifdef USE_ITHREADS
