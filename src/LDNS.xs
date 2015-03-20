@@ -502,6 +502,7 @@ axfr(obj,dname,callback,class="IN")
                 else {
                     croak("AXFR transfer error: unknown problem");
                 }
+                ldns_pkt_free(pkt);
             }
 
             /* Enter the Cargo Cult */
