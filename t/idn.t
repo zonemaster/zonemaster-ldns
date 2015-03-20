@@ -2,6 +2,7 @@ use Test::More;
 use Test::Fatal;
 use Encode;
 use Devel::Peek;
+use utf8;
 
 BEGIN { use_ok( "Net::LDNS" => qw[:all] ) }
 
@@ -12,10 +13,10 @@ if (exception {to_idn("whatever")} =~ /libidn not installed/) {
 }
 
 ok(has_idn(), 'Has IDN');
-my $encoded = to_idn( decode( 'utf8', 'annaröd.se' ) );
+my $encoded = to_idn( 'annaröd.se' );
 is( $encoded, 'xn--annard-0xa.se', 'One name encoded right' );
 
-my @before = map { decode( 'utf8', $_ ) } ('annaröd.se', 'rindlöw.se', 'räksmörgås.se', 'nic.中國', 'iis.se');
+my @before = ('annaröd.se', 'rindlöw.se', 'räksmörgås.se', 'nic.中國', 'iis.se');
 my @many = to_idn @before;
 is_deeply(
     \@many,
@@ -23,6 +24,6 @@ is_deeply(
     'Many encoded right'
 );
 
-like( exception { to_idn( decode( 'utf8', "ö" x 63 ) ) }, qr/Punycode/, 'Boom today' );
+like( exception { to_idn( "ö" x 63 ) }, qr/Punycode/, 'Boom today' );
 
 done_testing;

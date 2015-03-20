@@ -16,18 +16,21 @@ to_idn(...)
             int status;
             SV *obj = ST(i);
 
-            status = idna_to_ascii_8z(SvPV_nolen(obj), &out, IDNA_ALLOW_UNASSIGNED);
-            if (status == IDNA_SUCCESS)
+            if (SvPOK(ST(i)))
             {
-                SV *new = newSVpv(out,0);
-                SvUTF8_on(new); /* We know the string is plain ASCII, so let Perl know too */
-                mXPUSHs(new);
+               status = idna_to_ascii_8z(SvPVutf8_nolen(obj), &out, IDNA_ALLOW_UNASSIGNED);
+               if (status == IDNA_SUCCESS)
+               {
+                  SV *new = newSVpv(out,0);
+                  SvUTF8_on(new); /* We know the string is plain ASCII, so let Perl know too */
+                  mXPUSHs(new);
+                  free(out);
+               }
+               else
+               {
+                  croak("Error: %s\n", idna_strerror(status));
+               }
             }
-            else
-            {
-               croak("Error: %s\n", idna_strerror(status));
-            }
-            free(out);
         }
 #else
         croak("libidn not installed");
@@ -2084,6 +2087,7 @@ rr_nsec3_covers(obj,name)
         ldns_rr2canonical(clone);
         hashed = ldns_nsec3_hash_name_frm_nsec3(clone, dname);
         chopped = ldns_dname_left_chop(dname);
+        ldns_rdf_deep_free(dname);
         ldns_dname_cat(hashed,chopped);
         RETVAL = ldns_nsec_covers_name(clone,hashed);
         ldns_rdf_deep_free(hashed);
