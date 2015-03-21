@@ -498,10 +498,11 @@ axfr(obj,dname,callback,class="IN")
                 ldns_pkt *pkt = ldns_axfr_last_pkt(obj);
                 if(pkt != NULL)
                 {
+                   char tmp[20];
                    char *msg = ldns_pkt_rcode2str(ldns_pkt_get_rcode(pkt));
-                   SV *msg_sv = newSVpvf("AXFR transfer error: %s", msg);
+                   strncpy(tmp,msg,19);
                    free(msg);
-                   croak_sv(msg_sv);
+                   croak("AXFR transfer error: %s", tmp);
                 }
                 else {
                     croak("AXFR transfer error: unknown problem");
