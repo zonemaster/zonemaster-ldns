@@ -128,8 +128,8 @@ ppport.h
 README.md
 src/assist.c
 src/LDNS.xs
-src/ldns/b64_ntop.c
-src/ldns/b64_pton.c
+src/ldns/compat/b64_ntop.c
+src/ldns/compat/b64_pton.c
 src/ldns/buffer.c
 src/ldns/compat/strlcpy.c
 src/ldns/dane.c
