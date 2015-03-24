@@ -1943,6 +1943,7 @@ rr_nsec_typehref(obj)
     CODE:
     {
         char *typestring = D_STRING(obj,1);
+        char *copy = typestring;
         size_t pos;
         HV *res = newHV();
 
@@ -1962,6 +1963,7 @@ rr_nsec_typehref(obj)
             }
         }
         RETVAL = newRV_noinc((SV *)res);
+        free(copy);
     }
     OUTPUT:
         RETVAL
