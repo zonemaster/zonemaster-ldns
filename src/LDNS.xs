@@ -137,10 +137,6 @@ new(class, ...)
                 ldns_status s;
                 ldns_rdf *addr;
 
-                if ( !SvOK(ST(i)) || !SvPOK(ST(i)) ) {
-                    continue; /* Skip non-strings */
-                }
-
                 addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
                 if ( addr == NULL) {
                     addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(i)));
@@ -901,22 +897,19 @@ packet_answerfrom(obj,...)
     CODE:
         if(items >= 2)
         {
-            if(SvOK(ST(1)) && SvPOK(ST(1)))
-            {
-                ldns_rdf *address;
+           ldns_rdf *address;
 
-                address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(1)));
-                if(address == NULL)
-                {
-                    address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(1)));
-                }
-                if(address == NULL)
-                {
-                    croak("Failed to parse IP address: %s", SvPV_nolen(ST(1)));
-                }
+           address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(1)));
+           if(address == NULL)
+           {
+              address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(1)));
+           }
+           if(address == NULL)
+           {
+              croak("Failed to parse IP address: %s", SvPV_nolen(ST(1)));
+           }
 
-                ldns_pkt_set_answerfrom(obj, address);
-            }
+           ldns_pkt_set_answerfrom(obj, address);
         }
         RETVAL = ldns_rdf2str(ldns_pkt_answerfrom(obj));
     OUTPUT:

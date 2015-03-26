@@ -83,14 +83,6 @@ subtest 'global' => sub {
 #     is( scalar( $p->question ),   1, 'question count in scalar context' );
 # };
 
-subtest 'none' => sub {
-    my $none = Net::LDNS->new( undef );
-    isa_ok( $none, 'Net::LDNS' );
-    my $pn = eval { $none->query( 'iis.se' ) };
-    like( $@, qr/No \(valid\) nameservers defined in the resolver/ );
-    ok( !$pn );
-};
-
 subtest 'broken' => sub {
     my $b0rken = eval { Net::LDNS->new( 'gurksallad' ) };
     ok( !$b0rken );
