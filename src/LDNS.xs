@@ -137,6 +137,7 @@ new(class, ...)
                 ldns_status s;
                 ldns_rdf *addr;
 
+                SvGETMAGIC(ST(i));
                 addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(i)));
                 if ( addr == NULL) {
                     addr = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(i)));
@@ -236,6 +237,7 @@ recurse(obj,...)
     Net::LDNS obj;
     CODE:
         if(items>1) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_recursive(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_recursive(obj);
@@ -247,6 +249,7 @@ debug(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_debug(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_debug(obj);
@@ -258,6 +261,7 @@ dnssec(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_dnssec(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_dnssec(obj);
@@ -269,6 +273,7 @@ cd(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_dnssec_cd(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_dnssec_cd(obj);
@@ -280,6 +285,7 @@ usevc(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_usevc(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_usevc(obj);
@@ -291,6 +297,7 @@ igntc(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_igntc(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_igntc(obj);
@@ -302,6 +309,7 @@ retry(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_retry(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_retry(obj);
@@ -313,6 +321,7 @@ retrans(obj,...)
     Net::LDNS obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_retrans(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_retrans(obj);
@@ -325,6 +334,7 @@ edns_size(obj,...)
     CODE:
         if( items > 1 )
         {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_edns_udp_size(obj, (U16)SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_edns_udp_size(obj);
@@ -337,6 +347,7 @@ port(obj,...)
     CODE:
         if( items > 1 )
         {
+            SvGETMAGIC(ST(1));
             ldns_resolver_set_port(obj, (U16)SvIV(ST(1)));
         }
         RETVAL = ldns_resolver_port(obj);
@@ -457,6 +468,7 @@ axfr(obj,dname,callback,class="IN")
         ldns_rr_class cl = ldns_get_rr_class_by_name(class);
         ldns_status status;
 
+        SvGETMAGIC(callback);
         if(SvTYPE(SvRV(callback)) != SVt_PVCV)
         {
           ldns_rdf_deep_free(domain);
@@ -623,6 +635,7 @@ timeout(obj,...)
             double dec_part, int_part;
             struct timeval tn;
 
+            SvGETMAGIC(ST(1));
             dec_part = modf(SvNV(ST(1)), &int_part);
             tn.tv_sec  = int_part;
             tn.tv_usec = 1000000*dec_part;
@@ -703,6 +716,7 @@ packet_rcode(obj,...)
     Net::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
 			if ( strnEQ("NOERROR", SvPV_nolen(ST(1)), 7) ) {
 				ldns_pkt_set_rcode(obj, LDNS_RCODE_NOERROR);
 			}
@@ -751,6 +765,7 @@ packet_opcode(obj,...)
     Net::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
 			if ( strnEQ("QUERY", SvPV_nolen(ST(1)), 5) ) {
 				ldns_pkt_set_opcode(obj, LDNS_PACKET_QUERY);
 			}
@@ -781,6 +796,7 @@ packet_id(obj,...)
     Net::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
 			ldns_pkt_set_id(obj, (U16)SvIV(ST(1)));
 		}
         RETVAL = ldns_pkt_id(obj);
@@ -792,6 +808,7 @@ packet_qr(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_qr(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_qr(obj);
@@ -803,6 +820,7 @@ packet_aa(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_aa(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_aa(obj);
@@ -814,6 +832,7 @@ packet_tc(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_tc(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_tc(obj);
@@ -825,6 +844,7 @@ packet_rd(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_rd(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_rd(obj);
@@ -836,6 +856,7 @@ packet_cd(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_cd(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_cd(obj);
@@ -847,6 +868,7 @@ packet_ra(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_ra(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_ra(obj);
@@ -858,6 +880,7 @@ packet_ad(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_ad(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_ad(obj);
@@ -869,6 +892,7 @@ packet_do(obj,...)
     Net::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_edns_do(obj, SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_edns_do(obj);
@@ -888,6 +912,7 @@ packet_querytime(obj,...)
     Net::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
 			ldns_pkt_set_querytime(obj, (U32)SvIV(ST(1)));
 		}
         RETVAL = ldns_pkt_querytime(obj);
@@ -902,6 +927,7 @@ packet_answerfrom(obj,...)
         {
            ldns_rdf *address;
 
+           SvGETMAGIC(ST(1));
            address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(1)));
            if(address == NULL)
            {
@@ -929,6 +955,7 @@ packet_timestamp(obj,...)
             struct timeval tn;
             double dec_part, int_part;
 
+            SvGETMAGIC(ST(1));
             dec_part = modf(SvNV(ST(1)), &int_part);
             tn.tv_sec  = int_part;
             tn.tv_usec = 1000000*dec_part;
@@ -1172,6 +1199,7 @@ packet_edns_size(obj,...)
     CODE:
         if(items>=2)
         {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_edns_udp_size(obj, (U16)SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_edns_udp_size(obj);
@@ -1184,6 +1212,7 @@ packet_edns_rcode(obj,...)
     CODE:
         if(items>=2)
         {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_edns_extended_rcode(obj, (U8)SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_edns_extended_rcode(obj);
@@ -1196,6 +1225,7 @@ packet_edns_version(obj,...)
     CODE:
         if(items>=2)
         {
+            SvGETMAGIC(ST(1));
             ldns_pkt_set_edns_version(obj, (U8)SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_edns_version(obj);
@@ -1255,6 +1285,7 @@ packet_DESTROY(sv)
 #ifdef USE_ITHREADS
         net_ldns_forget();
 #endif
+        SvGETMAGIC(sv);
         ldns_pkt *obj = INT2PTR(ldns_pkt *, SvIV((SV *)SvRV(sv)));
         ldns_pkt_free(obj);
 
@@ -1883,11 +1914,14 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         {
             ldns_rr *rr;
             SV **rrsv = av_fetch(rrset_in,i,1);
-            IV tmp = SvIV((SV*)SvRV(*rrsv));
-            rr = INT2PTR(ldns_rr *,tmp);
-            if(rr != NULL)
-            {
-                ldns_rr_list_push_rr(rrset, rr);
+            if (rrsv != NULL) {
+                SvGETMAGIC(*rrsv);
+                IV tmp = SvIV((SV*)SvRV(*rrsv));
+                rr = INT2PTR(ldns_rr *,tmp);
+                if(rr != NULL)
+                {
+                    ldns_rr_list_push_rr(rrset, rr);
+                }
             }
         }
 
