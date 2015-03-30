@@ -49,6 +49,10 @@ is($r->timeout, 5, 'Expected default timeout');
 $r->timeout(3.33);
 ok(($r->timeout - 3.33) < 0.01, 'Expected set timeout');
 
+my $addr = '192.0.2.1'; # Reserved RFC5737
+ok($r->source($addr), "Source set.");
+is($r->source, $addr, 'Source got.');
+
 subtest 'recursion' => sub {
     my $r = Net::LDNS->new( '8.8.4.4' );
     my $p1 = $r->query( 'www.iis.se' );

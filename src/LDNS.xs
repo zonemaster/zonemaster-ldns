@@ -648,6 +648,36 @@ timeout(obj,...)
     OUTPUT:
         RETVAL
 
+
+char *
+source(obj,...)
+    Net::LDNS obj;
+    CODE:
+        if(items >= 2)
+        {
+           ldns_rdf *address;
+
+           SvGETMAGIC(ST(1));
+           address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_A, SvPV_nolen(ST(1)));
+           if(address == NULL)
+           {
+              address = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_AAAA, SvPV_nolen(ST(1)));
+           }
+           if(address == NULL)
+           {
+              croak("Failed to parse IP address: %s", SvPV_nolen(ST(1)));
+           }
+
+           ldns_resolver_set_source(obj, address);
+        }
+        RETVAL = ldns_rdf2str(ldns_resolver_source(obj));
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        free(RETVAL);
+
+
+
 void
 DESTROY(obj)
     Net::LDNS obj;

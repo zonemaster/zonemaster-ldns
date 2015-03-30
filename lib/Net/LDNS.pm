@@ -2,7 +2,7 @@ package Net::LDNS;
 
 use 5.10.1;
 
-our $VERSION = '0.74';
+our $VERSION = '0.75';
 
 use parent 'Exporter';
 our @EXPORT_OK = qw[to_idn has_idn ldns_version load_zonefile];
@@ -185,5 +185,9 @@ the problem was (for example, NOTAUTH or NXDOMAIN).
 =item timeout($time)
 
 Get and/or set the socket timeout for the resolver.
+
+=item source($addr)
+
+Get and/or set the IP address the resolver should try to send its queries from.
 
 =back
