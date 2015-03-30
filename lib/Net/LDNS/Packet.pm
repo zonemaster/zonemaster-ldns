@@ -14,6 +14,7 @@ sub TO_JSON {
             data       => encode_base64( $self->wireformat, '' ),
             answerfrom => $self->answerfrom,
             timestamp  => $self->timestamp,
+            querytime  => $self->querytime,
         }
     };
 }

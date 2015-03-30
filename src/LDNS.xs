@@ -691,6 +691,9 @@ packet_new(objclass,name,type="A",class="IN")
         pkt = ldns_pkt_query_new(rr_name, rr_type, rr_class,0);
         RETVAL = newSV(0);
         sv_setref_pv(RETVAL, objclass, pkt);
+#ifdef USE_ITHREADS
+        net_ldns_remember_packet(RETVAL);
+#endif
     }
     OUTPUT:
         RETVAL
@@ -1136,7 +1139,7 @@ packet_wireformat(obj)
     OUTPUT:
         RETVAL
 
-Net::LDNS::Packet
+SV *
 packet_new_from_wireformat(class,buf)
     char *class;
     SV *buf;
@@ -1145,6 +1148,7 @@ packet_new_from_wireformat(class,buf)
         Net__LDNS__Packet pkt;
         ldns_status status;
 
+        SvGETMAGIC(buf);
         status = ldns_wire2pkt(&pkt, (const uint8_t *)SvPV_nolen(buf), SvCUR(buf));
         if(status != LDNS_STATUS_OK)
         {
@@ -1152,7 +1156,11 @@ packet_new_from_wireformat(class,buf)
         }
         else
         {
-            RETVAL = pkt;
+            RETVAL = newSV(0);
+            sv_setref_pv(RETVAL, class, pkt);
+#ifdef USE_ITHREADS
+            net_ldns_remember_packet(RETVAL);
+#endif
         }
     }
     OUTPUT:
@@ -1241,12 +1249,13 @@ packet_type(obj)
         RETVAL
 
 void
-packet_DESTROY(obj)
-    Net::LDNS::Packet obj;
+packet_DESTROY(sv)
+    SV *sv;
     CODE:
 #ifdef USE_ITHREADS
         net_ldns_forget();
 #endif
+        ldns_pkt *obj = INT2PTR(ldns_pkt *, SvIV((SV *)SvRV(sv)));
         ldns_pkt_free(obj);
 
 #ifdef USE_ITHREADS

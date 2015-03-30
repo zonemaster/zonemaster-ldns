@@ -6,6 +6,7 @@ use utf8;
 
 BEGIN { use_ok( "Net::LDNS" => qw[:all] ) }
 
+no warnings 'uninitialized';
 if (exception {to_idn("whatever")} =~ /libidn not installed/) {
     ok(!has_idn(), 'No IDN');
     done_testing;
