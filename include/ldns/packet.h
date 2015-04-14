@@ -240,7 +240,7 @@ struct ldns_struct_pkt
         /** Timestamp of the time the packet was sent or created */
 	struct timeval timestamp;
 	/** The duration of the query this packet is an answer to */
-	uint32_t _querytime;
+        double _querytime;
 	/** The size of the wire format of the packet in octets */
 	size_t _size;
 	/** Optional tsig rr */
@@ -400,12 +400,20 @@ ldns_rdf *ldns_pkt_answerfrom(const ldns_pkt *p);
  * \return the timestamp
  */
 struct timeval ldns_pkt_timestamp(const ldns_pkt *p);
+
 /**
  * Return the packet's querytime
  * \param[in] p the packet
  * \return the querytime
  */
 uint32_t ldns_pkt_querytime(const ldns_pkt *p);
+
+/**
+ * Return the packet's querytime
+ * \param[in] p the packet
+ * \return the querytime
+ */
+double ldns_pkt_fquerytime(const ldns_pkt *p);
 
 /**
  * Return the packet's size in bytes
@@ -630,12 +638,21 @@ void ldns_pkt_set_arcount(ldns_pkt *p, uint16_t c);
  * \param[in] r the address
  */
 void ldns_pkt_set_answerfrom(ldns_pkt *p, ldns_rdf *r);
+
 /**
  * Set the packet's query time
  * \param[in] p the packet
  * \param[in] t the querytime in msec
  */
 void ldns_pkt_set_querytime(ldns_pkt *p, uint32_t t);
+
+/**
+ * Set the packet's query time
+ * \param[in] p the packet
+ * \param[in] t the querytime in msec
+ */
+void ldns_pkt_set_fquerytime(ldns_pkt *p, double t);
+
 /**
  * Set the packet's size
  * \param[in] p the packet
