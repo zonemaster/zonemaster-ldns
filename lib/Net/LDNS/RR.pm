@@ -50,6 +50,7 @@ use Net::LDNS::RR::NSEC3;
 use Net::LDNS::RR::NSEC3PARAM;
 use Net::LDNS::RR::NULL;
 use Net::LDNS::RR::NXT;
+use Net::LDNS::RR::OPT;
 use Net::LDNS::RR::PTR;
 use Net::LDNS::RR::PX;
 use Net::LDNS::RR::RKEY;

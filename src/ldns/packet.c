@@ -451,6 +451,10 @@ ldns_rr *ldns_pkt_tsig(const ldns_pkt *pkt) {
 	return pkt->_tsig_rr;
 }
 
+ldns_rr *ldns_pkt_opt_rr(const ldns_pkt *pkt) {
+	return pkt->_opt_rr;
+}
+
 /* write */
 void
 ldns_pkt_set_id(ldns_pkt *packet, uint16_t id)
@@ -650,6 +654,11 @@ void ldns_pkt_set_tsig(ldns_pkt *pkt, ldns_rr *rr)
 	pkt->_tsig_rr = rr;
 }
 
+void ldns_pkt_set_opt_rr(ldns_pkt *pkt, ldns_rr *rr)
+{
+	pkt->_opt_rr = rr;
+}
+
 bool
 ldns_pkt_push_rr(ldns_pkt *packet, ldns_pkt_section section, ldns_rr *rr)
 {
@@ -784,6 +793,7 @@ ldns_pkt_new(void)
 	packet->_edns_present = false;
 	
 	ldns_pkt_set_tsig(packet, NULL);
+    ldns_pkt_set_opt_rr(packet, NULL);
 	
 	return packet;
 }
@@ -798,7 +808,8 @@ ldns_pkt_free(ldns_pkt *packet)
 		ldns_rr_list_deep_free(packet->_authority);
 		ldns_rr_list_deep_free(packet->_additional);
 		ldns_rr_free(packet->_tsig_rr);
-		ldns_rdf_deep_free(packet->_edns_data);
+        ldns_rr_free(packet->_opt_rr);
+        ldns_rdf_deep_free(packet->_edns_data);
 		ldns_rdf_deep_free(packet->_answerfrom);
 		LDNS_FREE(packet);
 	}
@@ -1135,6 +1146,7 @@ ldns_pkt_clone(const ldns_pkt *pkt)
 	ldns_pkt_set_querytime(new_pkt, ldns_pkt_querytime(pkt));
 	ldns_pkt_set_size(new_pkt, ldns_pkt_size(pkt));
 	ldns_pkt_set_tsig(new_pkt, ldns_rr_clone(ldns_pkt_tsig(pkt)));
+    ldns_pkt_set_opt_rr(new_pkt, ldns_rr_clone(ldns_pkt_opt_rr(pkt)));
 	
 	ldns_pkt_set_edns_udp_size(new_pkt, ldns_pkt_edns_udp_size(pkt));
 	ldns_pkt_set_edns_extended_rcode(new_pkt, 

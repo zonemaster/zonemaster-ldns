@@ -265,6 +265,8 @@ struct ldns_struct_pkt
 	ldns_rr_list	*_authority;
 	/**  Additional section */
 	ldns_rr_list	*_additional;
+    /** EDNS0 OPT RR */
+    ldns_rr *_opt_rr;
 };
 typedef struct ldns_struct_pkt ldns_pkt;
 
@@ -429,6 +431,13 @@ uint16_t ldns_pkt_section_count(const ldns_pkt *p, ldns_pkt_section s);
  * \return the tsig rr
  */
 ldns_rr *ldns_pkt_tsig(const ldns_pkt *p);
+
+/**
+ * Return the packet's OPT rr
+ * \param[in] p the packet
+ * \return the tsig rr
+ */
+ldns_rr *ldns_pkt_opt_rr(const ldns_pkt *p);
 
 /**
  * Return the packet's question section
@@ -653,6 +662,13 @@ void ldns_pkt_set_section_count(ldns_pkt *p, ldns_pkt_section s, uint16_t x);
  * \param[in] t the tsig rr
  */
 void ldns_pkt_set_tsig(ldns_pkt *p, ldns_rr *t);
+
+/**
+ * Set the packet's OPT rr
+ * \param[in] p the packet
+ * \param[in] t the tsig rr
+ */
+void ldns_pkt_set_opt_rr(ldns_pkt *p, ldns_rr *rr);
 
 /**
  * looks inside the packet to determine

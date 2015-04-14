@@ -63,11 +63,14 @@ my $nsec3 = Net::LDNS::RR->new('NR2E513KM693MBTNVHH56ENF54F886T0.com. 86400 IN N
 isa_ok($nsec3, 'Net::LDNS::RR::NSEC3');
 ok($nsec3->covers('xx-example.com'), 'Covers xx-example.com');
 
-$res = Net::LDNS->new( '194.146.106.22' );
+$res = Net::LDNS->new( '212.247.7.228' );
 $res->dnssec( 1 );
-my $p1 = $res->query('www.iis.se', 'A');
-ok( $p1->needs_edns, 'Needs EDNS0');
-ok( $p1->has_edns, 'Alias is there');
-ok( ($p1->edns_size > 0), 'EDNS0 size larger than zero' );
+my $p1 = eval { $res->query('www.iis.se', 'A') };
+SKIP: {
+    skip 'Remote server not responding', 3 if not $p1;
+    ok( $p1->needs_edns, 'Needs EDNS0');
+    ok( $p1->has_edns, 'Alias is there');
+    ok( ($p1->edns_size > 0), 'EDNS0 size larger than zero' );
+}
 
 done_testing;
