@@ -2,8 +2,10 @@ use Test::More;
 
 use_ok('Net::LDNS');
 
-my $can_use_threads = eval 'use threads; 1';
-if ($can_use_threads) {
+SKIP: {
+    my $can_use_threads = eval 'use threads; 1';
+
+    skip 'no network or no threads', 4 if ( $ENV{TEST_NO_NETWORK} || !$can_use_threads );
 
     my $resolver = Net::LDNS->new('8.8.8.8');
     isa_ok($resolver, 'Net::LDNS');
@@ -22,7 +24,6 @@ if ($can_use_threads) {
     } ) for 1..5;
 
     $_->join for threads->list;
-
 }
 
 done_testing;
