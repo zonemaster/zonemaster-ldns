@@ -2,13 +2,16 @@ use Test::More;
 
 use_ok('Net::LDNS');
 
-my $r = Net::LDNS->new('192.5.6.30');
-isa_ok($r, 'Net::LDNS');
-ok($r->dnssec(1), 'DO flag set.');
-
-my $p = $r->query('net', 'SOA');
 SKIP: {
-    skip "Remote server not responding." if not $p;
+    skip 'no network', 8 if $ENV{TEST_NO_NETWORK};
+
+    my $r = Net::LDNS->new('192.5.6.30');
+    isa_ok($r, 'Net::LDNS');
+    ok($r->dnssec(1), 'DO flag set.');
+
+    my $p = $r->query('net', 'SOA');
+
+    skip 'Remote server not responding.', 6 if not $p;
     isa_ok($p, 'Net::LDNS::Packet');
 
     my $rr = $p->opt_rr;

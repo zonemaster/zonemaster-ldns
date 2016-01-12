@@ -2,77 +2,89 @@ use Test::More;
 
 use Net::LDNS;
 
-my $r = Net::LDNS->new( '8.8.8.8' );
+SKIP: {
+    skip 'no network', 20 if $ENV{TEST_NO_NETWORK};
 
-$r->recurse( 0 );
-ok( !$r->recurse, 'recursive off' );
-$r->recurse( 1 );
-ok( $r->recurse, 'recursive on' );
+    my $r = Net::LDNS->new( '8.8.8.8' );
 
-$r->retrans( 17 );
-is( $r->retrans, 17, 'retrans set' );
+    $r->recurse( 0 );
+    ok( !$r->recurse, 'recursive off' );
+    $r->recurse( 1 );
+    ok( $r->recurse, 'recursive on' );
 
-$r->retry( 17 );
-is( $r->retry, 17, 'retry set' );
+    $r->retrans( 17 );
+    is( $r->retrans, 17, 'retrans set' );
 
-$r->debug( 1 );
-ok( $r->debug, 'debug set' );
-$r->debug( 0 );
-ok( !$r->debug, 'debug unset' );
+    $r->retry( 17 );
+    is( $r->retry, 17, 'retry set' );
 
-$r->dnssec( 1 );
-ok( $r->dnssec, 'dnssec set' );
-$r->dnssec( 0 );
-ok( !$r->dnssec, 'dnssec unset' );
+    $r->debug( 1 );
+    ok( $r->debug, 'debug set' );
+    $r->debug( 0 );
+    ok( !$r->debug, 'debug unset' );
 
-$r->cd( 1 );
-ok( $r->cd, 'dnssec set' );
-$r->cd( 0 );
-ok( !$r->cd, 'dnssec unset' );
+    $r->dnssec( 1 );
+    ok( $r->dnssec, 'dnssec set' );
+    $r->dnssec( 0 );
+    ok( !$r->dnssec, 'dnssec unset' );
 
-$r->usevc( 1 );
-ok( $r->usevc, 'usevc set' );
-$r->usevc( 0 );
-ok( !$r->usevc, 'usevc unset' );
+    $r->cd( 1 );
+    ok( $r->cd, 'dnssec set' );
+    $r->cd( 0 );
+    ok( !$r->cd, 'dnssec unset' );
 
-$r->igntc( 1 );
-ok( $r->igntc, 'igntc set' );
-$r->igntc( 0 );
-ok( !$r->igntc, 'igntc unset' );
+    $r->usevc( 1 );
+    ok( $r->usevc, 'usevc set' );
+    $r->usevc( 0 );
+    ok( !$r->usevc, 'usevc unset' );
 
-$r->edns_size( 4711 );
-is($r->edns_size, 4711 , 'ENDS0 UDP size set');
-$r->edns_size( 0 );
-is($r->edns_size, 0 , 'ENDS0 UDP size set to zero');
+    $r->igntc( 1 );
+    ok( $r->igntc, 'igntc set' );
+    $r->igntc( 0 );
+    ok( !$r->igntc, 'igntc unset' );
 
-is($r->timeout, 5, 'Expected default timeout');
-$r->timeout(3.33);
-ok(($r->timeout - 3.33) < 0.01, 'Expected set timeout');
+    $r->edns_size( 4711 );
+    is($r->edns_size, 4711 , 'ENDS0 UDP size set');
+    $r->edns_size( 0 );
+    is($r->edns_size, 0 , 'ENDS0 UDP size set to zero');
 
-my $addr = '192.0.2.1'; # Reserved RFC5737
-ok($r->source($addr), "Source set.");
-is($r->source, $addr, 'Source got.');
+    is($r->timeout, 5, 'Expected default timeout');
+    $r->timeout(3.33);
+    ok(($r->timeout - 3.33) < 0.01, 'Expected set timeout');
+
+    my $addr = '192.0.2.1'; # Reserved RFC5737
+    ok($r->source($addr), "Source set.");
+    is($r->source, $addr, 'Source got.');
+}
 
 subtest 'recursion' => sub {
-    my $r = Net::LDNS->new( '8.8.4.4' );
-    my $p1 = $r->query( 'www.iis.se' );
-    is( scalar($p1->answer), 1);
-    $r->recurse(0);
-    my $p2 = $r->query( 'www.nic.se' );
-    is( scalar($p2->answer), 0, 'Got a reply');
-    ok(!$p2->rd, 'RD flag set');
+    SKIP: {
+        skip 'no network', 3 if $ENV{TEST_NO_NETWORK};
+
+        my $r = Net::LDNS->new( '8.8.4.4' );
+        my $p1 = $r->query( 'www.iis.se' );
+        is( scalar($p1->answer), 1);
+        $r->recurse(0);
+        my $p2 = $r->query( 'www.nic.se' );
+        is( scalar($p2->answer), 0, 'Got a reply');
+        ok(!$p2->rd, 'RD flag set');
+    }
 };
 
 subtest 'global' => sub {
-    my $res = new_ok( 'Net::LDNS' );
-    my $p = eval { $res->query( 'www.iis.se' ) } ;
+    SKIP: {
+        skip 'no network', 3 if $ENV{TEST_NO_NETWORK};
 
-    if (not $p) {
-        diag $@;
-    }
-    else {
-        isa_ok( $p, 'Net::LDNS::Packet' );
-        isa_ok( $_, 'Net::LDNS::RR' ) for $p->answer;
+        my $res = new_ok( 'Net::LDNS' );
+        my $p = eval { $res->query( 'www.iis.se' ) } ;
+
+        if (not $p) {
+            diag $@;
+        }
+        else {
+            isa_ok( $p, 'Net::LDNS::Packet' );
+            isa_ok( $_, 'Net::LDNS::RR' ) for $p->answer;
+        }
     }
 };
 
@@ -80,7 +92,7 @@ subtest 'global' => sub {
 #     my $res = Net::LDNS->new( '194.146.106.22' );
 #     my $p   = eval { $res->query( 'www.iis.se' ) };
 #     plan skip_all => 'No response, cannot test' if not $p;
-# 
+#
 #     is( scalar( $p->answer ),     1, 'answer count in scalar context' );
 #     is( scalar( $p->authority ),  3, 'authority count in scalar context' );
 #     is( scalar( $p->additional ), 6, 'additional count in scalar context' );

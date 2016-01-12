@@ -28,5 +28,4 @@ is($p->answerfrom, undef, 'No answerfrom');
 $p->answerfrom('127.0.0.1');
 is($p->answerfrom, '127.0.0.1', 'Localhost');
 
-
 done_testing();

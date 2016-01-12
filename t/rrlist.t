@@ -3,15 +3,23 @@ use Devel::Peek;
 
 use Net::LDNS;
 
-my $s = Net::LDNS->new( '8.8.8.8' );
-my $p = $s->query( 'iis.se', 'SOA' );
+my $rrl = Net::LDNS::Packet->new( 'foo.com', 'SOA', 'IN' )->all;
+$rrl->pop;
 
-my $rrl = $p->all;
-isa_ok( $rrl, 'Net::LDNS::RRList' );
+SKIP: {
+    skip 'no network', 3 if $ENV{TEST_NO_NETWORK};
 
-is( $rrl->count, 1, 'one RR in list' );
-my $rr = $rrl->pop;
-isa_ok( $rr, 'Net::LDNS::RR::SOA' );
+    my $s = Net::LDNS->new( '8.8.8.8' );
+    my $p = $s->query( 'iis.se', 'SOA' );
+
+    $rrl = $p->all;
+    isa_ok( $rrl, 'Net::LDNS::RRList' );
+
+    is( $rrl->count, 1, 'one RR in list' );
+    my $rr = $rrl->pop;
+    isa_ok( $rr, 'Net::LDNS::RR::SOA' );
+}
+
 is( $rrl->count, 0, 'zero RRs in list' );
 
 my $rr1 = Net::LDNS::RR->new_from_string( 'nic.se IN NS a.ns.se' );

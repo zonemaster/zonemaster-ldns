@@ -5,110 +5,143 @@ use MIME::Base64;
 
 BEGIN { use_ok( 'Net::LDNS' ) }
 
-my $s = Net::LDNS->new( '8.8.8.8' );
+my $s;
+$s = Net::LDNS->new( '8.8.8.8' ) unless $ENV{TEST_NO_NETWORK};
 
 subtest 'rdf' => sub {
-    my $p = $s->query( 'iis.se', 'SOA' );
-    plan skip_all => 'No response, cannot test' if not $p;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $p->answer ) {
-        is( $rr->rd_count, 7 );
-        foreach my $n (0..($rr->rd_count-1)) {
-            ok(length($rr->rdf($n)) >= 4);
+        my $p = $s->query( 'iis.se', 'SOA' );
+        plan skip_all => 'No response, cannot test' if not $p;
+
+        foreach my $rr ( $p->answer ) {
+            is( $rr->rd_count, 7 );
+            foreach my $n (0..($rr->rd_count-1)) {
+                ok(length($rr->rdf($n)) >= 4);
+            }
+            like( exception { $rr->rdf(7) }, qr/Trying to fetch nonexistent RDATA at position/, 'died on overflow');
         }
-        like( exception { $rr->rdf(7) }, qr/Trying to fetch nonexistent RDATA at position/, 'died on overflow');
     }
 };
 
 subtest 'SOA' => sub {
-    my $p = $s->query( 'iis.se', 'SOA' );
-    plan skip_all => 'No response, cannot test' if not $p;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $p->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::SOA' );
-        is( lc($rr->mname), 'ns.nic.se.' );
-        is( lc($rr->rname), 'hostmaster.iis.se.' );
-        ok( $rr->serial >= 1381471502, 'serial' );
-        is( $rr->refresh, 10800,   'refresh' );
-        is( $rr->retry,   3600,    'retry' );
-        is( $rr->expire,  1814400, 'expire' );
-        is( $rr->minimum, 14400,   'minimum' );
+        my $p = $s->query( 'iis.se', 'SOA' );
+        plan skip_all => 'No response, cannot test' if not $p;
+
+        foreach my $rr ( $p->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::SOA' );
+            is( lc($rr->mname), 'ns.nic.se.' );
+            is( lc($rr->rname), 'hostmaster.iis.se.' );
+            ok( $rr->serial >= 1381471502, 'serial' );
+            is( $rr->refresh, 10800,   'refresh' );
+            is( $rr->retry,   3600,    'retry' );
+            is( $rr->expire,  1814400, 'expire' );
+            is( $rr->minimum, 14400,   'minimum' );
+        }
     }
 };
 
 subtest 'A' => sub {
-    my $p = $s->query( 'a.ns.se' );
-    plan skip_all => 'No response, cannot test' if not $p;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $p->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::A' );
-        is( $rr->address, '192.36.144.107', 'expected address string' );
-        is( $rr->type, 'A' );
-        is( length($rr->rdf(0)), 4 );
+        my $p = $s->query( 'a.ns.se' );
+        plan skip_all => 'No response, cannot test' if not $p;
+
+        foreach my $rr ( $p->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::A' );
+            is( $rr->address, '192.36.144.107', 'expected address string' );
+            is( $rr->type, 'A' );
+            is( length($rr->rdf(0)), 4 );
+        }
     }
 };
 
 subtest 'AAAA' => sub {
-    $p = $s->query( 'a.ns.se', 'AAAA' );
-    plan skip_all => 'No response, cannot test' if not $p;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $p->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::AAAA' );
-        is( $rr->address, '2a01:3f0:0:301::53', 'expected address string' );
-        is( length($rr->rdf(0)), 16 );
+        $p = $s->query( 'a.ns.se', 'AAAA' );
+        plan skip_all => 'No response, cannot test' if not $p;
+
+        foreach my $rr ( $p->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::AAAA' );
+            is( $rr->address, '2a01:3f0:0:301::53', 'expected address string' );
+            is( length($rr->rdf(0)), 16 );
+        }
     }
 };
 
 subtest 'TXT' => sub {
-    my $se = Net::LDNS->new( '192.36.144.107' );
-    my $pt = $se->query( 'se', 'TXT' );
-    plan skip_all => 'No response, cannot test' if not $pt;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $pt->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::TXT' );
-        like( $rr->txtdata, qr/^"SE zone update: / );
+        my $se = Net::LDNS->new( '192.36.144.107' );
+        my $pt = $se->query( 'se', 'TXT' );
+        plan skip_all => 'No response, cannot test' if not $pt;
+
+        foreach my $rr ( $pt->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::TXT' );
+            like( $rr->txtdata, qr/^"SE zone update: / );
+        }
     }
 };
 
 subtest 'DNSKEY' => sub {
-    my $se = Net::LDNS->new( '192.36.144.107' );
-    my $pk = $se->query( 'se', 'DNSKEY' );
-    plan skip_all => 'No response, cannot test' if not $pk;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $pk->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::DNSKEY' );
-        ok( $rr->flags == 256 or $rr->flags == 257 );
-        is( $rr->protocol,  3 );
-        is( $rr->algorithm, 5 );
+        my $se = Net::LDNS->new( '192.36.144.107' );
+        my $pk = $se->query( 'se', 'DNSKEY' );
+        plan skip_all => 'No response, cannot test' if not $pk;
+
+        foreach my $rr ( $pk->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::DNSKEY' );
+            ok( $rr->flags == 256 or $rr->flags == 257 );
+            is( $rr->protocol,  3 );
+            is( $rr->algorithm, 5 );
+        }
     }
 };
 
 subtest 'RRSIG' => sub {
-    my $se = Net::LDNS->new( '192.36.144.107' );
-    my $pr = $se->query( 'se', 'RRSIG' );
-    plan skip_all => 'No response, cannot test' if not $pr;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $pr->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::RRSIG' );
-        is( $rr->signer, 'se.' );
-        is( $rr->labels, 1 );
-        if ( $rr->typecovered eq 'DNSKEY' ) {
-            is( $rr->keytag, 59747 ); # .SE KSK should not change very often
+        my $se = Net::LDNS->new( '192.36.144.107' );
+        my $pr = $se->query( 'se', 'RRSIG' );
+        plan skip_all => 'No response, cannot test' if not $pr;
+
+        foreach my $rr ( $pr->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::RRSIG' );
+            is( $rr->signer, 'se.' );
+            is( $rr->labels, 1 );
+            if ( $rr->typecovered eq 'DNSKEY' ) {
+                is( $rr->keytag, 59747 ); # .SE KSK should not change very often
+            }
         }
     }
 };
 
 subtest 'NSEC' => sub {
-    my $se = Net::LDNS->new( '192.36.144.107' );
-    my $pn = $se->query( 'se', 'NSEC' );
-    plan skip_all => 'No response, cannot test' if not $pn;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    foreach my $rr ( $pn->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::NSEC' );
-        ok( $rr->typehref->{TXT} );
-        ok( !$rr->typehref->{MX} );
-        ok( $rr->typehref->{TXT} );
-        is( $rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ' );
+        my $se = Net::LDNS->new( '192.36.144.107' );
+        my $pn = $se->query( 'se', 'NSEC' );
+        plan skip_all => 'No response, cannot test' if not $pn;
+
+        foreach my $rr ( $pn->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::NSEC' );
+            ok( $rr->typehref->{TXT} );
+            ok( !$rr->typehref->{MX} );
+            ok( $rr->typehref->{TXT} );
+            is( $rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ' );
+        }
     }
 };
 
@@ -129,25 +162,29 @@ subtest 'From string' => sub {
 };
 
 subtest 'DS' => sub {
-    my $se      = Net::LDNS->new( '192.36.144.107' );
-    my $pd      = $se->query( 'nic.se', 'DS' );
-    plan skip_all => 'No response, cannot test' if not $pd;
+    SKIP: {
+        skip 'no network', 1 if $ENV{TEST_NO_NETWORK};
 
-    my $nic_key = Net::LDNS::RR->new(
-'nic.se IN DNSKEY 257 3 5 AwEAAdhJAx197qFpGGXuQn8XH0tQpQSfjvLKMcreRvJyO+f3F3weIHR3 6E8DObolHFp+m1YkxsgnHYjUFN4E9sKa38ZXU0oHTSsB3adExJkINA/t INDlKrzUDn4cIbyUCqHNGe0et+lHmjmfZdj62GJlHgVmxizYkoBd7Rg0 wxzEOo7CA3ZadaHuqmVJ2HvqRCoe+5NDsYpnDia7WggvLTe0vorV6kDc u6d5N9AUPwBsR7YUkbetfXMtUebux71kHCGUJdmzp84MeDi9wXYIssjR oTC5wUF2H3I2Mnj5GqdyBwQCdj5otFbRAx3jiMD+ROxXJxOFdFq7fWi1 yPqUf1jpJ+8='
-    );
-    my $made = Net::LDNS::RR->new_from_string( 'nic.se IN NS a.ns.se' );
-    foreach my $rr ( $pd->answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::DS' );
-        is( $rr->keytag,    16696 );
-        is( $rr->algorithm, 5 );
-        ok( $rr->digtype == 1 or $rr->digtype == 2 );
-        ok(
-                 $rr->hexdigest eq '40079ddf8d09e7f10bb248a69b6630478a28ef969dde399f95bc3b39f8cbacd7'
-              or $rr->hexdigest eq 'ef5d421412a5eaf1230071affd4f585e3b2b1a60'
+        my $se      = Net::LDNS->new( '192.36.144.107' );
+        my $pd      = $se->query( 'nic.se', 'DS' );
+        plan skip_all => 'No response, cannot test' if not $pd;
+
+        my $nic_key = Net::LDNS::RR->new(
+    'nic.se IN DNSKEY 257 3 5 AwEAAdhJAx197qFpGGXuQn8XH0tQpQSfjvLKMcreRvJyO+f3F3weIHR3 6E8DObolHFp+m1YkxsgnHYjUFN4E9sKa38ZXU0oHTSsB3adExJkINA/t INDlKrzUDn4cIbyUCqHNGe0et+lHmjmfZdj62GJlHgVmxizYkoBd7Rg0 wxzEOo7CA3ZadaHuqmVJ2HvqRCoe+5NDsYpnDia7WggvLTe0vorV6kDc u6d5N9AUPwBsR7YUkbetfXMtUebux71kHCGUJdmzp84MeDi9wXYIssjR oTC5wUF2H3I2Mnj5GqdyBwQCdj5otFbRAx3jiMD+ROxXJxOFdFq7fWi1 yPqUf1jpJ+8='
         );
-        ok( $rr->verify( $nic_key ), 'derived from expected DNSKEY' );
-        ok( !$rr->verify( $made ),   'does not match a non-DS non-DNSKEY record' );
+        my $made = Net::LDNS::RR->new_from_string( 'nic.se IN NS a.ns.se' );
+        foreach my $rr ( $pd->answer ) {
+            isa_ok( $rr, 'Net::LDNS::RR::DS' );
+            is( $rr->keytag,    16696 );
+            is( $rr->algorithm, 5 );
+            ok( $rr->digtype == 1 or $rr->digtype == 2 );
+            ok(
+                     $rr->hexdigest eq '40079ddf8d09e7f10bb248a69b6630478a28ef969dde399f95bc3b39f8cbacd7'
+                  or $rr->hexdigest eq 'ef5d421412a5eaf1230071affd4f585e3b2b1a60'
+            );
+            ok( $rr->verify( $nic_key ), 'derived from expected DNSKEY' );
+            ok( !$rr->verify( $made ),   'does not match a non-DS non-DNSKEY record' );
+        }
     }
 };
 
