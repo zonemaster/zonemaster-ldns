@@ -78,7 +78,7 @@ SKIP: {
 
     is( scalar( $se->question ),   1,  'one question' );
     is( scalar( $se->answer ),     0,  'zero answers' );
-    is( scalar( $se->authority ),  9,  'nine authority' );
+    is( scalar( $se->authority ), 10,  'nine authority' );
     my $add = scalar( $se->additional );
     ok( $add == 16 || $add == 15, 'sixteen additional' );
 
