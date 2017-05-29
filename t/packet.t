@@ -4,9 +4,9 @@ use Test::Fatal;
 use strict;
 use warnings;
 
-use_ok('Net::LDNS');
+use_ok('Zonemaster::LDNS');
 
-my $p = new_ok('Net::LDNS::Packet' => ['www.example.org', 'SOA', 'IN']);
+my $p = new_ok('Zonemaster::LDNS::Packet' => ['www.example.org', 'SOA', 'IN']);
 
 foreach my $r (qw[NOERROR FORMERR SERVFAIL NXDOMAIN NOTIMPL REFUSED YXDOMAIN YXRRSET NXRRSET NOTAUTH NOTZONE]) {
     is($p->rcode($r), $r, $r);

@@ -1,6 +1,6 @@
 #include <LDNS.h>
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS
 
 PROTOTYPES: ENABLE
 
@@ -163,7 +163,7 @@ new(class, ...)
 
 SV *
 query(obj, dname, rrtype="A", rrclass="IN")
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     char *dname;
     char *rrtype;
     char *rrclass;
@@ -222,7 +222,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
         }
         ldns_pkt *clone = ldns_pkt_clone(pkt);
         ldns_pkt_set_timestamp(clone, ldns_pkt_timestamp(pkt));
-        RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::Packet", clone);
+        RETVAL = sv_setref_pv(newSV(0), "Zonemaster::LDNS::Packet", clone);
         ldns_rdf_deep_free(domain);
         ldns_pkt_free(pkt);
 #ifdef USE_ITHREADS
@@ -234,7 +234,7 @@ query(obj, dname, rrtype="A", rrclass="IN")
 
 bool
 recurse(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if(items>1) {
             SvGETMAGIC(ST(1));
@@ -246,7 +246,7 @@ recurse(obj,...)
 
 bool
 debug(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -258,7 +258,7 @@ debug(obj,...)
 
 bool
 dnssec(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -270,7 +270,7 @@ dnssec(obj,...)
 
 bool
 cd(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -282,7 +282,7 @@ cd(obj,...)
 
 bool
 usevc(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -294,7 +294,7 @@ usevc(obj,...)
 
 bool
 igntc(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -306,7 +306,7 @@ igntc(obj,...)
 
 U8
 retry(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -318,7 +318,7 @@ retry(obj,...)
 
 U8
 retrans(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -330,7 +330,7 @@ retrans(obj,...)
 
 U16
 edns_size(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if( items > 1 )
         {
@@ -343,7 +343,7 @@ edns_size(obj,...)
 
 U16
 port(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if( items > 1 )
         {
@@ -356,7 +356,7 @@ port(obj,...)
 
 SV *
 name2addr(obj,name)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     const char *name;
     PPCODE:
     {
@@ -405,7 +405,7 @@ name2addr(obj,name)
 
 SV *
 addr2name(obj,addr_in)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     const char *addr_in;
     PPCODE:
     {
@@ -458,7 +458,7 @@ addr2name(obj,addr_in)
 
 bool
 axfr(obj,dname,callback,class="IN")
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     const char *dname;
     SV *callback;
     const char *class;
@@ -551,7 +551,7 @@ axfr(obj,dname,callback,class="IN")
 
 bool
 axfr_start(obj,dname,class="IN")
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     const char *dname;
     const char *class;
     CODE:
@@ -579,7 +579,7 @@ axfr_start(obj,dname,class="IN")
 
 SV *
 axfr_next(obj)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
     {
         ldns_rr *rr;
@@ -610,15 +610,15 @@ axfr_next(obj)
 
 bool
 axfr_complete(obj)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         RETVAL = ldns_axfr_complete(obj);
     OUTPUT:
         RETVAL
 
-Net::LDNS::Packet
+Zonemaster::LDNS::Packet
 axfr_last_packet(obj)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         RETVAL = ldns_axfr_last_pkt(obj);
     OUTPUT:
@@ -626,7 +626,7 @@ axfr_last_packet(obj)
 
 double
 timeout(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         struct timeval tv;
 
@@ -651,7 +651,7 @@ timeout(obj,...)
 
 char *
 source(obj,...)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
         if(items >= 2)
         {
@@ -680,7 +680,7 @@ source(obj,...)
 
 void
 DESTROY(obj)
-    Net::LDNS obj;
+    Zonemaster::LDNS obj;
     CODE:
 #ifdef USE_ITHREADS
         net_ldns_forget();
@@ -698,7 +698,7 @@ CLONE(class)
 
 #endif
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::Packet           PREFIX=packet_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::Packet           PREFIX=packet_
 
 SV *
 packet_new(objclass,name,type="A",class="IN")
@@ -743,7 +743,7 @@ packet_new(objclass,name,type="A",class="IN")
 
 char *
 packet_rcode(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -792,7 +792,7 @@ packet_rcode(obj,...)
 
 char *
 packet_opcode(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -823,7 +823,7 @@ packet_opcode(obj,...)
 
 U16
 packet_id(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -835,7 +835,7 @@ packet_id(obj,...)
 
 bool
 packet_qr(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -847,7 +847,7 @@ packet_qr(obj,...)
 
 bool
 packet_aa(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -859,7 +859,7 @@ packet_aa(obj,...)
 
 bool
 packet_tc(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -871,7 +871,7 @@ packet_tc(obj,...)
 
 bool
 packet_rd(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -883,7 +883,7 @@ packet_rd(obj,...)
 
 bool
 packet_cd(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -895,7 +895,7 @@ packet_cd(obj,...)
 
 bool
 packet_ra(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -907,7 +907,7 @@ packet_ra(obj,...)
 
 bool
 packet_ad(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -919,7 +919,7 @@ packet_ad(obj,...)
 
 bool
 packet_do(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -931,7 +931,7 @@ packet_do(obj,...)
 
 size_t
 packet_size(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt_size(obj);
     OUTPUT:
@@ -939,7 +939,7 @@ packet_size(obj)
 
 U32
 packet_querytime(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
             SvGETMAGIC(ST(1));
@@ -951,7 +951,7 @@ packet_querytime(obj,...)
 
 char *
 packet_answerfrom(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if(items >= 2)
         {
@@ -978,7 +978,7 @@ packet_answerfrom(obj,...)
 
 double
 packet_timestamp(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if(items >= 2)
         {
@@ -999,7 +999,7 @@ packet_timestamp(obj,...)
 
 SV *
 packet_answer(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -1027,7 +1027,7 @@ packet_answer(obj)
 
 SV *
 packet_authority(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -1055,7 +1055,7 @@ packet_authority(obj)
 
 SV *
 packet_additional(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -1083,7 +1083,7 @@ packet_additional(obj)
 
 SV *
 packet_question(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     PPCODE:
     {
         size_t i,n;
@@ -1111,9 +1111,9 @@ packet_question(obj)
 
 bool
 packet_unique_push(obj,section,rr)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     char *section;
-    Net::LDNS::RR rr;
+    Zonemaster::LDNS::RR rr;
     CODE:
     {
         ldns_pkt_section sec;
@@ -1152,10 +1152,10 @@ packet_unique_push(obj,section,rr)
 
 SV *
 packet_all(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         ldns_rr_list *list = ldns_pkt_all_noquestion(obj);
-        RETVAL = sv_setref_pv(newSV(0), "Net::LDNS::RRList", list);
+        RETVAL = sv_setref_pv(newSV(0), "Zonemaster::LDNS::RRList", list);
 #ifdef USE_ITHREADS
         net_ldns_remember_rrlist(RETVAL);
 #endif
@@ -1164,7 +1164,7 @@ packet_all(obj)
 
 char *
 packet_string(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt2str(obj);
         RETVAL[strlen(RETVAL)-1] = '\0';
@@ -1175,7 +1175,7 @@ packet_string(obj)
 
 SV *
 packet_wireformat(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
     {
         size_t sz;
@@ -1202,7 +1202,7 @@ packet_new_from_wireformat(class,buf)
     SV *buf;
     CODE:
     {
-        Net__LDNS__Packet pkt;
+        Zonemaster__LDNS__Packet pkt;
         ldns_status status;
 
         SvGETMAGIC(buf);
@@ -1225,7 +1225,7 @@ packet_new_from_wireformat(class,buf)
 
 U16
 packet_edns_size(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if(items>=2)
         {
@@ -1238,7 +1238,7 @@ packet_edns_size(obj,...)
 
 U8
 packet_edns_rcode(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if(items>=2)
         {
@@ -1251,7 +1251,7 @@ packet_edns_rcode(obj,...)
 
 U8
 packet_edns_version(obj,...)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         if(items>=2)
         {
@@ -1264,9 +1264,9 @@ packet_edns_version(obj,...)
 
 bool
 packet_needs_edns(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     ALIAS:
-        Net::LDNS::Packet::has_edns = 1
+        Zonemaster::LDNS::Packet::has_edns = 1
     CODE:
         RETVAL = ldns_pkt_edns(obj);
     OUTPUT:
@@ -1274,7 +1274,7 @@ packet_needs_edns(obj)
 
 SV *
 packet_type(obj)
-    Net::LDNS::Packet obj;
+    Zonemaster::LDNS::Packet obj;
     CODE:
         ldns_pkt_type type = ldns_pkt_reply_type(obj);
         switch (type){
@@ -1329,11 +1329,11 @@ packet_CLONE(class)
 
 #endif
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RRList           PREFIX=rrlist_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RRList           PREFIX=rrlist_
 
 size_t
 rrlist_count(obj)
-    Net::LDNS::RRList obj;
+    Zonemaster::LDNS::RRList obj;
     CODE:
         RETVAL = ldns_rr_list_rr_count(obj);
     OUTPUT:
@@ -1341,7 +1341,7 @@ rrlist_count(obj)
 
 SV *
 rrlist_pop(obj)
-    Net::LDNS::RRList obj;
+    Zonemaster::LDNS::RRList obj;
     CODE:
         ldns_rr *rr = ldns_rr_list_pop_rr(obj);
         if(rr==NULL)
@@ -1357,8 +1357,8 @@ rrlist_pop(obj)
 
 bool
 rrlist_push(obj,rr)
-    Net::LDNS::RRList obj;
-    Net::LDNS::RR rr;
+    Zonemaster::LDNS::RRList obj;
+    Zonemaster::LDNS::RR rr;
     CODE:
         RETVAL = ldns_rr_list_push_rr(obj,ldns_rr_clone(rr));
     OUTPUT:
@@ -1366,7 +1366,7 @@ rrlist_push(obj,rr)
 
 bool
 rrlist_is_rrset(obj)
-    Net::LDNS::RRList obj;
+    Zonemaster::LDNS::RRList obj;
     CODE:
         RETVAL = ldns_is_rrset(obj);
     OUTPUT:
@@ -1374,7 +1374,7 @@ rrlist_is_rrset(obj)
 
 void
 rrlist_DESTROY(obj)
-    Net::LDNS::RRList obj;
+    Zonemaster::LDNS::RRList obj;
     CODE:
 #ifdef USE_ITHREADS
         net_ldns_forget();
@@ -1391,7 +1391,7 @@ rrlist_CLONE(class)
 
 #endif
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR           PREFIX=rr_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR           PREFIX=rr_
 
 SV *
 rr_new_from_string(class,str)
@@ -1410,7 +1410,7 @@ rr_new_from_string(class,str)
             croak("Failed to build RR: %s", ldns_get_errorstr_by_id(s));
         }
         rrtype = ldns_rr_type2str(ldns_rr_get_type(rr));
-        snprintf(rrclass, 39, "Net::LDNS::RR::%s", rrtype);
+        snprintf(rrclass, 39, "Zonemaster::LDNS::RR::%s", rrtype);
         free(rrtype);
         rr_sv = sv_newmortal();
         sv_setref_pv(rr_sv, rrclass, rr);
@@ -1421,7 +1421,7 @@ rr_new_from_string(class,str)
 
 char *
 rr_owner(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = randomize_capitalization(ldns_rdf2str(ldns_rr_owner(obj)));
     OUTPUT:
@@ -1431,7 +1431,7 @@ rr_owner(obj)
 
 U32
 rr_ttl(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_ttl(obj);
     OUTPUT:
@@ -1439,7 +1439,7 @@ rr_ttl(obj)
 
 char *
 rr_type(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_type2str(ldns_rr_get_type(obj));
     OUTPUT:
@@ -1449,7 +1449,7 @@ rr_type(obj)
 
 char *
 rr_class(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_class2str(ldns_rr_get_class(obj));
     OUTPUT:
@@ -1459,7 +1459,7 @@ rr_class(obj)
 
 char *
 rr_string(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr2str(obj);
         RETVAL[strlen(RETVAL)-1] = '\0';
@@ -1470,8 +1470,8 @@ rr_string(obj)
 
 I32
 rr_compare(obj1,obj2)
-    Net::LDNS::RR obj1;
-    Net::LDNS::RR obj2;
+    Zonemaster::LDNS::RR obj1;
+    Zonemaster::LDNS::RR obj2;
     CODE:
         RETVAL = ldns_rr_compare(obj1,obj2);
     OUTPUT:
@@ -1479,7 +1479,7 @@ rr_compare(obj1,obj2)
 
 size_t
 rr_rd_count(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr_rd_count(obj);
     OUTPUT:
@@ -1487,7 +1487,7 @@ rr_rd_count(obj)
 
 SV *
 rr_rdf(obj,n)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     size_t n;
     CODE:
         ldns_rdf *rdf = ldns_rr_rdf(obj,n);
@@ -1501,7 +1501,7 @@ rr_rdf(obj,n)
 
 void
 rr_DESTROY(obj)
-    Net::LDNS::RR obj;
+    Zonemaster::LDNS::RR obj;
     CODE:
 #ifdef USE_ITHREADS
         net_ldns_forget();
@@ -1514,17 +1514,17 @@ void
 rr_CLONE(class)
     char *class;
     CODE:
-        if(strEQ(class,"Net::LDNS::RR")) {
+        if(strEQ(class,"Zonemaster::LDNS::RR")) {
             net_ldns_clone_rrs();
         }
 
 #endif
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NS           PREFIX=rr_ns_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::NS           PREFIX=rr_ns_
 
 char *
 rr_ns_nsdname(obj)
-    Net::LDNS::RR::NS obj;
+    Zonemaster::LDNS::RR::NS obj;
     CODE:
         RETVAL = randomize_capitalization(ldns_rdf2str(ldns_rr_rdf(obj, 0)));
     OUTPUT:
@@ -1533,11 +1533,11 @@ rr_ns_nsdname(obj)
         free(RETVAL);
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::MX           PREFIX=rr_mx_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::MX           PREFIX=rr_mx_
 
 U16
 rr_mx_preference(obj)
-    Net::LDNS::RR::MX obj;
+    Zonemaster::LDNS::RR::MX obj;
     CODE:
         RETVAL = D_U16(obj, 0);
     OUTPUT:
@@ -1545,7 +1545,7 @@ rr_mx_preference(obj)
 
 char *
 rr_mx_exchange(obj)
-    Net::LDNS::RR::MX obj;
+    Zonemaster::LDNS::RR::MX obj;
     CODE:
         RETVAL = randomize_capitalization(D_STRING(obj, 1));
     OUTPUT:
@@ -1554,11 +1554,11 @@ rr_mx_exchange(obj)
         free(RETVAL);
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::A                PREFIX=rr_a_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::A                PREFIX=rr_a_
 
 char *
 rr_a_address(obj)
-    Net::LDNS::RR::A obj;
+    Zonemaster::LDNS::RR::A obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -1567,11 +1567,11 @@ rr_a_address(obj)
         free(RETVAL);
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::AAAA             PREFIX=rr_aaaa_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::AAAA             PREFIX=rr_aaaa_
 
 char *
 rr_aaaa_address(obj)
-    Net::LDNS::RR::AAAA obj;
+    Zonemaster::LDNS::RR::AAAA obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -1580,11 +1580,11 @@ rr_aaaa_address(obj)
         free(RETVAL);
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SOA              PREFIX=rr_soa_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::SOA              PREFIX=rr_soa_
 
 char *
 rr_soa_mname(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = randomize_capitalization(D_STRING(obj,0));
     OUTPUT:
@@ -1594,7 +1594,7 @@ rr_soa_mname(obj)
 
 char *
 rr_soa_rname(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = randomize_capitalization(D_STRING(obj,1));
     OUTPUT:
@@ -1604,7 +1604,7 @@ rr_soa_rname(obj)
 
 U32
 rr_soa_serial(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,2);
     OUTPUT:
@@ -1612,7 +1612,7 @@ rr_soa_serial(obj)
 
 U32
 rr_soa_refresh(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,3);
     OUTPUT:
@@ -1620,7 +1620,7 @@ rr_soa_refresh(obj)
 
 U32
 rr_soa_retry(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,4);
     OUTPUT:
@@ -1628,7 +1628,7 @@ rr_soa_retry(obj)
 
 U32
 rr_soa_expire(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,5);
     OUTPUT:
@@ -1636,18 +1636,18 @@ rr_soa_expire(obj)
 
 U32
 rr_soa_minimum(obj)
-    Net::LDNS::RR::SOA obj;
+    Zonemaster::LDNS::RR::SOA obj;
     CODE:
         RETVAL = D_U32(obj,6);
     OUTPUT:
         RETVAL
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::DS               PREFIX=rr_ds_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::DS               PREFIX=rr_ds_
 
 U16
 rr_ds_keytag(obj)
-    Net::LDNS::RR::DS obj;
+    Zonemaster::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_U16(obj,0);
     OUTPUT:
@@ -1655,7 +1655,7 @@ rr_ds_keytag(obj)
 
 U8
 rr_ds_algorithm(obj)
-    Net::LDNS::RR::DS obj;
+    Zonemaster::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -1663,7 +1663,7 @@ rr_ds_algorithm(obj)
 
 U8
 rr_ds_digtype(obj)
-    Net::LDNS::RR::DS obj;
+    Zonemaster::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -1671,7 +1671,7 @@ rr_ds_digtype(obj)
 
 SV *
 rr_ds_digest(obj)
-    Net::LDNS::RR::DS obj;
+    Zonemaster::LDNS::RR::DS obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
@@ -1682,7 +1682,7 @@ rr_ds_digest(obj)
 
 char *
 rr_ds_hexdigest(obj)
-    Net::LDNS::RR::DS obj;
+    Zonemaster::LDNS::RR::DS obj;
     CODE:
         RETVAL = D_STRING(obj,3);
     OUTPUT:
@@ -1693,18 +1693,18 @@ rr_ds_hexdigest(obj)
 
 bool
 rr_ds_verify(obj,other)
-    Net::LDNS::RR::DS obj;
-    Net::LDNS::RR other;
+    Zonemaster::LDNS::RR::DS obj;
+    Zonemaster::LDNS::RR other;
     CODE:
         RETVAL = ldns_rr_compare_ds(obj, other);
     OUTPUT:
         RETVAL
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::DNSKEY           PREFIX=rr_dnskey_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
 U32
 rr_dnskey_keysize(obj)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
     {
         U8 algorithm = D_U8(obj,2);
@@ -1748,7 +1748,7 @@ rr_dnskey_keysize(obj)
 
 U16
 rr_dnskey_flags(obj)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = D_U16(obj,0);
     OUTPUT:
@@ -1756,7 +1756,7 @@ rr_dnskey_flags(obj)
 
 U8
 rr_dnskey_protocol(obj)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -1764,7 +1764,7 @@ rr_dnskey_protocol(obj)
 
 U8
 rr_dnskey_algorithm(obj)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -1772,7 +1772,7 @@ rr_dnskey_algorithm(obj)
 
 SV *
 rr_dnskey_keydata(obj)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
@@ -1783,15 +1783,15 @@ rr_dnskey_keydata(obj)
 
 U16
 rr_dnskey_keytag(obj)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
         RETVAL = ldns_calc_keytag(obj);
     OUTPUT:
         RETVAL
 
-Net::LDNS::RR::DS
+Zonemaster::LDNS::RR::DS
 rr_dnskey_ds(obj, hash)
-    Net::LDNS::RR::DNSKEY obj;
+    Zonemaster::LDNS::RR::DNSKEY obj;
     const char *hash;
     CODE:
     {
@@ -1829,11 +1829,11 @@ rr_dnskey_ds(obj, hash)
     OUTPUT:
         RETVAL
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::RRSIG            PREFIX=rr_rrsig_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::RRSIG            PREFIX=rr_rrsig_
 
 char *
 rr_rrsig_typecovered(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -1843,7 +1843,7 @@ rr_rrsig_typecovered(obj)
 
 U8
 rr_rrsig_algorithm(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -1851,7 +1851,7 @@ rr_rrsig_algorithm(obj)
 
 U8
 rr_rrsig_labels(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -1859,7 +1859,7 @@ rr_rrsig_labels(obj)
 
 U32
 rr_rrsig_origttl(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U32(obj,3);
     OUTPUT:
@@ -1867,7 +1867,7 @@ rr_rrsig_origttl(obj)
 
 U32
 rr_rrsig_expiration(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U32(obj,4);
     OUTPUT:
@@ -1875,7 +1875,7 @@ rr_rrsig_expiration(obj)
 
 U32
 rr_rrsig_inception(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U32(obj,5);
     OUTPUT:
@@ -1883,7 +1883,7 @@ rr_rrsig_inception(obj)
 
 U16
 rr_rrsig_keytag(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_U16(obj,6);
     OUTPUT:
@@ -1891,7 +1891,7 @@ rr_rrsig_keytag(obj)
 
 char *
 rr_rrsig_signer(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
         RETVAL = D_STRING(obj,7);
     OUTPUT:
@@ -1901,7 +1901,7 @@ rr_rrsig_signer(obj)
 
 SV *
 rr_rrsig_signature(obj)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,8);
@@ -1912,7 +1912,7 @@ rr_rrsig_signature(obj)
 
 bool
 rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
-    Net::LDNS::RR::RRSIG obj;
+    Zonemaster::LDNS::RR::RRSIG obj;
     AV *rrset_in;
     AV *keys_in;
     time_t when;
@@ -1983,11 +1983,11 @@ rr_rrsig_verify_time(obj,rrset_in,keys_in, when, msg)
         RETVAL
         msg
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC             PREFIX=rr_nsec_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::NSEC             PREFIX=rr_nsec_
 
 char *
 rr_nsec_next(obj)
-    Net::LDNS::RR::NSEC obj;
+    Zonemaster::LDNS::RR::NSEC obj;
     CODE:
         RETVAL = randomize_capitalization(D_STRING(obj,0));
     OUTPUT:
@@ -1995,7 +1995,7 @@ rr_nsec_next(obj)
 
 char *
 rr_nsec_typelist(obj)
-    Net::LDNS::RR::NSEC obj;
+    Zonemaster::LDNS::RR::NSEC obj;
     CODE:
         RETVAL = D_STRING(obj,1);
     OUTPUT:
@@ -2005,7 +2005,7 @@ rr_nsec_typelist(obj)
 
 SV *
 rr_nsec_typehref(obj)
-    Net::LDNS::RR::NSEC obj;
+    Zonemaster::LDNS::RR::NSEC obj;
     CODE:
     {
         char *typestring = D_STRING(obj,1);
@@ -2036,7 +2036,7 @@ rr_nsec_typehref(obj)
 
 bool
 rr_nsec_covers(obj,name)
-    Net::LDNS::RR::NSEC obj;
+    Zonemaster::LDNS::RR::NSEC obj;
     const char *name;
     CODE:
         ldns_rdf *dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
@@ -2047,11 +2047,11 @@ rr_nsec_covers(obj,name)
     OUTPUT:
         RETVAL
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3            PREFIX=rr_nsec3_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::NSEC3            PREFIX=rr_nsec3_
 
 U8
 rr_nsec3_algorithm(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
         RETVAL = ldns_nsec3_algorithm(obj);
     OUTPUT:
@@ -2059,7 +2059,7 @@ rr_nsec3_algorithm(obj)
 
 U8
 rr_nsec3_flags(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
         RETVAL = ldns_nsec3_flags(obj);
     OUTPUT:
@@ -2067,7 +2067,7 @@ rr_nsec3_flags(obj)
 
 bool
 rr_nsec3_optout(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
         RETVAL = ldns_nsec3_optout(obj);
     OUTPUT:
@@ -2075,7 +2075,7 @@ rr_nsec3_optout(obj)
 
 U16
 rr_nsec3_iterations(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
         RETVAL = ldns_nsec3_iterations(obj);
     OUTPUT:
@@ -2083,7 +2083,7 @@ rr_nsec3_iterations(obj)
 
 SV *
 rr_nsec3_salt(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     PPCODE:
         if(ldns_nsec3_salt_length(obj) > 0)
         {
@@ -2094,7 +2094,7 @@ rr_nsec3_salt(obj)
 
 SV *
 rr_nsec3_next_owner(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
         ldns_rdf *buf = ldns_nsec3_next_owner(obj);
         RETVAL = newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf));
@@ -2103,7 +2103,7 @@ rr_nsec3_next_owner(obj)
 
 char *
 rr_nsec3_typelist(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
         RETVAL = ldns_rdf2str(ldns_nsec3_bitmap(obj));
     OUTPUT:
@@ -2113,7 +2113,7 @@ rr_nsec3_typelist(obj)
 
 SV *
 rr_nsec3_typehref(obj)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     CODE:
     {
         char *typestring = ldns_rdf2str(ldns_nsec3_bitmap(obj));
@@ -2144,7 +2144,7 @@ rr_nsec3_typehref(obj)
 
 bool
 rr_nsec3_covers(obj,name)
-    Net::LDNS::RR::NSEC3 obj;
+    Zonemaster::LDNS::RR::NSEC3 obj;
     const char *name;
     CODE:
     {
@@ -2169,11 +2169,11 @@ rr_nsec3_covers(obj,name)
     OUTPUT:
         RETVAL
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::NSEC3PARAM       PREFIX=rr_nsec3param_
 
 U8
 rr_nsec3param_algorithm(obj)
-    Net::LDNS::RR::NSEC3PARAM obj;
+    Zonemaster::LDNS::RR::NSEC3PARAM obj;
     CODE:
         RETVAL = D_U8(obj,0);
     OUTPUT:
@@ -2181,7 +2181,7 @@ rr_nsec3param_algorithm(obj)
 
 U8
 rr_nsec3param_flags(obj)
-    Net::LDNS::RR::NSEC3PARAM obj;
+    Zonemaster::LDNS::RR::NSEC3PARAM obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -2190,7 +2190,7 @@ rr_nsec3param_flags(obj)
 
 U16
 rr_nsec3param_iterations(obj)
-    Net::LDNS::RR::NSEC3PARAM obj;
+    Zonemaster::LDNS::RR::NSEC3PARAM obj;
     CODE:
         RETVAL = D_U16(obj,2);
     OUTPUT:
@@ -2198,7 +2198,7 @@ rr_nsec3param_iterations(obj)
 
 SV *
 rr_nsec3param_salt(obj)
-    Net::LDNS::RR::NSEC3PARAM obj;
+    Zonemaster::LDNS::RR::NSEC3PARAM obj;
     PPCODE:
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
         if(ldns_rdf_size(rdf) > 0)
@@ -2206,11 +2206,11 @@ rr_nsec3param_salt(obj)
             mPUSHs(newSVpvn((char *)ldns_rdf_data(rdf), ldns_rdf_size(rdf)));
         }
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::PTR              PREFIX=rr_ptr_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::PTR              PREFIX=rr_ptr_
 
 char *
 rr_ptr_ptrdname(obj)
-    Net::LDNS::RR::PTR obj;
+    Zonemaster::LDNS::RR::PTR obj;
     CODE:
         RETVAL = randomize_capitalization(D_STRING(obj,0));
     OUTPUT:
@@ -2219,11 +2219,11 @@ rr_ptr_ptrdname(obj)
         free(RETVAL);
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::CNAME            PREFIX=rr_cname_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::CNAME            PREFIX=rr_cname_
 
 char *
 rr_cname_cname(obj)
-    Net::LDNS::RR::CNAME obj;
+    Zonemaster::LDNS::RR::CNAME obj;
     CODE:
         RETVAL = randomize_capitalization(D_STRING(obj,0));
     OUTPUT:
@@ -2232,11 +2232,11 @@ rr_cname_cname(obj)
         free(RETVAL);
 
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::TXT              PREFIX=rr_txt_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::TXT              PREFIX=rr_txt_
 
 char *
 rr_txt_txtdata(obj)
-    Net::LDNS::RR::TXT obj;
+    Zonemaster::LDNS::RR::TXT obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -2244,11 +2244,11 @@ rr_txt_txtdata(obj)
     CLEANUP:
         free(RETVAL);
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SPF              PREFIX=rr_spf_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::SPF              PREFIX=rr_spf_
 
 char *
 rr_spf_spfdata(obj)
-    Net::LDNS::RR::SPF obj;
+    Zonemaster::LDNS::RR::SPF obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -2256,11 +2256,11 @@ rr_spf_spfdata(obj)
     CLEANUP:
         free(RETVAL);
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::KEY           PREFIX=rr_key_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::KEY           PREFIX=rr_key_
 
 U16
 rr_key_flags(obj)
-    Net::LDNS::RR::KEY obj;
+    Zonemaster::LDNS::RR::KEY obj;
     CODE:
         RETVAL = D_U16(obj,0);
     OUTPUT:
@@ -2268,7 +2268,7 @@ rr_key_flags(obj)
 
 U8
 rr_key_protocol(obj)
-    Net::LDNS::RR::KEY obj;
+    Zonemaster::LDNS::RR::KEY obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -2276,7 +2276,7 @@ rr_key_protocol(obj)
 
 U8
 rr_key_algorithm(obj)
-    Net::LDNS::RR::KEY obj;
+    Zonemaster::LDNS::RR::KEY obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -2284,7 +2284,7 @@ rr_key_algorithm(obj)
 
 SV *
 rr_key_keydata(obj)
-    Net::LDNS::RR::KEY obj;
+    Zonemaster::LDNS::RR::KEY obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,3);
@@ -2293,11 +2293,11 @@ rr_key_keydata(obj)
     OUTPUT:
         RETVAL
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::SIG            PREFIX=rr_sig_
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::SIG            PREFIX=rr_sig_
 
 char *
 rr_sig_typecovered(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_STRING(obj,0);
     OUTPUT:
@@ -2307,7 +2307,7 @@ rr_sig_typecovered(obj)
 
 U8
 rr_sig_algorithm(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_U8(obj,1);
     OUTPUT:
@@ -2315,7 +2315,7 @@ rr_sig_algorithm(obj)
 
 U8
 rr_sig_labels(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_U8(obj,2);
     OUTPUT:
@@ -2323,7 +2323,7 @@ rr_sig_labels(obj)
 
 U32
 rr_sig_origttl(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_U32(obj,3);
     OUTPUT:
@@ -2331,7 +2331,7 @@ rr_sig_origttl(obj)
 
 U32
 rr_sig_expiration(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_U32(obj,4);
     OUTPUT:
@@ -2339,7 +2339,7 @@ rr_sig_expiration(obj)
 
 U32
 rr_sig_inception(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_U32(obj,5);
     OUTPUT:
@@ -2347,7 +2347,7 @@ rr_sig_inception(obj)
 
 U16
 rr_sig_keytag(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_U16(obj,6);
     OUTPUT:
@@ -2355,7 +2355,7 @@ rr_sig_keytag(obj)
 
 char *
 rr_sig_signer(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
         RETVAL = D_STRING(obj,7);
     OUTPUT:
@@ -2365,7 +2365,7 @@ rr_sig_signer(obj)
 
 SV *
 rr_sig_signature(obj)
-    Net::LDNS::RR::SIG obj;
+    Zonemaster::LDNS::RR::SIG obj;
     CODE:
     {
         ldns_rdf *rdf = ldns_rr_rdf(obj,8);
@@ -2373,4 +2373,3 @@ rr_sig_signature(obj)
     }
     OUTPUT:
         RETVAL
-

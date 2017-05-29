@@ -2,26 +2,26 @@ use Test::More;
 use Devel::Peek;
 use version;
 
-BEGIN { use_ok( 'Net::LDNS' ) }
+BEGIN { use_ok( 'Zonemaster::LDNS' ) }
 
-my $lib_v = version->parse(Net::LDNS::lib_version());
+my $lib_v = version->parse(Zonemaster::LDNS::lib_version());
 ok( $lib_v >= v1.6.16, 'ldns version at least 1.6.16' );
 
 SKIP: {
     skip 'no network', 59 if $ENV{TEST_NO_NETWORK};
 
-    my $s = Net::LDNS->new( '8.8.8.8' );
-    isa_ok( $s, 'Net::LDNS' );
+    my $s = Zonemaster::LDNS->new( '8.8.8.8' );
+    isa_ok( $s, 'Zonemaster::LDNS' );
     my $p = $s->query( 'nic.se', 'MX' );
-    isa_ok( $p, 'Net::LDNS::Packet' );
+    isa_ok( $p, 'Zonemaster::LDNS::Packet' );
     is( $p->rcode, 'NOERROR', 'expected rcode' );
 
     my $p2 = $s->query( 'iis.se', 'NS', 'IN' );
-    isa_ok( $p2, 'Net::LDNS::Packet' );
+    isa_ok( $p2, 'Zonemaster::LDNS::Packet' );
     is( $p2->rcode, 'NOERROR' );
     is( $p2->opcode, 'QUERY', 'expected opcode' );
-    my $pround = Net::LDNS::Packet->new_from_wireformat( $p2->wireformat );
-    isa_ok( $pround, 'Net::LDNS::Packet' );
+    my $pround = Zonemaster::LDNS::Packet->new_from_wireformat( $p2->wireformat );
+    isa_ok( $pround, 'Zonemaster::LDNS::Packet' );
     is( $pround->opcode, $p2->opcode, 'roundtrip opcode OK' );
     is( $pround->rcode,  $p2->rcode,  'roundtrip rcode OK' );
 
@@ -59,7 +59,7 @@ SKIP: {
     is( scalar( @answer ), 3, 'expected number of NS records in answer' );
     my %known_ns = map { $_ => 1 } qw[ns.nic.se. i.ns.se. ns3.nic.se.];
     foreach my $rr ( @answer ) {
-        isa_ok( $rr, 'Net::LDNS::RR::NS' );
+        isa_ok( $rr, 'Zonemaster::LDNS::RR::NS' );
         is( lc($rr->owner), 'iis.se.', 'expected owner name' );
         ok( $rr->ttl > 0, 'positive TTL (' . $rr->ttl . ')' );
         is( $rr->type,  'NS', 'type is NS' );
@@ -73,7 +73,7 @@ SKIP: {
         ok( $known_mx{ lc($rr->exchange) }, 'known MX exchange (' . $rr->exchange . ')' );
     }
 
-    my $lroot = Net::LDNS->new( '199.7.83.42' );
+    my $lroot = Zonemaster::LDNS->new( '199.7.83.42' );
     my $se = $lroot->query( 'se', 'NS' );
 
     is( scalar( $se->question ),   1,  'one question' );
@@ -83,10 +83,10 @@ SKIP: {
     cmp_ok( $add, '<=', 20, 'at most 20 additional' );
     cmp_ok( $add, '>=', 8, 'at least 8 additional' );
 
-    my $rr = Net::LDNS::RR->new_from_string(
+    my $rr = Zonemaster::LDNS::RR->new_from_string(
         'se. 172800	IN	SOA	catcher-in-the-rye.nic.se. registry-default.nic.se. 2013111305 1800 1800 864000 7200' );
     my $rr2 =
-      Net::LDNS::RR->new( 'se.			172800	IN	TXT	"SE zone update: 2013-11-13 15:08:28 +0000 (EPOCH 1384355308) (auto)"' );
+      Zonemaster::LDNS::RR->new( 'se.			172800	IN	TXT	"SE zone update: 2013-11-13 15:08:28 +0000 (EPOCH 1384355308) (auto)"' );
     ok( $se->unique_push( 'answer', $rr ), 'unique_push returns ok' );
     is( $se->answer, 1, 'one record in answer section' );
     ok( !$se->unique_push( 'answer', $rr ), 'unique_push returns false' );
@@ -95,8 +95,8 @@ SKIP: {
     is( $se->answer, 2, 'two records in answer section' );
 }
 
-my $made = Net::LDNS::Packet->new( 'foo.com', 'SOA', 'IN' );
-isa_ok( $made, 'Net::LDNS::Packet' );
+my $made = Zonemaster::LDNS::Packet->new( 'foo.com', 'SOA', 'IN' );
+isa_ok( $made, 'Zonemaster::LDNS::Packet' );
 
 foreach my $flag (qw[do qr tc aa rd cd ra ad]) {
     ok(!$made->$flag(), uc($flag).' not set');

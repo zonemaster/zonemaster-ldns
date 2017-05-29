@@ -8,7 +8,7 @@ If you want a module that specifically aims to be a complete and transparent int
 
 API
 ===
-This module started as an alternative to Net::DNS. Thus, the interface is similar but not identical. The main difference at the moment is that the expected entrypoint to the system is through Net::LDNS directly rather than a submodule (like Net::DNS::Resolver). It's also not possible to set the flags in the resolver object at creation, although that may change.
+This module started as an alternative to Net::DNS. Thus, the interface is similar but not identical. The main difference at the moment is that the expected entrypoint to the system is through Zonemaster::LDNS directly rather than a submodule (like Net::DNS::Resolver). It's also not possible to set the flags in the resolver object at creation, although that may change.
 
 The API should at the moment be considered slightly volatile. We have other code written to the current interface, so it's unlikely that we'll want to make any drastic changes, but at least until we start calling it version 1.0 it's a good idea to check for changes before upgrading.
 

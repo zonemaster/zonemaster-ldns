@@ -4,7 +4,7 @@ use Test::Fatal;
 use strict;
 use warnings;
 
-BEGIN { use_ok("Net::LDNS" => qw(load_zonefile))}
+BEGIN { use_ok("Zonemaster::LDNS" => qw(load_zonefile))}
 
 my @rrs = load_zonefile("t/example.org");
 is(scalar(@rrs), 16, 'All records loaded');

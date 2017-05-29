@@ -31,10 +31,11 @@ cc_libs( '-L' . $libdir ) if $libdir;
 
 cc_include_paths( 'include' );
 
-name 'Net-LDNS';
-version_from 'lib/Net/LDNS.pm';
+name 'Zonemaster-LDNS';
+version_from 'lib/Zonemaster/LDNS.pm';
 license 'bsd';
 author 'Calle Dybedahl <calle@init.se>';
+author 'Mattias Päivärinta <mattias.paivarinta@iis.se>';
 abstract 'Perl wrapper for the ldns DNS library.';
 perl_version '5.010001';
 

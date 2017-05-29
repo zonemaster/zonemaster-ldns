@@ -1,4 +1,4 @@
-Revision history for Net::LDNS
+Revision history for Zonemaster::LDNS
 
 0.75 2015-04-07
  - Add method to get/set source IP address on resolvers.
