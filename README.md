@@ -4,7 +4,9 @@ This module aims to provide an alternative to the Net::DNS module, based the ldn
 
 This module is written as part of the Zonemaster project (http://github.com/dotse/zonemaster), and therefore primarily exposes the functionality needed for that. Since Zonemaster is a diagnostic tool, that means the functions most used are those for looking things up and inspecting them.
 
-If you want a module that specifically aims to be a complete and transparent interface to ldns, DNS::LDNS is a better fit than this module. 
+If you want a module that specifically aims to be a complete and transparent interface to ldns, DNS::LDNS is a better fit than this module.
+
+Initially this module was named Net::LDNS.
 
 API
 ===
