@@ -6,7 +6,7 @@ BEGIN { use_ok( 'Net::LDNS' ) }
 SKIP: {
     skip 'no network', 3 if $ENV{TEST_NO_NETWORK};
 
-    my $res = Net::LDNS->new( '46.21.100.115' );
+    my $res = Net::LDNS->new( '46.21.106.227' );
     my $res2 = Net::LDNS->new( '192.36.144.107' );
 
     my $counter = 0;
