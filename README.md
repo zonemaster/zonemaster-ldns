@@ -23,5 +23,3 @@ Installation
 Installation uses the normal `perl Makefile.PL && make && make test && make install` sequence. This assumes that OpenSSL can be found in one of the places where the C compiler looks by default (if it's somewhere else, try using the `--prefix` flag when running `Makefile.PL`). `make test` assumes that it can send queries to the outside world.
 
 There is a small part in the code that may not be compatible with non-Unix operating systems, in that it assumes that the file /dev/null exists. If you try using this on Windows, VMS, z/OS or something else non-Unix, I'd love to hear from you so we can sort that bit out.
-
-/Calle Dybedahl <calle@init.se>, 12 February 2015
