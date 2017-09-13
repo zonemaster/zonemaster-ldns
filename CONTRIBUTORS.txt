@@ -1,0 +1,6 @@
+Calle Dybedahl <calle@init.se>
+Mattias Päivärinta <mattias.paivarinta@iis.se>
+Wieger Opmeer <opmeer@strato-rz.de>
+Calle Dybedahl <github@cyberpomo.com>
+Jerry Lundström <lundstrom.jerry@gmail.com>
+Patrik Wallström <pawal@blipp.com>

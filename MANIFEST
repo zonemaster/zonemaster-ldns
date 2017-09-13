@@ -1,4 +1,6 @@
+.travis.yml
 Changes
+CONTRIBUTORS.txt
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -128,9 +130,9 @@ ppport.h
 README.md
 src/assist.c
 src/LDNS.xs
+src/ldns/buffer.c
 src/ldns/compat/b64_ntop.c
 src/ldns/compat/b64_pton.c
-src/ldns/buffer.c
 src/ldns/compat/strlcpy.c
 src/ldns/dane.c
 src/ldns/dname.c

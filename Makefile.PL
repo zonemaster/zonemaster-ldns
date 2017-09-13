@@ -94,6 +94,13 @@ if ( $randomize ) {
     print( ( "=" x 65 ) . "\n" );
 }
 
+sub MY::postamble {
+    return <<'TARGET';
+CONTRIBUTORS.txt:
+	git shortlog -sne | cut -b8- | tee CONTRIBUTORS.txt
+TARGET
+}
+
 WriteAll;
 
 sub check_ecdsa {
