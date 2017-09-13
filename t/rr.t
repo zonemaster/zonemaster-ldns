@@ -37,7 +37,7 @@ subtest 'SOA' => sub {
             is( lc($rr->mname), 'ns.nic.se.' );
             is( lc($rr->rname), 'hostmaster.iis.se.' );
             ok( $rr->serial >= 1381471502, 'serial' );
-            is( $rr->refresh, 10800,   'refresh' );
+            is( $rr->refresh, 14400,   'refresh' );
             is( $rr->retry,   3600,    'retry' );
             is( $rr->expire,  1814400, 'expire' );
             is( $rr->minimum, 14400,   'minimum' );
