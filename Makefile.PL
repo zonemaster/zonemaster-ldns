@@ -97,7 +97,12 @@ if ( $randomize ) {
 sub MY::postamble {
     return <<'TARGET';
 CONTRIBUTORS.txt:
-	git shortlog -sne | cut -b8- | tee CONTRIBUTORS.txt
+	@( \
+	echo "This module is based on the ldns library from NLnet Labs <https://www.nlnetlabs.nl/projects/ldns/>" ; \
+    echo ; \
+	echo "Contributors to this module:" ; \
+	git shortlog -sne | cut -b8- \
+	) >| CONTRIBUTORS.txt
 TARGET
 }
 

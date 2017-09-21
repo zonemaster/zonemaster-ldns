@@ -1,3 +1,6 @@
+This module is based on the ldns library from NLnet Labs <https://www.nlnetlabs.nl/projects/ldns/>
+
+Contributors to this module:
 Calle Dybedahl <calle@init.se>
 Mattias Päivärinta <mattias.paivarinta@iis.se>
 Wieger Opmeer <opmeer@strato-rz.de>
