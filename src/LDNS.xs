@@ -937,15 +937,15 @@ packet_size(obj)
     OUTPUT:
         RETVAL
 
-double
+U32
 packet_querytime(obj,...)
     Net::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
             SvGETMAGIC(ST(1));
-			ldns_pkt_set_fquerytime(obj, SvNV(ST(1)));
+			ldns_pkt_set_querytime(obj, (U32)SvIV(ST(1)));
 		}
-        RETVAL = ldns_pkt_fquerytime(obj);
+        RETVAL = ldns_pkt_querytime(obj);
     OUTPUT:
         RETVAL
 

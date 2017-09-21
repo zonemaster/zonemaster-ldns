@@ -187,12 +187,6 @@ ldns_pkt_size(const ldns_pkt *packet)
 uint32_t 
 ldns_pkt_querytime(const ldns_pkt *packet)
 {
-	return (uint32_t) packet->_querytime * 1000;
-}
-
-double
-ldns_pkt_fquerytime(const ldns_pkt *packet)
-{
 	return packet->_querytime;
 }
 
@@ -577,12 +571,6 @@ ldns_pkt_set_arcount(ldns_pkt *packet, uint16_t arcount)
 void
 ldns_pkt_set_querytime(ldns_pkt *packet, uint32_t time) 
 {
-	packet->_querytime = (time / 1000.0);
-}
-
-void
-ldns_pkt_set_fquerytime(ldns_pkt *packet, double time) 
-{
 	packet->_querytime = time;
 }
 
@@ -780,7 +768,7 @@ ldns_pkt_new(void)
 	ldns_pkt_set_rcode(packet, 0);
 	ldns_pkt_set_id(packet, 0); 
 	ldns_pkt_set_size(packet, 0);
-	ldns_pkt_set_fquerytime(packet, 0.0);
+	ldns_pkt_set_querytime(packet, 0);
 	memset(&packet->timestamp, 0, sizeof(packet->timestamp));
 	ldns_pkt_set_answerfrom(packet, NULL);
 	ldns_pkt_set_section_count(packet, LDNS_SECTION_QUESTION, 0);
@@ -1144,7 +1132,7 @@ ldns_pkt_clone(const ldns_pkt *pkt)
 		ldns_pkt_set_answerfrom(new_pkt,
 			ldns_rdf_clone(ldns_pkt_answerfrom(pkt)));
 	ldns_pkt_set_timestamp(new_pkt, ldns_pkt_timestamp(pkt));
-	ldns_pkt_set_fquerytime(new_pkt, ldns_pkt_fquerytime(pkt));
+	ldns_pkt_set_querytime(new_pkt, ldns_pkt_querytime(pkt));
 	ldns_pkt_set_size(new_pkt, ldns_pkt_size(pkt));
 	ldns_pkt_set_tsig(new_pkt, ldns_rr_clone(ldns_pkt_tsig(pkt)));
 	
