@@ -1,5 +1,7 @@
 #include <LDNS.h>
 
+#define RR_CLASSNAME_MAX_LEN 34
+
 #ifdef USE_ITHREADS
 #define RESOLVER_HASH_NAME "Zonemaster::LDNS::__resolvers__"
 #define RR_HASH_NAME "Zonemaster::LDNS::__rrs__"
@@ -202,11 +204,11 @@ randomize_capitalization(char *in)
 SV *
 rr2sv(ldns_rr *rr)
 {
-    char rrclass[30];
+    char rrclass[RR_CLASSNAME_MAX_LEN];
     char *type;
 
     type = ldns_rr_type2str(ldns_rr_get_type(rr));
-    snprintf(rrclass, 30, "Zonemaster::LDNS::RR::%s", type);
+    snprintf(rrclass, RR_CLASSNAME_MAX_LEN, "Zonemaster::LDNS::RR::%s", type);
 
     SV* rr_sv = newSV(0);
     if (strncmp(type, "TYPE", 4)==0)
