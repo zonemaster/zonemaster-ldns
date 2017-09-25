@@ -937,15 +937,15 @@ packet_size(obj)
     OUTPUT:
         RETVAL
 
-double
+U32
 packet_querytime(obj,...)
     Net::LDNS::Packet obj;
     CODE:
 		if ( items > 1 ) {
             SvGETMAGIC(ST(1));
-			ldns_pkt_set_fquerytime(obj, SvNV(ST(1)));
+			ldns_pkt_set_querytime(obj, (U32)SvIV(ST(1)));
 		}
-        RETVAL = ldns_pkt_fquerytime(obj);
+        RETVAL = ldns_pkt_querytime(obj);
     OUTPUT:
         RETVAL
 
@@ -1108,25 +1108,6 @@ packet_question(obj)
             mXPUSHs(rr2sv(ldns_rr_clone(ldns_rr_list_rr(rrs,i))));
         }
     }
-
-SV *
-packet_opt_rr(obj)
-    Net::LDNS::Packet obj;
-    CODE:
-    {
-        ldns_rr *opt = ldns_pkt_opt_rr(obj);
-
-        if(opt != NULL)
-        {
-            RETVAL = rr2sv(ldns_rr_clone(opt));
-        }
-        else
-        {
-            RETVAL = &PL_sv_undef;
-        }
-    }
-    OUTPUT:
-        RETVAL
 
 bool
 packet_unique_push(obj,section,rr)
@@ -2393,50 +2374,3 @@ rr_sig_signature(obj)
     OUTPUT:
         RETVAL
 
-MODULE = Net::LDNS        PACKAGE = Net::LDNS::RR::OPT            PREFIX=rr_opt_
-
-U16
-rr_opt_udp_size(obj)
-    Net::LDNS::RR::OPT obj;
-    CODE:
-    {
-        RETVAL = (U16)ldns_rr_get_class(obj);
-    }
-    OUTPUT:
-        RETVAL
-
-U8
-rr_opt_extended_rcode(obj)
-    Net::LDNS::RR::OPT obj;
-    CODE:
-    {
-        U8 data[4];
-        ldns_write_uint32(data, ldns_rr_ttl(obj));
-        RETVAL = data[0];
-    }
-    OUTPUT:
-        RETVAL
-
-U8
-rr_opt_edns_version(obj)
-    Net::LDNS::RR::OPT obj;
-    CODE:
-    {
-        U8 data[4];
-        ldns_write_uint32(data, ldns_rr_ttl(obj));
-        RETVAL = data[1];
-    }
-    OUTPUT:
-        RETVAL
-
-U16
-rr_opt_edns_z(obj)
-    Net::LDNS::RR::OPT obj;
-    CODE:
-    {
-        U8 data[4];
-        ldns_write_uint32(data, ldns_rr_ttl(obj));
-        RETVAL = ldns_read_uint16(&data[2]);
-    }
-    OUTPUT:
-        RETVAL

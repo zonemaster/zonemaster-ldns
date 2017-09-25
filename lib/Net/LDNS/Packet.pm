@@ -129,7 +129,7 @@ thus rather pointless until such time as EDNS1 is defined.
 =item querytime([$value])
 
 Returns the time the query this packet is the answer to took to execute, in
-(fractional) seconds. If given a value, sets the querytime to that value.
+milliseconds. If given a value, sets the querytime to that value.
 
 =item answerfrom($ipaddr)
 
@@ -169,9 +169,5 @@ Returns a Perl string holding the packet in wire format.
 =item type()
 
 Returns the ldns library's guess as to the content of the packet. One of the strings C<question>, C<referral>, C<answer>, C<nxdomain>, C<nodata> or C<unknown>.
-
-=item opt_rr()
-
-Return an L<Net::LDNS::RR::OPT> object for the OPT pseudo-RR included with the packet, if there was one. If there wasn't, returns C<undef>.
 
 =back

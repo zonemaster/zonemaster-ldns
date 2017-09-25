@@ -76,7 +76,6 @@ typedef ldns_rr *Net__LDNS__RR__NSEC3;
 typedef ldns_rr *Net__LDNS__RR__NSEC3PARAM;
 typedef ldns_rr *Net__LDNS__RR__NULL;
 typedef ldns_rr *Net__LDNS__RR__NXT;
-typedef ldns_rr *Net__LDNS__RR__OPT;
 typedef ldns_rr *Net__LDNS__RR__PTR;
 typedef ldns_rr *Net__LDNS__RR__PX;
 typedef ldns_rr *Net__LDNS__RR__RKEY;

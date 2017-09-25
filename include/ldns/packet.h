@@ -240,7 +240,7 @@ struct ldns_struct_pkt
         /** Timestamp of the time the packet was sent or created */
 	struct timeval timestamp;
 	/** The duration of the query this packet is an answer to */
-        double _querytime;
+	uint32_t _querytime;
 	/** The size of the wire format of the packet in octets */
 	size_t _size;
 	/** Optional tsig rr */
@@ -265,8 +265,6 @@ struct ldns_struct_pkt
 	ldns_rr_list	*_authority;
 	/**  Additional section */
 	ldns_rr_list	*_additional;
-    /** EDNS0 OPT RR */
-    ldns_rr *_opt_rr;
 };
 typedef struct ldns_struct_pkt ldns_pkt;
 
@@ -400,20 +398,12 @@ ldns_rdf *ldns_pkt_answerfrom(const ldns_pkt *p);
  * \return the timestamp
  */
 struct timeval ldns_pkt_timestamp(const ldns_pkt *p);
-
 /**
  * Return the packet's querytime
  * \param[in] p the packet
  * \return the querytime
  */
 uint32_t ldns_pkt_querytime(const ldns_pkt *p);
-
-/**
- * Return the packet's querytime
- * \param[in] p the packet
- * \return the querytime
- */
-double ldns_pkt_fquerytime(const ldns_pkt *p);
 
 /**
  * Return the packet's size in bytes
@@ -439,13 +429,6 @@ uint16_t ldns_pkt_section_count(const ldns_pkt *p, ldns_pkt_section s);
  * \return the tsig rr
  */
 ldns_rr *ldns_pkt_tsig(const ldns_pkt *p);
-
-/**
- * Return the packet's OPT rr
- * \param[in] p the packet
- * \return the tsig rr
- */
-ldns_rr *ldns_pkt_opt_rr(const ldns_pkt *p);
 
 /**
  * Return the packet's question section
@@ -638,21 +621,12 @@ void ldns_pkt_set_arcount(ldns_pkt *p, uint16_t c);
  * \param[in] r the address
  */
 void ldns_pkt_set_answerfrom(ldns_pkt *p, ldns_rdf *r);
-
 /**
  * Set the packet's query time
  * \param[in] p the packet
  * \param[in] t the querytime in msec
  */
 void ldns_pkt_set_querytime(ldns_pkt *p, uint32_t t);
-
-/**
- * Set the packet's query time
- * \param[in] p the packet
- * \param[in] t the querytime in msec
- */
-void ldns_pkt_set_fquerytime(ldns_pkt *p, double t);
-
 /**
  * Set the packet's size
  * \param[in] p the packet
@@ -679,13 +653,6 @@ void ldns_pkt_set_section_count(ldns_pkt *p, ldns_pkt_section s, uint16_t x);
  * \param[in] t the tsig rr
  */
 void ldns_pkt_set_tsig(ldns_pkt *p, ldns_rr *t);
-
-/**
- * Set the packet's OPT rr
- * \param[in] p the packet
- * \param[in] t the tsig rr
- */
-void ldns_pkt_set_opt_rr(ldns_pkt *p, ldns_rr *rr);
 
 /**
  * looks inside the packet to determine
