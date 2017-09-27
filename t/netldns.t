@@ -80,7 +80,8 @@ SKIP: {
     is( scalar( $se->answer ),     0,  'zero answers' );
     is( scalar( $se->authority ), 10,  'nine authority' );
     my $add = scalar( $se->additional );
-    ok( $add == 16 || $add == 15, 'sixteen additional' );
+    cmp_ok( $add, '<=', 20, 'at most 20 additional' );
+    cmp_ok( $add, '>=', 8, 'at least 8 additional' );
 
     my $rr = Net::LDNS::RR->new_from_string(
         'se. 172800	IN	SOA	catcher-in-the-rye.nic.se. registry-default.nic.se. 2013111305 1800 1800 864000 7200' );
