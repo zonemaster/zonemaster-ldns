@@ -35,7 +35,7 @@ SKIP: {
     ok( !$p2->ad(),    'AD bit not set' );
     ok( !$p2->do(),    'DO bit not set' );
 
-    ok( $p2->querytime > 0 );
+    cmp_ok( $p2->querytime, '>=', 0);
     is( $p2->answerfrom, '8.8.8.8', 'expected answerfrom' );
     $p2->answerfrom( '1.2.3.4' );
     is( $p2->answerfrom, '1.2.3.4', 'setting answerfrom works' );
