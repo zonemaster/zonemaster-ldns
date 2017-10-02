@@ -31,10 +31,11 @@ cc_libs( '-L' . $libdir ) if $libdir;
 
 cc_include_paths( 'include' );
 
-name 'Net-LDNS';
-version_from 'lib/Net/LDNS.pm';
+name 'Zonemaster-LDNS';
+version_from 'lib/Zonemaster/LDNS.pm';
 license 'bsd';
 author 'Calle Dybedahl <calle@init.se>';
+author 'Mattias Päivärinta <mattias.paivarinta@iis.se>';
 abstract 'Perl wrapper for the ldns DNS library.';
 perl_version '5.010001';
 
@@ -91,6 +92,18 @@ if ( $randomize ) {
     print( ( "=" x 65 ) . "\n" );
     print "Compiling with randomzied capitalization.\n";
     print( ( "=" x 65 ) . "\n" );
+}
+
+sub MY::postamble {
+    return <<'TARGET';
+CONTRIBUTORS.txt:
+	@( \
+	echo "This module is based on the ldns library from NLnet Labs <https://www.nlnetlabs.nl/projects/ldns/>" ; \
+    echo ; \
+	echo "Contributors to this module:" ; \
+	git shortlog -sne | cut -b8- \
+	) >| CONTRIBUTORS.txt
+TARGET
 }
 
 WriteAll;

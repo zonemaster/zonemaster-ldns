@@ -4,11 +4,13 @@ This module aims to provide an alternative to the Net::DNS module, based the ldn
 
 This module is written as part of the Zonemaster project (http://github.com/dotse/zonemaster), and therefore primarily exposes the functionality needed for that. Since Zonemaster is a diagnostic tool, that means the functions most used are those for looking things up and inspecting them.
 
-If you want a module that specifically aims to be a complete and transparent interface to ldns, DNS::LDNS is a better fit than this module. 
+If you want a module that specifically aims to be a complete and transparent interface to ldns, DNS::LDNS is a better fit than this module.
+
+Initially this module was named Net::LDNS.
 
 API
 ===
-This module started as an alternative to Net::DNS. Thus, the interface is similar but not identical. The main difference at the moment is that the expected entrypoint to the system is through Net::LDNS directly rather than a submodule (like Net::DNS::Resolver). It's also not possible to set the flags in the resolver object at creation, although that may change.
+This module started as an alternative to Net::DNS. Thus, the interface is similar but not identical. The main difference at the moment is that the expected entrypoint to the system is through Zonemaster::LDNS directly rather than a submodule (like Net::DNS::Resolver). It's also not possible to set the flags in the resolver object at creation, although that may change.
 
 The API should at the moment be considered slightly volatile. We have other code written to the current interface, so it's unlikely that we'll want to make any drastic changes, but at least until we start calling it version 1.0 it's a good idea to check for changes before upgrading.
 
@@ -21,5 +23,3 @@ Installation
 Installation uses the normal `perl Makefile.PL && make && make test && make install` sequence. This assumes that OpenSSL can be found in one of the places where the C compiler looks by default (if it's somewhere else, try using the `--prefix` flag when running `Makefile.PL`). `make test` assumes that it can send queries to the outside world.
 
 There is a small part in the code that may not be compatible with non-Unix operating systems, in that it assumes that the file /dev/null exists. If you try using this on Windows, VMS, z/OS or something else non-Unix, I'd love to hear from you so we can sort that bit out.
-
-/Calle Dybedahl <calle@init.se>, 12 February 2015

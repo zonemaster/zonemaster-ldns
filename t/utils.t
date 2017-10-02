@@ -1,11 +1,11 @@
 use Test::More;
 
-BEGIN { use_ok( 'Net::LDNS' ) }
+BEGIN { use_ok( 'Zonemaster::LDNS' ) }
 
 SKIP: {
     skip 'no network', 5 if $ENV{TEST_NO_NETWORK};
 
-    my $res = new_ok( 'Net::LDNS', ['8.8.4.4'] );
+    my $res = new_ok( 'Zonemaster::LDNS', ['8.8.4.4'] );
 
     my @addrs = sort $res->name2addr( 'b.ns.se' );
     my $count = $res->name2addr( 'b.ns.se' );

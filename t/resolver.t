@@ -1,11 +1,11 @@
 use Test::More;
 
-use Net::LDNS;
+use Zonemaster::LDNS;
 
 SKIP: {
     skip 'no network', 20 if $ENV{TEST_NO_NETWORK};
 
-    my $r = Net::LDNS->new( '8.8.8.8' );
+    my $r = Zonemaster::LDNS->new( '8.8.8.8' );
 
     $r->recurse( 0 );
     ok( !$r->recurse, 'recursive off' );
@@ -61,7 +61,7 @@ subtest 'recursion' => sub {
     SKIP: {
         skip 'no network', 3 if $ENV{TEST_NO_NETWORK};
 
-        my $r = Net::LDNS->new( '8.8.4.4' );
+        my $r = Zonemaster::LDNS->new( '8.8.4.4' );
         my $p1 = $r->query( 'www.iis.se' );
         is( scalar($p1->answer), 1);
         $r->recurse(0);
@@ -75,21 +75,21 @@ subtest 'global' => sub {
     SKIP: {
         skip 'no network', 3 if $ENV{TEST_NO_NETWORK};
 
-        my $res = new_ok( 'Net::LDNS' );
+        my $res = new_ok( 'Zonemaster::LDNS' );
         my $p = eval { $res->query( 'www.iis.se' ) } ;
 
         if (not $p) {
             diag $@;
         }
         else {
-            isa_ok( $p, 'Net::LDNS::Packet' );
-            isa_ok( $_, 'Net::LDNS::RR' ) for $p->answer;
+            isa_ok( $p, 'Zonemaster::LDNS::Packet' );
+            isa_ok( $_, 'Zonemaster::LDNS::RR' ) for $p->answer;
         }
     }
 };
 
 # subtest 'sections' => sub {
-#     my $res = Net::LDNS->new( '194.146.106.22' );
+#     my $res = Zonemaster::LDNS->new( '194.146.106.22' );
 #     my $p   = eval { $res->query( 'www.iis.se' ) };
 #     plan skip_all => 'No response, cannot test' if not $p;
 #
@@ -100,7 +100,7 @@ subtest 'global' => sub {
 # };
 
 subtest 'broken' => sub {
-    my $b0rken = eval { Net::LDNS->new( 'gurksallad' ) };
+    my $b0rken = eval { Zonemaster::LDNS->new( 'gurksallad' ) };
     ok( !$b0rken );
     like( $@, qr/Failed to parse IP address: gurksallad/ );
 };

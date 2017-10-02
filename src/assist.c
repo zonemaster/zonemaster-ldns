@@ -1,10 +1,12 @@
 #include <LDNS.h>
 
+#define RR_CLASSNAME_MAX_LEN 34
+
 #ifdef USE_ITHREADS
-#define RESOLVER_HASH_NAME "Net::LDNS::__resolvers__"
-#define RR_HASH_NAME "Net::LDNS::__rrs__"
-#define RRLIST_HASH_NAME "Net::LDNS::__rrlists__"
-#define PACKET_HASH_NAME "Net::LDNS::__packets__"
+#define RESOLVER_HASH_NAME "Zonemaster::LDNS::__resolvers__"
+#define RR_HASH_NAME "Zonemaster::LDNS::__rrs__"
+#define RRLIST_HASH_NAME "Zonemaster::LDNS::__rrlists__"
+#define PACKET_HASH_NAME "Zonemaster::LDNS::__packets__"
 
 void
 net_ldns_forget()
@@ -202,16 +204,16 @@ randomize_capitalization(char *in)
 SV *
 rr2sv(ldns_rr *rr)
 {
-    char rrclass[30];
+    char rrclass[RR_CLASSNAME_MAX_LEN];
     char *type;
 
     type = ldns_rr_type2str(ldns_rr_get_type(rr));
-    snprintf(rrclass, 30, "Net::LDNS::RR::%s", type);
+    snprintf(rrclass, RR_CLASSNAME_MAX_LEN, "Zonemaster::LDNS::RR::%s", type);
 
     SV* rr_sv = newSV(0);
     if (strncmp(type, "TYPE", 4)==0)
     {
-        sv_setref_pv(rr_sv, "Net::LDNS::RR", rr);
+        sv_setref_pv(rr_sv, "Zonemaster::LDNS::RR", rr);
     }
     else
     {
