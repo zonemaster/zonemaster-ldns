@@ -1,7 +1,5 @@
 package Zonemaster::LDNS::Packet;
 
-use 5.10.1;
-
 use Zonemaster::LDNS;
 
 use MIME::Base64;

@@ -1,6 +1,6 @@
 package Zonemaster::LDNS;
 
-use 5.10.1;
+use 5.014;
 
 our $VERSION = '1.0.0';
 

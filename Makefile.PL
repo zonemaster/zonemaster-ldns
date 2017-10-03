@@ -33,11 +33,11 @@ cc_include_paths( 'include' );
 
 name 'Zonemaster-LDNS';
 version_from 'lib/Zonemaster/LDNS.pm';
+perl_version_from 'lib/Zonemaster/LDNS.pm';
 license 'bsd';
 author 'Calle Dybedahl <calle@init.se>';
 author 'Mattias Päivärinta <mattias.paivarinta@iis.se>';
 abstract 'Perl wrapper for the ldns DNS library.';
-perl_version '5.010001';
 
 configure_requires 'Devel::CheckLib';
 requires 'MIME::Base64';
