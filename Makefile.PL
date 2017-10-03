@@ -36,7 +36,7 @@ version_from 'lib/Zonemaster/LDNS.pm';
 perl_version_from 'lib/Zonemaster/LDNS.pm';
 license 'bsd';
 author 'Calle Dybedahl <calle@init.se>';
-author 'Mattias Päivärinta <mattias.paivarinta@iis.se>';
+author 'Mattias P <mattias.paivarinta@iis.se>';
 abstract 'Perl wrapper for the ldns DNS library.';
 
 configure_requires 'Devel::CheckLib';
