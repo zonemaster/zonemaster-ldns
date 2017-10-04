@@ -1,6 +1,6 @@
 Revision history for Zonemaster::LDNS
 
-1.0.0 2017-10-05
+1.0.0 2017-10-06
  - Switch to Semantic Versioning.
  - Rename module to Zonemaster::LDNS.
  - Fix test suite (for the time being).
