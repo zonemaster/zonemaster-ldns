@@ -1,5 +1,6 @@
-.travis.yml
-MANIFEST.SKIP
+\.o$
+^MANIFEST\.SKIP$
+^\.travis\.yml$
 
 #!start included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
 # Avoid version control files.
