@@ -1,4 +1,3 @@
-.travis.yml
 Changes
 CONTRIBUTORS.txt
 inc/Module/Install.pm
@@ -178,3 +177,4 @@ t/rrlist.t
 t/serialize.t
 t/threads.t
 t/utils.t
+t/wireformat.t
