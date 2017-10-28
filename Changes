@@ -3,6 +3,7 @@ Revision history for Zonemaster::LDNS
 1.0.1 2017-11-02
  - Fixed
    - Fixed licensing discrepancy (#20)
+   - Explicitly avoid distributing C file generated from XS
 
 1.0.0 2017-10-06
  - Switch to Semantic Versioning.

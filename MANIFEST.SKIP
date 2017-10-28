@@ -2,6 +2,9 @@
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
 
+# Avoid C files generated from XS
+^src/LDNS\.c$
+
 #!start included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
 # Avoid version control files.
 \bRCS\b
