@@ -104,7 +104,7 @@ subtest 'DNSKEY' => sub {
             ok( $rr->flags == 256 or $rr->flags == 257 );
             is( $rr->protocol,  3 );
             # Alg 8 will replace 5. Now (December 2017) both are used.
-            is( $rr->algorithm, 5 ) or is( $rr->algorithm, 8 );
+            ok( $rr->algorithm == 5 or $rr->algorithm == 8 );
         }
     }
 };
@@ -124,7 +124,7 @@ subtest 'RRSIG' => sub {
             if ( $rr->typecovered eq 'DNSKEY' ) {
                 # .SE KSK should not change very often. 59407 will replace 59747.
                 # Now (December 2017) both are used.
-                is( $rr->keytag, 59747 ) or is( $rr->keytag, 59407 );
+                ok( $rr->keytag == 59747 or $rr->keytag == 59407 );
             }
         }
     }
