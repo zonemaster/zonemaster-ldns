@@ -1,3 +1,6 @@
+env:
+- TEST_WITH_NETWORK=1
+
 language: perl
 perl:
     - "5.24"
