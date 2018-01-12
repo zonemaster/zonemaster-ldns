@@ -262,9 +262,9 @@ parse_escape(uint8_t *ch_p, const char** str_p)
 {
 	uint16_t val;
 
-	if ((*str_p)[0] && isdigit((*str_p)[0])  &&
-	    (*str_p)[1] && isdigit((*str_p)[1])  &&
-	    (*str_p)[2] && isdigit((*str_p)[2]))  {
+	if ((*str_p)[0] && isdigit((unsigned char)(*str_p)[0])  &&
+	    (*str_p)[1] && isdigit((unsigned char)(*str_p)[1])  &&
+	    (*str_p)[2] && isdigit((unsigned char)(*str_p)[2]))  {
 
 		val = (uint16_t)(((*str_p)[0] - '0') * 100 +
 				 ((*str_p)[1] - '0') *  10 +
@@ -277,7 +277,7 @@ parse_escape(uint8_t *ch_p, const char** str_p)
 		*str_p += 3;
 		return true;
 
-	} else if ((*str_p)[0] && !isdigit((*str_p)[0])) {
+	} else if ((*str_p)[0] && !isdigit((unsigned char)(*str_p)[0])) {
 
 		*ch_p = (uint8_t)*(*str_p)++;
 		return true;
@@ -782,20 +782,23 @@ static ldns_lookup_table ldns_tlsa_certificate_usages[] = {
 	{ LDNS_TLSA_USAGE_PKIX_EE		, "PKIX-EE"  },
 	{ LDNS_TLSA_USAGE_DANE_TA		, "DANE-TA"  },
 	{ LDNS_TLSA_USAGE_DANE_EE		, "DANE-EE"  },
-	{ LDNS_TLSA_USAGE_PRIVCERT		, "PrivCert" }
+	{ LDNS_TLSA_USAGE_PRIVCERT		, "PrivCert" },
+        { 0, NULL }
 };
 
 static ldns_lookup_table ldns_tlsa_selectors[] = {
 	{ LDNS_TLSA_SELECTOR_CERT		, "Cert" },
 	{ LDNS_TLSA_SELECTOR_SPKI		, "SPKI" },
-	{ LDNS_TLSA_SELECTOR_PRIVSEL		, "PrivSel" }
+	{ LDNS_TLSA_SELECTOR_PRIVSEL		, "PrivSel" },
+        { 0, NULL }
 };
 
 static ldns_lookup_table ldns_tlsa_matching_types[] = {
 	{ LDNS_TLSA_MATCHING_TYPE_FULL		, "Full"      },
 	{ LDNS_TLSA_MATCHING_TYPE_SHA2_256	, "SHA2-256"  },
 	{ LDNS_TLSA_MATCHING_TYPE_SHA2_512	, "SHA2-512"  },
-	{ LDNS_TLSA_MATCHING_TYPE_PRIVMATCH	, "PrivMatch" }
+	{ LDNS_TLSA_MATCHING_TYPE_PRIVMATCH	, "PrivMatch" },
+        { 0, NULL }
 };
 
 static ldns_status
@@ -866,7 +869,7 @@ loc_parse_cm(char* my_str, char** endstr, uint8_t* m, uint8_t* e)
 	/* read <digits>[.<digits>][mM] */
 	/* into mantissa exponent format for LOC type */
 	uint32_t meters = 0, cm = 0, val;
-	while (isblank(*my_str)) {
+	while (isblank((unsigned char)*my_str)) {
 		my_str++;
 	}
 	meters = (uint32_t)strtol(my_str, &my_str, 10);
@@ -971,7 +974,7 @@ north:
 	} else {
 		latitude = equator - latitude;
 	}
-	while (isblank(*my_str)) {
+	while (isblank((unsigned char)*my_str)) {
 		my_str++;
 	}
 
@@ -993,7 +996,7 @@ north:
 		return LDNS_STATUS_INVALID_STR;
 	}
 
-	while (isblank(*my_str)) {
+	while (isblank((unsigned char)*my_str)) {
 		my_str++;
 	}
 
@@ -1002,7 +1005,7 @@ north:
 	}
 
 east:
-	while (isblank(*my_str)) {
+	while (isblank((unsigned char)*my_str)) {
 		my_str++;
 	}
 
@@ -1451,7 +1454,7 @@ ldns_str2rdf_tag(ldns_rdf **rd, const char *str)
 		return LDNS_STATUS_INVALID_TAG;
 	}
 	for (ptr = str; *ptr; ptr++) {
-		if (! isalnum(*ptr)) {
+		if (! isalnum((unsigned char)*ptr)) {
 			return LDNS_STATUS_INVALID_TAG;
 		}
 	}
