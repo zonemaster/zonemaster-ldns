@@ -92,11 +92,13 @@ CONTRIBUTORS.txt:
 	git shortlog -sne | cut -b8- \
 	) >| CONTRIBUTORS.txt
 
-config ::
+config :: ldns/configure
+
+ldns/configure:
 	git submodule update --init
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
-	cd ldns ; ./configure --disable-dane-ta-usage
+	cd ldns ; ./configure CFLAGS=-fPIC --disable-dane
 TARGET
 }
 
