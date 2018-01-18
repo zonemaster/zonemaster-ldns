@@ -22,7 +22,7 @@ GetOptions(
 );
 
 if ( $prefix ) {
-    $headdir = catdir( $prefix, 'include' );
+    $headdir = catdir( $prefix, 'ldns' );
     $libdir  = catdir( $prefix, 'lib' );
 }
 
@@ -30,6 +30,7 @@ cc_include_paths( $headdir ) if $headdir;
 cc_libs( '-L' . $libdir ) if $libdir;
 
 cc_include_paths( 'include' );
+cc_include_paths( 'ldns' );
 
 name 'Zonemaster-LDNS';
 version_from 'lib/Zonemaster/LDNS.pm';
@@ -49,6 +50,7 @@ test_requires 'Test::Fatal';
 use_ppport 3.19;
 cc_libs 'crypto';
 cc_src_paths 'src';
+cc_libs( '-Lldns/lib' );
 
 my %assert_args = (
     lib      => 'crypto',
@@ -59,22 +61,6 @@ $assert_args{LIBS} = '-L' . $libdir  if $libdir;
 $assert_args{INC}  = '-I' . $headdir if $headdir;
 
 cc_assert_lib %assert_args;
-
-if (not check_ecdsa(%assert_args)) {
-    print "Your OpenSSL does not seem to support ECDSA.\n";
-    exit;
-}
-else {
-    print "ECDSA support detected.\n";
-}
-
-if (not check_gost(%assert_args)) {
-    print "Your OpenSSL does not seem to support GOST.\n";
-}
-else {
-    print "GOST support detected.\n";
-    cc_define '-DUSE_GOST';
-}
 
 if (
     check_lib(
@@ -105,54 +91,13 @@ CONTRIBUTORS.txt:
 	echo "Contributors to this module:" ; \
 	git shortlog -sne | cut -b8- \
 	) >| CONTRIBUTORS.txt
+
+config ::
+	git submodule update --init
+	cd ldns ; libtoolize -ci
+	cd ldns ; autoreconf -fi
+	cd ldns ; ./configure --disable-dane-ta-usage
 TARGET
 }
 
 WriteAll;
-
-sub check_ecdsa {
-    my %args = @_;
-
-    $args{header} = [ 'openssl/crypto.h', 'openssl/ecdsa.h' ];
-    $args{function} = q[if(ECDSA_SIG_new()) return 0; else return 1;];
-
-    return check_lib(%args);
-}
-
-sub check_gost {
-    my %args = @_;
-
-    $args{header} = [ 'openssl/crypto.h', 'openssl/ecdsa.h', 'openssl/engine.h' ];
-    $args{function} = <<'CODE';
-    const EVP_PKEY_ASN1_METHOD* meth;
-    ENGINE* e;
-
-    meth = EVP_PKEY_asn1_find_str(NULL, "gost2001", -1);
-    if(meth) {
-       return 0;
-    }
-
-    e = ENGINE_by_id("gost");
-    if(!e) {
-       ENGINE_load_builtin_engines();
-       ENGINE_load_dynamic();
-       e = ENGINE_by_id("gost");
-    }
-    if(!e) {
-       return 1;
-    }
-    if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-       return 1;
-    }
-
-    meth = EVP_PKEY_asn1_find_str(&e, "gost2001", -1);
-    if(!meth) {
-       return 1;
-    }
-
-    return 0;
-
-CODE
-
-    return check_lib(%args);
-}
