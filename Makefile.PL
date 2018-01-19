@@ -85,7 +85,7 @@ if ( $randomize ) {
 sub MY::postamble {
     return <<'TARGET';
 
-override LDFROM += ldns/.libs/libldns.a
+LDFROM += ldns/.libs/libldns.a
 
 config :: ldns/.libs/libldns.a
 
