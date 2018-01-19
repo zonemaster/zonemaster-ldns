@@ -90,12 +90,14 @@ override LDFROM += ldns/.libs/libldns.a
 config :: ldns/.libs/libldns.a
 
 ldns/.libs/libldns.a: ldns/configure
-	cd ldns ; make lib
+	cd ldns ;\
+	./configure CFLAGS=-fPIC --disable-ldns-config --disable-dane ;\
+	make lib
 
 ldns/configure:
+	git submodule update --init
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
-	cd ldns ; ./configure CFLAGS=-fPIC --disable-ldns-config --disable-dane
 
 CONTRIBUTORS.txt:
 	@( \

@@ -10,14 +10,13 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Module/Install/XSUtil.pm
 include/LDNS.h
-ldns/acx_nlnetlabs.m4
-ldns/ax_pkg_swig.m4
-ldns/ax_python_devel.m4
 ldns/buffer.c
 ldns/compat/b64_ntop.c
 ldns/compat/b64_pton.c
 ldns/compat/strlcpy.c
-ldns/configure.ac
+ldns/config.guess
+ldns/config.sub
+ldns/configure
 ldns/dane.c
 ldns/dname.c
 ldns/dnssec.c
@@ -29,9 +28,11 @@ ldns/error.c
 ldns/higher.c
 ldns/host2str.c
 ldns/host2wire.c
+ldns/install-sh
 ldns/keys.c
 ldns/ldns/buffer.h
 ldns/ldns/common.h.in
+ldns/ldns/config.h.in
 ldns/ldns/dane.h
 ldns/ldns/dname.h
 ldns/ldns/dnssec.h
@@ -63,8 +64,7 @@ ldns/ldns/util.h.in
 ldns/ldns/wire2host.h
 ldns/ldns/zone.h
 ldns/LICENSE
-ldns/m4/ax_config_feature.m4
-ldns/m4/ax_have_poll.m4
+ldns/ltmain.sh
 ldns/Makefile.in
 ldns/net.c
 ldns/packaging/ldns-config.in
@@ -164,7 +164,6 @@ lib/Zonemaster/LDNS/RR/WKS.pm
 lib/Zonemaster/LDNS/RR/X25.pm
 lib/Zonemaster/LDNS/RRList.pm
 LICENSE
-LICENSE-NLnet-Labs
 Makefile.PL
 MANIFEST			This list of files
 META.yml
@@ -188,4 +187,3 @@ t/serialize.t
 t/threads.t
 t/utils.t
 t/wireformat.t
-Zonemaster-LDNS-1.0.2.tar.gz
