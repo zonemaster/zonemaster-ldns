@@ -3,6 +3,10 @@
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
 
+# Avoid the dist tarball
+^Zonemaster-DNS-.*\.tar\.gz$
+
+# Avoid ldns files we don't need
 ^ldns/Changelog$
 ^ldns/README$
 ^ldns/README\.
@@ -61,7 +65,6 @@
 ^ldns/packaging/libldns\.pc$
 ^ldns/pcat/
 ^ldns/test/
-
 
 # Avoid C files generated from XS
 ^src/LDNS\.c$
