@@ -95,7 +95,7 @@ ldns/.libs/libldns.a: ldns/configure
 ldns/configure:
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
-	cd ldns ; ./configure CFLAGS=-fPIC --disable-dane
+	cd ldns ; ./configure CFLAGS=-fPIC --disable-ldns-config --disable-dane
 
 CONTRIBUTORS.txt:
 	@( \
