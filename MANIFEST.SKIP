@@ -1,6 +1,38 @@
 \.o$
+\.lo$
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
+
+^ldns/\.libs/
+^ldns/autom4te.cache/
+^ldns/contrib/
+^ldns/doc/
+^ldns/drill/
+^ldns/examples/
+^ldns/lua/
+^ldns/masterdont/
+^ldns/pcat/
+^ldns/test/
+^ldns/ldns/common\.h$
+^ldns/ldns/config\.h$
+^ldns/ldns/config\.h\.in$
+^ldns/ldns/net\.h$
+^ldns/ldns/util\.h$
+^ldns/aclocal\.m4$
+^ldns/Changelog$
+^ldns/configure$
+^ldns/README$
+^ldns/README\.
+^ldns/config\.guess$
+^ldns/config\.log$
+^ldns/config\.status$
+^ldns/config\.sub$
+^ldns/install-sh$
+^ldns/ldns/\.c-mode-rc.el$
+^ldns/libdns\.doxygen$
+^ldns/libdns\.vim$
+^ldns/libldns\.la$
+^ldns/linktest\.c$
 
 # Avoid C files generated from XS
 ^src/LDNS\.c$
@@ -14,6 +46,7 @@
 \B\.svn\b
 \B\.git\b
 \B\.gitignore\b
+\B\.gitmodules$
 \b_darcs\b
 \B\.cvsignore$
 
@@ -62,4 +95,3 @@
 # Avoid MYMETA files
 ^MYMETA\.
 #!end included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
-
