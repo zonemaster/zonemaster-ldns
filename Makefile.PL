@@ -93,7 +93,6 @@ ldns/.libs/libldns.a: ldns/configure
 	cd ldns ; make lib
 
 ldns/configure:
-	git submodule update --init
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
 	cd ldns ; ./configure CFLAGS=-fPIC --disable-dane
