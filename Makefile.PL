@@ -96,7 +96,7 @@ ldns/configure:
 	git submodule update --init
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
-	cd ldns ; ./configure CFLAGS=-fPIC --disable-dane
+	cd ldns ; ./configure CFLAGS=-fPIC
 
 CONTRIBUTORS.txt:
 	@( \
