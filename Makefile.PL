@@ -87,16 +87,16 @@ sub MY::postamble {
 
 override LDFROM += ldns/.libs/libldns.a
 
-config :: ldns/configure
+config :: ldns/.libs/libldns.a
+
+ldns/.libs/libldns.a: ldns/configure
+	cd ldns ; make lib
 
 ldns/configure:
 	git submodule update --init
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
 	cd ldns ; ./configure CFLAGS=-fPIC --disable-dane
-
-ldns/.libs/libldns.a:
-	cd ldns ; make lib
 
 CONTRIBUTORS.txt:
 	@( \
