@@ -12,7 +12,7 @@ If you want a module that specifically aims to be a complete and transparent int
 Initially this module was named Net::LDNS.
 
 
-## Features
+## Optional features
 
 When installing from source, you can choose to enable or disable a number
 of optional features using command line options to the `perl Makefile.PL`
@@ -35,6 +35,15 @@ although that should cover a lot of real-world use cases.
 > **Note:** The Zonemaster Engine test suite assumes this feature
 > is enabled.
 
+### Internal ldns
+
+Enabled by default.
+Disable with `--no-internal-ldns`.
+
+When enabled, an included version of ldns is statically linked into
+Zonemaster::LDNS.
+When disabled, libldns is dynamically linked just like other dependencies.
+
 ### Randomized capitalization
 
 Disabled by default.
@@ -47,23 +56,31 @@ Randomizes the capitalization of returned domain names.
 
 ## Dependencies
 
-This module depends on the `openssl` library and has an optional
-dependency on the `libidn` (with the [IDN](#idn) feature, enabled by
-default) library.
+Run-time dependencies:
+ * `openssl`
+ * `libidn` (if [IDN] is enabled)
+ * `libldns` (if [Internal ldns] is disabled)
+
+Compile-time dependencies (only when installing from source):
+ * `make`
+ * `Devel::CheckLib`
+ * `git` (if [Internal ldns] is enabled)
+ * `libtool` (if [Internal ldns] is enabled)
+ * `autoconf` (if [Internal ldns] is enabled)
+ * `automake` (if [Internal ldns] is enabled)
+
+Test-time dependencies:
+ * `Test::Fatal`
 
 
 ## Installation
 
+### Recommended installation
+
 The recommended way to install Zonemaster::LDNS is to install it from CPAN as a dependency to Zonemaster::Engine. If you follow the [installation instructions for Zonemaster::Engine](https://github.com/dotse/zonemaster-engine/blob/master/docs/Installation.md) you will get all the prerequisites for Zonemaster::LDNS before installing it from CPAN.
 
-To install Zonemaster LDNS from from sources, follow the instruction
-below.
+### Installation from source
 
-> **Note:** This procedure has additional compile-time dependencies on
-> `git`, `libtool`, `autoconf`, `automake`, `make` and `Devel::CheckLib`,
-> as well as a test-time dependency on `Test::Fatal`.
-
-Install this module with the following commands.
 Override the default set of features by appending `--FEATURE` and/or
 `--no-FEATURE` options to the `perl Makefile.PL` command.
 
@@ -103,3 +120,7 @@ TEST_WITH_NETWORK=1 make test
 ## Compatibility
 
 There is a small part in the code that may not be compatible with non-Unix operating systems, in that it assumes that the file /dev/null exists.
+
+
+[IDN]: #idn
+[Internal ldns]: #internal-ldns
