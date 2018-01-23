@@ -1,5 +1,5 @@
-#include "EXTERN.h"
-#include "perl.h"
+/* ldns/config.h.  Generated from config.h.in by configure.  */
+/* ldns/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* Define if building universal (internal helper macro) */
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
@@ -44,12 +44,35 @@
    don't. */
 #define HAVE_DECL_NID_SECP384R1 1
 
+/* Define to 1 if you have the declaration of `NID_X25519', and to 0 if you
+   don't. */
+/* #undef HAVE_DECL_NID_X25519 */
+
+/* Define to 1 if you have the declaration of `NID_X448', and to 0 if you
+   don't. */
+/* #undef HAVE_DECL_NID_X448 */
+
 /* Define to 1 if you have the declaration of `NID_X9_62_prime256v1', and to 0
    if you don't. */
 #define HAVE_DECL_NID_X9_62_PRIME256V1 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
+
+/* Define to 1 if you have the `DSA_get0_key' function. */
+/* #undef HAVE_DSA_GET0_KEY */
+
+/* Define to 1 if you have the `DSA_get0_pqg' function. */
+/* #undef HAVE_DSA_GET0_PQG */
+
+/* Define to 1 if you have the `DSA_SIG_get0' function. */
+/* #undef HAVE_DSA_SIG_GET0 */
+
+/* Define to 1 if you have the `DSA_SIG_set0' function. */
+/* #undef HAVE_DSA_SIG_SET0 */
+
+/* Define to 1 if you have the `ECDSA_SIG_get0' function. */
+/* #undef HAVE_ECDSA_SIG_GET0 */
 
 /* Define to 1 if you have the `endprotoent' function. */
 #define HAVE_ENDPROTOENT 1
@@ -60,8 +83,26 @@
 /* Define to 1 if you have the `ENGINE_load_cryptodev' function. */
 #define HAVE_ENGINE_LOAD_CRYPTODEV 1
 
+/* Define to 1 if you have the `EVP_dss1' function. */
+#define HAVE_EVP_DSS1 1
+
+/* Define to 1 if you have the `EVP_MD_CTX_new' function. */
+/* #undef HAVE_EVP_MD_CTX_NEW */
+
+/* Define to 1 if you have the `EVP_PKEY_base_id' function. */
+#define HAVE_EVP_PKEY_BASE_ID 1
+
+/* Define to 1 if you have the `EVP_PKEY_keygen' function. */
+#define HAVE_EVP_PKEY_KEYGEN 1
+
 /* Define to 1 if you have the `EVP_sha256' function. */
 #define HAVE_EVP_SHA256 1
+
+/* Define to 1 if you have the `EVP_sha384' function. */
+#define HAVE_EVP_SHA384 1
+
+/* Define to 1 if you have the `EVP_sha512' function. */
+#define HAVE_EVP_SHA512 1
 
 /* Define to 1 if you have the `fcntl' function. */
 #define HAVE_FCNTL 1
@@ -78,8 +119,8 @@
 /* Define to 1 if you have the `gmtime_r' function. */
 #define HAVE_GMTIME_R 1
 
-/* If you have HMAC_CTX_init */
-#define HAVE_HMAC_CTX_INIT 1
+/* If you have HMAC_Update */
+#define HAVE_HMAC_UPDATE 1
 
 /* Define to 1 if you have the `inet_aton' function. */
 #define HAVE_INET_ATON 1
@@ -104,6 +145,9 @@
 
 /* Define to 1 if you have the `pcap' library (-lpcap). */
 /* #undef HAVE_LIBPCAP */
+
+/* Define if we have LibreSSL */
+/* #undef HAVE_LIBRESSL */
 
 /* Define to 1 if you have the `localtime_r' function. */
 #define HAVE_LOCALTIME_R 1
@@ -166,6 +210,12 @@
 /* Define to 1 if you have the <pcap.h> header file. */
 /* #undef HAVE_PCAP_H */
 
+/* This platform supports poll(7). */
+#define HAVE_POLL 1
+
+/* If available, contains the Python version number currently in use. */
+/* #undef HAVE_PYTHON */
+
 /* Define to 1 if you have the `random' function. */
 #define HAVE_RANDOM 1
 
@@ -201,14 +251,13 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strlcpy' function. */
-#ifdef HAS_STRLCPY
-#define HAVE_STRLCPY 1
-#else
-#undef HAVE_STRLCPY
-#endif
+/* #undef HAVE_STRLCPY */
 
 /* Define to 1 if you have the `strtoul' function. */
 #define HAVE_STRTOUL 1
+
+/* Define if you have SWIG libraries and header files. */
+/* #undef HAVE_SWIG */
 
 /* Define to 1 if you have the <sys/mount.h> header file. */
 #define HAVE_SYS_MOUNT_H 1
@@ -261,7 +310,8 @@
 /* Is a CAPATH given at configure time */
 /* #undef LDNS_DANE_CA_PATH */
 
-/* Define to the sub-directory where libtool stores uninstalled libraries. */
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
 #define LT_OBJDIR ".libs/"
 
 /* Define to the address where bug reports for this package should be sent. */
@@ -271,7 +321,7 @@
 #define PACKAGE_NAME "ldns"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ldns 1.6.17"
+#define PACKAGE_STRING "ldns 1.7.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "libdns"
@@ -280,22 +330,22 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.6.17"
+#define PACKAGE_VERSION "1.7.0"
+
+/* Define this to enable RR type AVC. */
+/* #undef RRTYPE_AVC */
 
 /* Define this to enable RR type NINFO. */
 /* #undef RRTYPE_NINFO */
 
 /* Define this to enable RR type OPENPGPKEY. */
-/* #undef RRTYPE_OPENPGPKEY */
+#define RRTYPE_OPENPGPKEY /**/
 
 /* Define this to enable RR type RKEY. */
 /* #undef RRTYPE_RKEY */
 
 /* Define this to enable RR type TA. */
 /* #undef RRTYPE_TA */
-
-/* Define this to enable RR type URI. */
-/* #undef RRTYPE_URI */
 
 /* The size of `time_t', as computed by sizeof. */
 #define SIZEOF_TIME_T 8
@@ -312,11 +362,26 @@
 /* Define this to enable DANE support. */
 #define USE_DANE 1
 
+/* Define this to enable DANE-TA usage type support. */
+/* #undef USE_DANE_TA_USAGE */
+
+/* Define this to enable DANE verify support. */
+#define USE_DANE_VERIFY 1
+
+/* Define this to enable DSA support. */
+#define USE_DSA 1
+
 /* Define this to enable ECDSA support. */
 #define USE_ECDSA 1
 
+/* Define this to enable ED25519 support. */
+/* #undef USE_ED25519 */
+
+/* Define this to enable ED448 support. */
+/* #undef USE_ED448 */
+
 /* Define this to enable GOST support. */
-/* #define USE_GOST 1 */
+#define USE_GOST 1
 
 /* Define this to enable SHA256 and SHA512 support. */
 #define USE_SHA2 1
@@ -578,6 +643,15 @@ void *memmove(void *dest, const void *src, size_t n);
 #ifndef HAVE_STRLCPY
 size_t strlcpy(char *dst, const char *src, size_t siz);
 #endif
+
+#ifdef USE_WINSOCK
+#define SOCK_INVALID INVALID_SOCKET
+#define close_socket(_s) do { if (_s > SOCK_INVALID) {closesocket(_s); _s = SOCK_INVALID;} } while(0)
+#else
+#define SOCK_INVALID -1
+#define close_socket(_s) do { if (_s > SOCK_INVALID) {close(_s); _s = SOCK_INVALID;} } while(0)
+#endif
+
 #ifdef __cplusplus
 }
 #endif
