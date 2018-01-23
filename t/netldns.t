@@ -78,7 +78,9 @@ SKIP: {
 
     is( scalar( $se->question ),   1,  'one question' );
     is( scalar( $se->answer ),     0,  'zero answers' );
-    is( scalar( $se->authority ), 10,  'nine authority' );
+    my $authority = scalar $se->authority;
+    cmp_ok( $authority, '<=', 13, 'at most 13 NS (authority)' );
+    cmp_ok( $authority, '>=', 6, 'at least 6 NS (authority)' );
     my $add = scalar( $se->additional );
     cmp_ok( $add, '<=', 20, 'at most 20 additional' );
     cmp_ok( $add, '>=', 8, 'at least 8 additional' );
