@@ -9,6 +9,11 @@ BEGIN {
     }
 }
 
+name 'Zonemaster-LDNS';
+all_from 'lib/Zonemaster/LDNS.pm';
+repository 'https://github.com/dotse/zonemaster-ldns';
+bugtracker 'https://github.com/dotse/zonemaster-ldns/issues';
+
 my $randomize;
 
 GetOptions(
@@ -17,16 +22,6 @@ GetOptions(
 
 cc_include_paths( 'include' );
 cc_include_paths( 'ldns' );
-
-name 'Zonemaster-LDNS';
-version_from 'lib/Zonemaster/LDNS.pm';
-perl_version_from 'lib/Zonemaster/LDNS.pm';
-license 'bsd';
-author 'Calle Dybedahl <calle@init.se>';
-author 'Mattias P <mattias.paivarinta@iis.se>';
-abstract 'Perl wrapper for the ldns DNS library.';
-repository 'https://github.com/dotse/zonemaster-ldns';
-bugtracker 'https://github.com/dotse/zonemaster-ldns/issues';
 
 configure_requires 'Devel::CheckLib';
 requires 'MIME::Base64';
