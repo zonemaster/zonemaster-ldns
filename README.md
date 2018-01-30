@@ -57,7 +57,7 @@ The recommended way to install Zonemaster::LDNS is to install it from CPAN as a 
 To install Zonemaster LDNS from from sources, follow the instruction
 below.
 
-> **Note:** This procedure has additoinal compile-time dependencies on
+> **Note:** This procedure has additional compile-time dependencies on
 > `git`, `libtool` and `autoconf`
 
 Install this module with the following commands.
