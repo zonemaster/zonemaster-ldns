@@ -40,7 +40,7 @@ although that should cover a lot of real-world use cases.
 This feature is disabled by default.
 Enable with `--randomize`.
 
-Enables compilation with randomzied capitalization.
+Randomizes the capitalization of returned domain names.
 
 
 ## Dependencies
