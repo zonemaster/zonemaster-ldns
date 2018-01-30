@@ -33,4 +33,6 @@ Returns the algorithm number.
 
 Returns the cryptographic key in binary form.
 
+=back
+
 =cut
