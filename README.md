@@ -65,12 +65,14 @@ Install this module with the following commands.
 Override the default set of features by appending `--FEATURE` and/or
 `--no-FEATURE` options to the `perl Makefile.PL` command.
 
-    git clone https://github.com/dotse/zonemaster-ldns
-    cd zonemaster-ldns
-    perl Makefile.PL
-    make
-    make test
-    make install
+```sh
+git clone https://github.com/dotse/zonemaster-ldns
+cd zonemaster-ldns
+perl Makefile.PL
+make
+make test
+make install
+```
 
 > **Note:** The source ZIP files downloaded from Github are broken with
 > respect to this instruction.
@@ -82,7 +84,7 @@ Some of the unit tests depend on data on Internet, which may change. To avoid fa
 fails, those unit tests are only run if the environment variable `TEST_WITH_NETWORK` is `true`. By default that variable
 is unset (those tests are not run). To run all tests, execute
 
-```
+```sh
 TEST_WITH_NETWORK=1 make test
 ```
 
