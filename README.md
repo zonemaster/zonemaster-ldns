@@ -78,6 +78,15 @@ make install
 > respect to this instruction.
 
 
+## Post-installation sanity check
+
+```sh
+perl -MZonemaster::LDNS -E 'say Zonemaster::LDNS->new("8.8.8.8")->query("zonemaster.net")->string'
+```
+
+The above command should print some `dig`-like output.
+
+
 ## Testing
 
 Some of the unit tests depend on data on Internet, which may change. To avoid false 
