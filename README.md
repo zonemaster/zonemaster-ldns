@@ -58,7 +58,8 @@ To install Zonemaster LDNS from from sources, follow the instruction
 below.
 
 > **Note:** This procedure has additional compile-time dependencies on
-> `git`, `libtool` and `autoconf`
+> `git`, `libtool`, `autoconf`, `automake`, `make` and `Devel::CheckLib`,
+> as well as a test-time dependency on `Test::Fatal`.
 
 Install this module with the following commands.
 Override the default set of features by appending `--FEATURE` and/or
