@@ -9,25 +9,11 @@ BEGIN {
     }
 }
 
-my $headdir;
-my $libdir;
-my $prefix;
 my $randomize;
 
 GetOptions(
-    'headers=s'  => \$headdir,
-    'libs=s'     => \$libdir,
-    'prefix=s'   => \$prefix,
     'randomize!' => \$randomize,
 );
-
-if ( $prefix ) {
-    $headdir = catdir( $prefix, 'ldns' );
-    $libdir  = catdir( $prefix, 'lib' );
-}
-
-cc_include_paths( $headdir ) if $headdir;
-cc_libs( '-L' . $libdir ) if $libdir;
 
 cc_include_paths( 'include' );
 cc_include_paths( 'ldns' );
@@ -57,8 +43,6 @@ my %assert_args = (
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;'
 );
-$assert_args{LIBS} = '-L' . $libdir  if $libdir;
-$assert_args{INC}  = '-I' . $headdir if $headdir;
 
 cc_assert_lib %assert_args;
 
