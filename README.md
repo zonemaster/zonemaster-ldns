@@ -20,7 +20,7 @@ commands.
 
 ### IDN
 
-This feature is enabled by default.
+Enabled by default.
 Disable with `--no-idn`.
 
 If the IDN feature is enabled, the GNU `libidn` library will be used to
@@ -37,7 +37,7 @@ although that should cover a lot of real-world use cases.
 
 ### Randomized capitalization
 
-This feature is disabled by default.
+Disabled by default.
 Enable with `--randomize`.
 
 Randomizes the capitalization of returned domain names.
