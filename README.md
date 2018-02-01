@@ -40,7 +40,7 @@ although that should cover a lot of real-world use cases.
 Disabled by default.
 Enable with `--randomize`.
 
-This feature is experimental.
+> **Note:** This feature is experimental.
 
 Randomizes the capitalization of returned domain names.
 
