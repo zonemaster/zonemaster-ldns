@@ -16,7 +16,7 @@ bugtracker 'https://github.com/dotse/zonemaster-ldns/issues';
 
 my $opt_randomize     = 0;
 my $opt_idn           = 1;
-my $opt_internal_ldns = 0;
+my $opt_internal_ldns = 1;
 GetOptions(
     'randomize!'     => \$opt_randomize,
     'idn!'           => \$opt_idn,
@@ -109,7 +109,7 @@ END_CONTRIBUTORS
     my $postamble = '';
 
     $postamble .= $contributors_make;
-    $postamble .= $internal_ldns_make if !$opt_internal_ldns;
+    $postamble .= $internal_ldns_make if $opt_internal_ldns;
 
     return $postamble;
 }
