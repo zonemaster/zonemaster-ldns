@@ -18,7 +18,7 @@ use Zonemaster::LDNS::Packet;
 
 =head1 NAME
 
-    Zonemaster::LDNS - DNS-talking module based on the ldns C library
+Zonemaster::LDNS - Perl wrapper for the ldns DNS library.
 
 =head1 SYNOPSIS
 
@@ -191,3 +191,22 @@ Get and/or set the socket timeout for the resolver.
 Get and/or set the IP address the resolver should try to send its queries from.
 
 =back
+
+=head1 AUTHORS
+
+Mattias P <mattias.paivarinta@iis.se>
+- Current maintainer
+
+Calle Dybedahl <calle@init.se>
+- Original author
+
+=head1 LICENSE
+
+This is free software, licensed under:
+
+The (three-clause) BSD License
+
+The full text of the license can be found in the
+F<LICENSE> file included with this distribution.
+
+=cut
