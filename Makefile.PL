@@ -14,10 +14,11 @@ all_from 'lib/Zonemaster/LDNS.pm';
 repository 'https://github.com/dotse/zonemaster-ldns';
 bugtracker 'https://github.com/dotse/zonemaster-ldns/issues';
 
-my $randomize;
-
+my $opt_randomize = 0;
+my $opt_idn       = 1;
 GetOptions(
-    'randomize!' => \$randomize,
+    'randomize!' => \$opt_randomize,
+    'idn!'       => \$opt_idn,
 );
 
 cc_include_paths( 'include' );
@@ -41,24 +42,27 @@ my %assert_args = (
 
 cc_assert_lib %assert_args;
 
-if (
-    check_lib(
-        lib      => 'idn',
-        header   => 'idna.h',
-        function => 'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;'
-    )
-  )
-{
+if ( $opt_idn ) {
+    check_lib_or_exit(
+        lib    => 'idn',
+        header => 'idna.h',
+        function =>
+          'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;'
+    );
     cc_libs 'idn';
     cc_define '-DWE_CAN_HAZ_IDN';
-    print "IDNA support detected.\n";
+    print "Feature idn enabled\n";
+}
+else {
+    print "Feature idn disabled\n";
 }
 
-if ( $randomize ) {
+if ( $opt_randomize ) {
     cc_define '-DRANDOMIZE';
-    print( ( "=" x 65 ) . "\n" );
-    print "Compiling with randomzied capitalization.\n";
-    print( ( "=" x 65 ) . "\n" );
+    print "Feature randomized capitalization enabled\n";
+}
+else {
+    print "Feature randomized capitalization disabled\n";
 }
 
 sub MY::postamble {
