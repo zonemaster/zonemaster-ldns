@@ -40,7 +40,9 @@ Returns the ldns version string. Can be exported, but is not by default.
 
 =item to_idn($name, ...)
 
-Takes a number of strings and returns a list of them converted to IDNA format.
+Takes a number of domain names (in string format) and returns them with all
+labels converted to A-labels unless they are already in ASCII.
+
 Assumes that the strings have been converted to Perl's internal encoding before
 it's called. Can be exported, but is not by default.
 
