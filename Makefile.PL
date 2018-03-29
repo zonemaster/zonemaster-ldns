@@ -14,10 +14,12 @@ all_from 'lib/Zonemaster/LDNS.pm';
 repository 'https://github.com/zonemaster/zonemaster-ldns';
 bugtracker 'https://github.com/zonemaster/zonemaster-ldns/issues';
 
+my $opt_ed25519       = 1;
 my $opt_idn           = 1;
 my $opt_internal_ldns = 1;
 my $opt_randomize     = 0;
 GetOptions(
+    'ed25519!'       => \$opt_ed25519,
     'idn!'           => \$opt_idn,
     'internal-ldns!' => \$opt_internal_ldns,
     'randomize!'     => \$opt_randomize,
@@ -43,6 +45,13 @@ cc_assert_lib(
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;'
 );
+
+if ( $opt_ed25519 ) {
+    print "Feature Ed25519 enabled\n";
+}
+else {
+    print "Feature Ed25519 disabled\n";
+}
 
 
 # LDNS
@@ -89,24 +98,6 @@ else {
 
 sub MY::postamble {
 
-    my $internal_ldns_make = <<'END_INTERNAL_LDNS';
-
-LDFROM += ldns/.libs/libldns.a
-
-config :: ldns/.libs/libldns.a
-
-ldns/.libs/libldns.a: ldns/configure
-	cd ldns ;\
-	./configure CFLAGS=-fPIC --disable-ldns-config --disable-dane ;\
-	make lib
-
-ldns/configure:
-	git submodule update --init
-	cd ldns ; libtoolize -ci
-	cd ldns ; autoreconf -fi
-
-END_INTERNAL_LDNS
-
     my $contributors_make = <<'END_CONTRIBUTORS';
 
 CONTRIBUTORS.txt:
@@ -119,9 +110,48 @@ CONTRIBUTORS.txt:
 
 END_CONTRIBUTORS
 
+    my $configure_flags_make = <<'END_CONFIGURE_FLAGS';
+
+CONFIGURE_FLAGS = --disable-ldns-config --disable-dane
+
+END_CONFIGURE_FLAGS
+
+    my $ed25519_make = <<'END_ED25519';
+
+CONFIGURE_FLAGS += --enable-ed25519
+
+END_ED25519
+
+    my $no_ed25519_make = <<'END_NO_ED25519';
+
+CONFIGURE_FLAGS += --disable-ed25519
+
+END_NO_ED25519
+
+    my $internal_ldns_make = <<'END_INTERNAL_LDNS';
+
+LDFROM += ldns/.libs/libldns.a
+
+config :: ldns/.libs/libldns.a
+
+ldns/.libs/libldns.a: ldns/configure
+	cd ldns ;\
+	./configure CFLAGS=-fPIC $(CONFIGURE_FLAGS) ;\
+	make lib
+
+ldns/configure:
+	git submodule update --init
+	cd ldns ; libtoolize -ci
+	cd ldns ; autoreconf -fi
+
+END_INTERNAL_LDNS
+
     my $postamble = '';
 
     $postamble .= $contributors_make;
+    $postamble .= $configure_flags_make;
+    $postamble .= $ed25519_make if $opt_ed25519;
+    $postamble .= $no_ed25519_make if !$opt_ed25519;
     $postamble .= $internal_ldns_make if $opt_internal_ldns;
 
     return $postamble;

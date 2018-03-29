@@ -29,7 +29,7 @@ Initially this module was named Net::LDNS.
 ## Dependencies and compatibility
 
 Run-time dependencies:
- * `openssl`
+ * `openssl` (>= 1.1.0 unless [Ed25519] is disabled)
  * `libidn` (if [IDN] is enabled)
  * `libldns` (if [Internal ldns] is disabled)
 
@@ -95,6 +95,11 @@ TEST_WITH_NETWORK=1 make test
 When installing from source, you can choose to enable or disable a number
 of optional features using command line options to the `perl Makefile.PL`
 commands.
+
+### Ed25519
+
+Enabled by default.
+Disabled with `--no-ed25519`
 
 ### IDN
 
