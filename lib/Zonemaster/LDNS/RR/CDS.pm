@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::CDS;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::CDS;
 
 use parent 'Zonemaster::LDNS::RR';
 

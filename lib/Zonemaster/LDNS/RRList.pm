@@ -1,8 +1,5 @@
 package Zonemaster::LDNS::RRList;
 
-use strict;
-use warnings;
-
 1;
 
 =head1 NAME

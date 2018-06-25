@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::MAILB;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::MAILB;
 
 use parent 'Zonemaster::LDNS::RR';
 

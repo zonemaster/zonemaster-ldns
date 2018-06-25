@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::WKS;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::WKS;
 
 use parent 'Zonemaster::LDNS::RR';
 

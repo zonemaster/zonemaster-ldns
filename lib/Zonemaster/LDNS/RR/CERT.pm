@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::CERT;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::CERT;
 
 use parent 'Zonemaster::LDNS::RR';
 

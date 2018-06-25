@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::IPSECKEY;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::IPSECKEY;
 
 use parent 'Zonemaster::LDNS::RR';
 

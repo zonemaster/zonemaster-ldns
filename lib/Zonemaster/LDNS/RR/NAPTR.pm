@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::NAPTR;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::NAPTR;
 
 use parent 'Zonemaster::LDNS::RR';
 

@@ -1,68 +1,6 @@
 \.o$
-\.lo$
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
-
-# Avoid the dist tarball
-^Zonemaster-LDNS-.*\.tar\.gz$
-
-# Avoid autotools input files
-\.m4$
-\.ac$
-
-# Avoid ldns files we don't need
-^ldns/Changelog$
-^ldns/README$
-^ldns/README\.
-^ldns/\.libs/
-^ldns/aclocal\.m4$
-^ldns/autom4te.cache/
-^ldns/compat/calloc\.c$
-^ldns/compat/ctime_r\.c$
-^ldns/compat/fake-rfc2553\.c$
-^ldns/compat/fake-rfc2553\.h$
-^ldns/compat/gmtime_r\.c$
-^ldns/compat/inet_aton\.c$
-^ldns/compat/inet_ntop\.c$
-^ldns/compat/inet_pton\.c$
-^ldns/compat/isascii\.c$
-^ldns/compat/isblank\.c$
-^ldns/compat/localtime_r\.c$
-^ldns/compat/malloc\.c$
-^ldns/compat/memmove\.c$
-^ldns/compat/realloc\.c$
-^ldns/compat/snprintf\.c$
-^ldns/compat/timegm\.c$
-^ldns/config\.log$
-^ldns/config\.status$
-^ldns/contrib/
-^ldns/doc/
-^ldns/drill/
-^ldns/examples/
-^ldns/ldns/\.c-mode-rc.el$
-^ldns/ldns/common\.h$
-^ldns/ldns/config\.h$
-^ldns/ldns/net\.h$
-^ldns/ldns/util\.h$
-^ldns/libdns\.doxygen$
-^ldns/libdns\.vim$
-^ldns/libldns\.la$
-^ldns/libtool$
-^ldns/linktest\.c$
-^ldns/lua/
-^ldns/m4/libtool\.m4$
-^ldns/m4/ltoptions\.m4$
-^ldns/m4/ltsugar\.m4$
-^ldns/m4/ltversion\.m4$
-^ldns/m4/lt~obsolete\.m4$
-^ldns/makedist\.sh$
-^ldns/masterdont/
-^ldns/packaging/fedora/ldns\.spec$
-^ldns/packaging/ldns-config$
-^ldns/packaging/ldns-config\.1$
-^ldns/packaging/libldns\.pc$
-^ldns/pcat/
-^ldns/test/
 
 # Avoid C files generated from XS
 ^src/LDNS\.c$
@@ -76,7 +14,6 @@
 \B\.svn\b
 \B\.git\b
 \B\.gitignore\b
-\B\.gitmodules$
 \b_darcs\b
 \B\.cvsignore$
 
@@ -125,3 +62,4 @@
 # Avoid MYMETA files
 ^MYMETA\.
 #!end included /usr/share/perl/5.20/ExtUtils/MANIFEST.SKIP
+
