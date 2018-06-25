@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::TKEY;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::TKEY;
 
 use parent 'Zonemaster::LDNS::RR';
 

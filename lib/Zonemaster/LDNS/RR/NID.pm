@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::NID;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::NID;
 
 use parent 'Zonemaster::LDNS::RR';
 

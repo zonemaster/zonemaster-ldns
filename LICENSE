@@ -1,8 +1,7 @@
 ### Code license
 
-In some situations sources from the ldns library by NLnet Labs are
-included in the ldns directory. For files under the ldns directory,
-see ldns/LICENSE. For all other sources, as below.
+For the NLnet Labs portion of the code, see LICENSE-NLnet-Labs. For the rest
+of the code, as below.
 
 Copyright (c) 2013-2017, IIS (The Internet Foundation in Sweden)
 Copyright (c) 2013-2017, AFNIC

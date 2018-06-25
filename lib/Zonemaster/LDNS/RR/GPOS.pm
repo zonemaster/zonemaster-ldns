@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::GPOS;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::GPOS;
 
 use parent 'Zonemaster::LDNS::RR';
 

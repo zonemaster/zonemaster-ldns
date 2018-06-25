@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::AFSDB;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::AFSDB;
 
 use parent 'Zonemaster::LDNS::RR';
 

@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::SPF;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::SPF;
 
 use parent 'Zonemaster::LDNS::RR';
 

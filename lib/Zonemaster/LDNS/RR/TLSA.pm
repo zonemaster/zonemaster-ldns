@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::TLSA;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::TLSA;
 
 use parent 'Zonemaster::LDNS::RR';
 

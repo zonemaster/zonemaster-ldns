@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::TALINK;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::TALINK;
 
 use parent 'Zonemaster::LDNS::RR';
 

@@ -1,8 +1,5 @@
 package Zonemaster::LDNS::Packet;
 
-use strict;
-use warnings;
-
 use Zonemaster::LDNS;
 
 use MIME::Base64;

@@ -1,8 +1,5 @@
 package Zonemaster::LDNS::RR::CNAME;
 
-use strict;
-use warnings;
-
 use parent 'Zonemaster::LDNS::RR';
 
 1;

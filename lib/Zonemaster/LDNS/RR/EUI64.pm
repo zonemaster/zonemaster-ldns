@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::EUI64;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::EUI64;
 
 use parent 'Zonemaster::LDNS::RR';
 

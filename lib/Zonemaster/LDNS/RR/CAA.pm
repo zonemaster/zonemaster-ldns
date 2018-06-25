@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::CAA;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::CAA;
 
 use parent 'Zonemaster::LDNS::RR';
 

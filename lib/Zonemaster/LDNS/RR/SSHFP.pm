@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::SSHFP;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::SSHFP;
 
 use parent 'Zonemaster::LDNS::RR';
 

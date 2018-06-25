@@ -1,7 +1,5 @@
-package Zonemaster::LDNS::RR::ISDN;
 
-use strict;
-use warnings;
+package Zonemaster::LDNS::RR::ISDN;
 
 use parent 'Zonemaster::LDNS::RR';
 
