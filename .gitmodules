@@ -1,0 +1,3 @@
+[submodule "ldns"]
+	path = ldns
+	url = https://git.nlnetlabs.nl/ldns
