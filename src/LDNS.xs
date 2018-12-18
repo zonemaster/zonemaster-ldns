@@ -232,6 +232,43 @@ query(obj, dname, rrtype="A", rrclass="IN")
     OUTPUT:
         RETVAL
 
+SV *
+query_with_pkt(obj, query_pkt)
+    Zonemaster::LDNS obj;
+    Zonemaster::LDNS::Packet query_pkt;
+    CODE:
+    {
+        ldns_status status;
+        ldns_pkt *pkt;
+
+        ldns_pkt_set_edns_data(query_pkt, NULL);
+        status = ldns_resolver_send_pkt(&pkt, obj, query_pkt);
+        if ( status != LDNS_STATUS_OK) {
+            /* Remove and reinsert nameserver to make ldns forget it failed */
+            ldns_status s;
+            ldns_rdf *ns = ldns_resolver_pop_nameserver(obj);
+            if (ns != NULL) {
+                s = ldns_resolver_push_nameserver(obj, ns);
+                if ( s != LDNS_STATUS_OK) {
+                    croak("Failed to reinsert nameserver after failure (ouch): %s", ldns_get_errorstr_by_id(s));
+                }
+                ldns_rdf_deep_free(ns);
+            }
+            croak("%s", ldns_get_errorstr_by_id(status));
+            RETVAL = NULL;
+        }
+        ldns_pkt *clone = ldns_pkt_clone(pkt);
+        ldns_pkt_set_timestamp(clone, ldns_pkt_timestamp(pkt));
+        RETVAL = sv_setref_pv(newSV(0), "Zonemaster::LDNS::Packet", clone);
+        ldns_pkt_free(pkt);
+#ifdef USE_ITHREADS
+        net_ldns_remember_packet(RETVAL);
+#endif
+    }
+    OUTPUT:
+        RETVAL
+
+
 bool
 recurse(obj,...)
     Zonemaster::LDNS obj;
@@ -941,10 +978,10 @@ U32
 packet_querytime(obj,...)
     Zonemaster::LDNS::Packet obj;
     CODE:
-		if ( items > 1 ) {
+        if ( items > 1 ) {
             SvGETMAGIC(ST(1));
-			ldns_pkt_set_querytime(obj, (U32)SvIV(ST(1)));
-		}
+            ldns_pkt_set_querytime(obj, (U32)SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_querytime(obj);
     OUTPUT:
         RETVAL
@@ -1223,6 +1260,24 @@ packet_new_from_wireformat(class,buf)
     OUTPUT:
         RETVAL
 
+bool
+packet_set_edns_present(obj)
+    Zonemaster::LDNS::Packet obj;
+    CODE:
+        obj->_edns_present = true;
+        RETVAL = ldns_pkt_edns(obj);
+    OUTPUT:
+        RETVAL 
+
+bool
+packet_unset_edns_present(obj)
+    Zonemaster::LDNS::Packet obj;
+    CODE:
+        obj->_edns_present = false;
+        RETVAL = ldns_pkt_edns(obj);
+    OUTPUT:
+        RETVAL 
+
 U16
 packet_edns_size(obj,...)
     Zonemaster::LDNS::Packet obj;
@@ -1248,6 +1303,19 @@ packet_edns_rcode(obj,...)
         RETVAL = ldns_pkt_edns_extended_rcode(obj);
     OUTPUT:
         RETVAL
+
+U16
+packet_edns_z(obj,...)
+    Zonemaster::LDNS::Packet obj;
+    CODE:
+        if(items>=2)
+        {
+            SvGETMAGIC(ST(1));
+            ldns_pkt_set_edns_z(obj, (U16)SvIV(ST(1)));
+        }
+        RETVAL = ldns_pkt_edns_z(obj);
+    OUTPUT:
+        RETVAL 
 
 U8
 packet_edns_version(obj,...)
