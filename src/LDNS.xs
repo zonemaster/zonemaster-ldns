@@ -241,7 +241,6 @@ query_with_pkt(obj, query_pkt)
         ldns_status status;
         ldns_pkt *pkt;
 
-        ldns_pkt_set_edns_data(query_pkt, NULL);
         status = ldns_resolver_send_pkt(&pkt, obj, query_pkt);
         if ( status != LDNS_STATUS_OK) {
             /* Remove and reinsert nameserver to make ldns forget it failed */
@@ -862,10 +861,10 @@ U16
 packet_id(obj,...)
     Zonemaster::LDNS::Packet obj;
     CODE:
-		if ( items > 1 ) {
+        if ( items > 1 ) {
             SvGETMAGIC(ST(1));
-			ldns_pkt_set_id(obj, (U16)SvIV(ST(1)));
-		}
+            ldns_pkt_set_id(obj, (U16)SvIV(ST(1)));
+        }
         RETVAL = ldns_pkt_id(obj);
     OUTPUT:
         RETVAL
@@ -1327,6 +1326,28 @@ packet_edns_version(obj,...)
             ldns_pkt_set_edns_version(obj, (U8)SvIV(ST(1)));
         }
         RETVAL = ldns_pkt_edns_version(obj);
+    OUTPUT:
+        RETVAL
+
+SV *
+packet_edns_data(obj,...)
+    Zonemaster::LDNS::Packet obj;
+    CODE:
+        ldns_rdf* opt;
+        if(items>=2)
+        {
+            SvGETMAGIC(ST(1));
+            opt = ldns_native2rdf_int32(LDNS_RDF_TYPE_INT32, (U32)SvIV(ST(1)));
+            if(opt == NULL) 
+            {
+                croak("Failed to set OPT RDATA");
+            }
+            ldns_pkt_set_edns_data(obj, opt);
+        }
+        else {
+            opt = ldns_pkt_edns_data(obj);
+        }
+        RETVAL = newSVpvn((char*)(opt), 4);
     OUTPUT:
         RETVAL
 
