@@ -340,6 +340,18 @@ igntc(obj,...)
     OUTPUT:
         RETVAL
 
+bool
+fallback(obj,...)
+    Zonemaster::LDNS obj;
+    CODE:
+        if ( items > 1 ) {
+            SvGETMAGIC(ST(1));
+            ldns_resolver_set_fallback(obj, SvIV(ST(1)));
+        }
+        RETVAL = ldns_resolver_fallback(obj);
+    OUTPUT:
+        RETVAL
+
 U8
 retry(obj,...)
     Zonemaster::LDNS obj;
