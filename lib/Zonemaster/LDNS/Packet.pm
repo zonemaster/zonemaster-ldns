@@ -146,7 +146,7 @@ When set, need_edns/has_edns methods return true value.
 
 =item unset_edns_present
 
-Unset edns_present flag to false.
+Set edns_present flag to false.
 
 =item querytime([$value])
 

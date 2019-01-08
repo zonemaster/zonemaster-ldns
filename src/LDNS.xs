@@ -1294,32 +1294,22 @@ packet_new_from_wireformat(class,buf)
 # --------------------------
 # Set edns_present property of Packet object
 #
-# returns: a boolean (true)
-#
-bool
+SV *
 packet_set_edns_present(obj)
     Zonemaster::LDNS::Packet obj;
     CODE:
         obj->_edns_present = true;
-        RETVAL = ldns_pkt_edns(obj);
-    OUTPUT:
-        RETVAL 
 
 #
 # Function: unset_edns_present
 # ----------------------------
 # Unset edns_present property of Packet object
 #
-# returns: a boolean (false)
-#
-bool
+SV *
 packet_unset_edns_present(obj)
     Zonemaster::LDNS::Packet obj;
     CODE:
         obj->_edns_present = false;
-        RETVAL = ldns_pkt_edns(obj);
-    OUTPUT:
-        RETVAL 
 
 U16
 packet_edns_size(obj,...)
