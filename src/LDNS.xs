@@ -232,6 +232,17 @@ query(obj, dname, rrtype="A", rrclass="IN")
     OUTPUT:
         RETVAL
 
+#
+# Function: query_with_pkt
+# ------------------------
+# Sister function of 'query' that takes a 'ready to send'
+# packet instead of create a new one from provided parameters.
+#
+# obj: LDNS resolver object
+# query_pkt: the packet to send
+#
+# returns: a "Zonemaster::LDNS::Packet" object with answer of the query
+#
 SV *
 query_with_pkt(obj, query_pkt)
     Zonemaster::LDNS obj;
@@ -340,6 +351,13 @@ igntc(obj,...)
     OUTPUT:
         RETVAL
 
+#
+# Function: fallback
+# ------------------
+# Get/set 'fallback' flag
+#
+# returns: a boolean
+#
 bool
 fallback(obj,...)
     Zonemaster::LDNS obj;
@@ -1271,6 +1289,13 @@ packet_new_from_wireformat(class,buf)
     OUTPUT:
         RETVAL
 
+#
+# Function: set_edns_present
+# --------------------------
+# Set edns_present property of Packet object
+#
+# returns: a boolean (true)
+#
 bool
 packet_set_edns_present(obj)
     Zonemaster::LDNS::Packet obj;
@@ -1280,6 +1305,13 @@ packet_set_edns_present(obj)
     OUTPUT:
         RETVAL 
 
+#
+# Function: unset_edns_present
+# ----------------------------
+# Unset edns_present property of Packet object
+#
+# returns: a boolean (false)
+#
 bool
 packet_unset_edns_present(obj)
     Zonemaster::LDNS::Packet obj;
@@ -1341,6 +1373,18 @@ packet_edns_version(obj,...)
     OUTPUT:
         RETVAL
 
+#
+# Function: edns_data
+# -------------------
+# Get/set EDNS data
+# 
+# Beware, this code can only take a unique U32 parameter which means it 
+# is not a full implementation of EDNS data but it is enough for our 
+# current purpose. It can only deal with option codes with OPTION-LENGTH=0
+# (see 6.1.2 section of RFC 6891) which means OPTION-DATA is always empty.
+#
+# returns: a bytes string
+#
 SV *
 packet_edns_data(obj,...)
     Zonemaster::LDNS::Packet obj;
