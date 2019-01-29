@@ -11,8 +11,8 @@ BEGIN {
 
 name 'Zonemaster-LDNS';
 all_from 'lib/Zonemaster/LDNS.pm';
-repository 'https://github.com/dotse/zonemaster-ldns';
-bugtracker 'https://github.com/dotse/zonemaster-ldns/issues';
+repository 'https://github.com/zonemaster/zonemaster-ldns';
+bugtracker 'https://github.com/zonemaster/zonemaster-ldns/issues';
 
 my $opt_randomize     = 0;
 my $opt_idn           = 1;
