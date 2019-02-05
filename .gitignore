@@ -1,6 +1,5 @@
 Makefile.old
 MYMETA.*
-META.yml
 Makefile
 *.bs
 *.o

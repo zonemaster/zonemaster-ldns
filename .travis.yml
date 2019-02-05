@@ -10,4 +10,3 @@ perl:
     - "5.20"
     - "5.18"
     - "5.16"
-before_install: cpanm --quiet --notest Devel::CheckLib Test::More
