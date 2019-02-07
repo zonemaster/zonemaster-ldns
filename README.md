@@ -36,6 +36,8 @@ Run-time dependencies:
 Compile-time dependencies (only when installing from source):
  * `make`
  * `Devel::CheckLib`
+ * `Module::Install`
+ * `Module::Install::XSUtil`
  * `Test::More >= 1.302015`
  * `git` (if [Internal ldns] is enabled)
  * `libtool` (if [Internal ldns] is enabled)
