@@ -26,7 +26,6 @@ GetOptions(
 configure_requires 'Devel::CheckLib';
 configure_requires 'Module::Install' => 1.19;
 configure_requires 'Module::Install::XSUtil';
-requires 'MIME::Base64';
 test_requires 'JSON::PP';
 test_requires 'Test::Fatal';
 test_requires 'Test::More' => 1.302015;
