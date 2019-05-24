@@ -8,6 +8,7 @@ perl:
     - "5.24"
     - "5.22"
     - "5.20"
-    - "5.18"
     - "5.16"
-before_install: cpanm --quiet --notest Devel::CheckLib Test::More
+
+# Install configure-time dependencies
+before_install: cpanm --quiet --notest Devel::CheckLib Module::Install Module::Install::XSUtil

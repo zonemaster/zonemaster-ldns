@@ -24,9 +24,11 @@ GetOptions(
 );
 
 configure_requires 'Devel::CheckLib';
-requires 'MIME::Base64';
+configure_requires 'Module::Install' => 1.19;
+configure_requires 'Module::Install::XSUtil';
 test_requires 'JSON::PP';
 test_requires 'Test::Fatal';
+test_requires 'Test::More' => 1.302015;
 
 use_ppport 3.19;
 cc_libs 'crypto';
