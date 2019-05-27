@@ -2,6 +2,8 @@ package Zonemaster::LDNS;
 
 use 5.014;
 
+# Meaningless comment.
+
 our $VERSION = '2.0.1';
 
 use parent 'Exporter';
