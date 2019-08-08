@@ -10,5 +10,9 @@ perl:
     - "5.20"
     - "5.16"
 
-# Install configure-time dependencies
-before_install: cpanm --quiet --notest Devel::CheckLib Module::Install Module::Install::XSUtil
+before_install:
+    # Install configure-time dependencies
+    - cpanm --quiet --notest Devel::CheckLib Module::Install Module::Install::XSUtil
+
+    # Install compile-time dependencies
+    - sudo apt-get install -y libidn11-dev
