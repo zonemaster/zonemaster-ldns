@@ -152,7 +152,9 @@ ldns/.libs/libldns.a: ldns/configure
 	make lib
 
 ldns/configure:
-	git submodule update --init
+	git submodule init
+	git submodule sync
+	git submodule update
 	cd ldns ; libtoolize -ci
 	cd ldns ; autoreconf -fi
 
