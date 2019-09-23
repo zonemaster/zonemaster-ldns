@@ -45,9 +45,13 @@ cc_assert_lib(
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;'
 );
-
 if ( $opt_ed25519 ) {
     print "Feature Ed25519 enabled\n";
+    cc_assert_lib(
+        lib      => 'crypto',
+        header   => 'openssl/evp.h',
+        function => 'EVP_PKEY_ED25519; return 0;'
+    );
 }
 else {
     print "Feature Ed25519 disabled\n";
@@ -64,6 +68,14 @@ if ( $opt_internal_ldns ) {
 else {
     print "Feature internal ldns disabled\n";
     cc_libs 'ldns';
+    if ( $opt_ed25519 ) {
+        cc_assert_lib(
+            lib      => 'ldns',
+            header   => 'ldns/ldns.h',
+            ccflags  => '-DUSE_ED25519',
+            function => 'if(LDNS_ED25519) return 0; else return 1;'
+        );
+    }
 }
 
 
