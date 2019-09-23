@@ -1,3 +1,5 @@
+dist: bionic
+
 env:
 - TEST_WITH_NETWORK=1
 
@@ -9,8 +11,15 @@ perl:
     - "5.22"
 
 before_install:
-    # Install configure-time dependencies
-    - cpanm --quiet --notest Devel::CheckLib Module::Install Module::Install::XSUtil
+    - sudo apt-get install -y libidn11-dev libldns-dev
+    - eval $(curl https://travis-perl.github.io/init)
+    - cpan-install Devel::CheckLib Module::Install Module::Install::XSUtil
+    - cpan-install --deps
 
-    # Install compile-time dependencies
-    - sudo apt-get install -y libidn11-dev
+install:
+    # --no-internal-ldns is faster
+    # --no-ed25519 is compatibile with the openssl we get
+    - cpanm --notest --configure-args="--no-ed25519 --no-internal-ldns" .
+
+script:
+    - prove -bl $(test-files)

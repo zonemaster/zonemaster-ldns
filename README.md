@@ -31,7 +31,7 @@ Initially this module was named Net::LDNS.
 Run-time dependencies:
  * `openssl` (openssl >= 1.1.0 unless [Ed25519] is disabled)
  * `libidn` (if [IDN] is enabled)
- * `libldns` (if [Internal ldns] is disabled, libldns >= 1.7.1 unless [Ed25519] is disabled)
+ * `libldns` (if [Internal ldns] is disabled; libldns >= 1.7.0, or libldns >= 1.7.1 if [Ed25519] is enabled)
 
 Compile-time dependencies (only when installing from source):
  * `make`
