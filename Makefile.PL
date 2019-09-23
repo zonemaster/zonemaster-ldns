@@ -14,13 +14,13 @@ all_from 'lib/Zonemaster/LDNS.pm';
 repository 'https://github.com/zonemaster/zonemaster-ldns';
 bugtracker 'https://github.com/zonemaster/zonemaster-ldns/issues';
 
-my $opt_randomize     = 0;
 my $opt_idn           = 1;
 my $opt_internal_ldns = 1;
+my $opt_randomize     = 0;
 GetOptions(
-    'randomize!'     => \$opt_randomize,
     'idn!'           => \$opt_idn,
     'internal-ldns!' => \$opt_internal_ldns,
+    'randomize!'     => \$opt_randomize,
 );
 
 configure_requires 'Devel::CheckLib';
@@ -31,29 +31,37 @@ test_requires 'Test::Fatal';
 test_requires 'Test::More' => 1.302015;
 
 use_ppport 3.19;
-cc_libs 'crypto';
 cc_include_paths 'include';
 cc_src_paths 'src';
 
-if ( $opt_internal_ldns ) {
-    cc_libs '-Lldns/lib';
-    cc_include_paths 'ldns';
-    print "Feature internal ldns enabled\n";
-}
-else {
-    cc_libs 'ldns';
-    print "Feature internal ldns disabled\n";
-}
 
-my %assert_args = (
+# OpenSSL
+
+cc_libs 'crypto';
+cc_assert_lib(
     lib      => 'crypto',
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;'
 );
 
-cc_assert_lib %assert_args;
+
+# LDNS
+
+if ( $opt_internal_ldns ) {
+    print "Feature internal ldns enabled\n";
+    cc_libs '-Lldns/lib';
+    cc_include_paths 'ldns';
+}
+else {
+    print "Feature internal ldns disabled\n";
+    cc_libs 'ldns';
+}
+
+
+# IDN
 
 if ( $opt_idn ) {
+    print "Feature idn enabled\n";
     check_lib_or_exit(
         lib    => 'idn',
         header => 'idna.h',
@@ -62,19 +70,22 @@ if ( $opt_idn ) {
     );
     cc_libs 'idn';
     cc_define '-DWE_CAN_HAZ_IDN';
-    print "Feature idn enabled\n";
 }
 else {
     print "Feature idn disabled\n";
 }
 
+
+# Internals
+
 if ( $opt_randomize ) {
-    cc_define '-DRANDOMIZE';
     print "Feature randomized capitalization enabled\n";
+    cc_define '-DRANDOMIZE';
 }
 else {
     print "Feature randomized capitalization disabled\n";
 }
+
 
 sub MY::postamble {
 
