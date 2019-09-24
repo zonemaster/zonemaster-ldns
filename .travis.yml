@@ -19,7 +19,7 @@ before_install:
     - cpan-install --deps
 
 install:
-    - cpanm --verbose --notest --configure-args="--no-ed25519" .
+    - cpanm --verbose --notest --configure-args="--no-ed25519 --no-internal-ldns" .
 
 script:
     - prove -bl $(test-files)
