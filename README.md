@@ -103,6 +103,11 @@ Disabled with `--no-ed25519`
 
 Requires support for Ed25519 in both openssl and ldns.
 
+>
+> *Note:* Zonemaster Engine relies on this feature for its analysis when the
+> Ed25519 algorithm is being used.
+>
+
 ### IDN
 
 Enabled by default.
