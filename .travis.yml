@@ -12,14 +12,11 @@ perl:
 
 before_install:
     - eval $(curl https://travis-perl.github.io/init)
-
-    - sudo apt-get install -y libidn11-dev libldns-dev
-
-    - cpan-install Devel::CheckLib Module::Install Module::Install::XSUtil
-    - cpan-install --deps
+    - sudo apt-get install -y libidn11-dev
+    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil
 
 install:
-    - cpanm --verbose --notest --configure-args="--no-ed25519 --no-internal-ldns" .
+    - cpanm --verbose --notest --configure-args="--no-ed25519" .
 
 script:
     - prove -bl $(test-files)
