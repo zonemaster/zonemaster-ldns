@@ -104,8 +104,8 @@ Disabled with `--no-ed25519`
 Requires support for Ed25519 in both openssl and ldns.
 
 >
-> *Note:* Zonemaster Engine relies on this feature for its analysis when the
-> Ed25519 algorithm is being used.
+> *Note:* Zonemaster Engine relies on this feature for its analysis when Ed25519
+> (algorithm 15) is being used in DNS records.
 >
 
 ### IDN
