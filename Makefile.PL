@@ -14,15 +14,17 @@ all_from 'lib/Zonemaster/LDNS.pm';
 repository 'https://github.com/zonemaster/zonemaster-ldns';
 bugtracker 'https://github.com/zonemaster/zonemaster-ldns/issues';
 
-my $opt_ed25519       = 1;
-my $opt_idn           = 1;
-my $opt_internal_ldns = 1;
-my $opt_randomize     = 0;
+my $opt_ed25519        = 1;
+my $opt_idn            = 1;
+my $opt_internal_ldns  = 1;
+my $opt_randomize      = 0;
+my $opt_prefix_openssl = "";
 GetOptions(
-    'ed25519!'       => \$opt_ed25519,
-    'idn!'           => \$opt_idn,
-    'internal-ldns!' => \$opt_internal_ldns,
-    'randomize!'     => \$opt_randomize,
+    'ed25519!'         => \$opt_ed25519,
+    'idn!'             => \$opt_idn,
+    'internal-ldns!'   => \$opt_internal_ldns,
+    'randomize!'       => \$opt_randomize,
+    'prefix-openssl=s' => \$opt_prefix_openssl,
 );
 
 configure_requires 'Devel::CheckLib';
@@ -39,18 +41,31 @@ cc_src_paths 'src';
 
 # OpenSSL
 
-cc_libs 'crypto';
+my %assert_lib_args_openssl;
+if ( $opt_prefix_openssl ) {
+    print "Custom prefix for OpenSSL: $opt_prefix_openssl\n";
+    cc_include_paths "$opt_prefix_openssl/include";
+    cc_libs "-L$opt_prefix_openssl/lib", "crypto";
+    $assert_lib_args_openssl{incpath} = "$opt_prefix_openssl/include";
+    $assert_lib_args_openssl{libpath} = "$opt_prefix_openssl/lib";
+}
+else {
+    cc_libs 'crypto';
+}
+
 cc_assert_lib(
     lib      => 'crypto',
     header   => 'openssl/crypto.h',
-    function => 'if(SSLeay()) return 0; else return 1;'
+    function => 'if(SSLeay()) return 0; else return 1;',
+    %assert_lib_args_openssl,
 );
 if ( $opt_ed25519 ) {
     print "Feature Ed25519 enabled\n";
     cc_assert_lib(
         lib      => 'crypto',
         header   => 'openssl/evp.h',
-        function => 'EVP_PKEY_ED25519; return 0;'
+        function => 'EVP_PKEY_ED25519; return 0;',
+        %assert_lib_args_openssl,
     );
 }
 else {
@@ -124,9 +139,15 @@ END_CONTRIBUTORS
 
     my $configure_flags_make = <<'END_CONFIGURE_FLAGS';
 
-CONFIGURE_FLAGS = --disable-ldns-config --disable-dane
+CONFIGURE_FLAGS += --disable-ldns-config --disable-dane
 
 END_CONFIGURE_FLAGS
+
+    my $openssl_make = <<END_ED25519;
+
+CONFIGURE_FLAGS += --with-ssl=$opt_prefix_openssl
+
+END_ED25519
 
     my $ed25519_make = <<'END_ED25519';
 
@@ -163,10 +184,13 @@ END_INTERNAL_LDNS
     my $postamble = '';
 
     $postamble .= $contributors_make;
-    $postamble .= $configure_flags_make;
-    $postamble .= $ed25519_make if $opt_ed25519;
-    $postamble .= $no_ed25519_make if !$opt_ed25519;
-    $postamble .= $internal_ldns_make if $opt_internal_ldns;
+    if ( $opt_internal_ldns ) {
+        $postamble .= $configure_flags_make;
+        $postamble .= $openssl_make if $opt_prefix_openssl;
+        $postamble .= $ed25519_make if $opt_ed25519;
+        $postamble .= $no_ed25519_make if !$opt_ed25519;
+        $postamble .= $internal_ldns_make;
+    }
 
     return $postamble;
 }
