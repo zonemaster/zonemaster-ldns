@@ -18,5 +18,5 @@ before_install:
     - sudo apt-get install -y libidn11-dev
 
 before_script:
-    - perl -E 'say "qq(@INC)";
+    - perl -E 'say "qq(@INC)"';
     - find $TRAVIS_HOME -name 'CheckLib*'
