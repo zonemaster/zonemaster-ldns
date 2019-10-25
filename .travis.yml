@@ -1,3 +1,5 @@
+dist: bionic
+
 env:
 - TEST_WITH_NETWORK=1
 
@@ -9,8 +11,12 @@ perl:
     - "5.22"
 
 before_install:
-    # Install configure-time dependencies
-    - cpanm --quiet --notest Devel::CheckLib Module::Install Module::Install::XSUtil
-
-    # Install compile-time dependencies
+    - eval $(curl https://travis-perl.github.io/init)
     - sudo apt-get install -y libidn11-dev
+    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil
+
+install:
+    - cpanm --verbose --notest --configure-args="--no-ed25519" .
+
+script:
+    - prove -bl $(test-files)

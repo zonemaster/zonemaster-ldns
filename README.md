@@ -29,9 +29,9 @@ Initially this module was named Net::LDNS.
 ## Dependencies and compatibility
 
 Run-time dependencies:
- * `openssl`
+ * `openssl` (openssl >= 1.1.1 unless [Ed25519] is disabled)
  * `libidn` (if [IDN] is enabled)
- * `libldns` (if [Internal ldns] is disabled)
+ * `libldns` (if [Internal ldns] is disabled; libldns >= 1.7.0, or libldns >= 1.7.1 if [Ed25519] is enabled)
 
 Compile-time dependencies (only when installing from source):
  * `make`
@@ -95,6 +95,18 @@ TEST_WITH_NETWORK=1 make test
 When installing from source, you can choose to enable or disable a number
 of optional features using command line options to the `perl Makefile.PL`
 commands.
+
+### Ed25519
+
+Enabled by default.
+Disabled with `--no-ed25519`
+
+Requires support for Ed25519 in both openssl and ldns.
+
+>
+> *Note:* Zonemaster Engine relies on this feature for its analysis when Ed25519
+> (algorithm 15) is being used in DNS records.
+>
 
 ### IDN
 
