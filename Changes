@@ -1,13 +1,24 @@
 Release history for Zonemaster component Zonemaster-LDNS
 
+
+3.0.0 2019-11-15
+
+ [API change]
+ - Support for Ed25519 (algorithm 15) added (#85, #51, #84)
+ - Requires libldns 1.7.0 or 1.7.1 (#85)
+
+ [Fixed]
+ - Make Travis not fail (#82)
+
+
 2.0.1 2019-05-21
 
 - Removed
-  - Ubuntu 14.04 is no longer supported
+  - Ubuntu 14.04 is no longer supported (#74)
 
 - Changed
-  - inc::Module::install is no longer bundled
-  - Dependency declarations have been cleaned up
+  - inc::Module::install is no longer bundled (#72)
+  - Dependency declarations have been cleaned up (#73)
 
 
 2.0.0 2019-01-25 (pre-release version)
