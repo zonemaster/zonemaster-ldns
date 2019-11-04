@@ -11,8 +11,9 @@ Zonemaster LDNS
   * [Post-installation sanity check](#post-installation-sanity-check)
   * [Testing](#testing)
 * [Optional features](#optional-features)
-  * [IDN](#idn)
-  * [Internal ldns](#internal-ldns)
+  * [Ed25519]
+  * [IDN]
+  * [Internal ldns]
   * [Randomized capitalization](#randomized-capitalization)
 
 
@@ -146,3 +147,5 @@ Randomizes the capitalization of returned domain names.
 
 [IDN]: #idn
 [Internal ldns]: #internal-ldns
+[Ed25519]: #ed25519
+
