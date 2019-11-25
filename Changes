@@ -1,15 +1,11 @@
 Release history for Zonemaster component Zonemaster-LDNS
 
 
-3.0.0 2019-11-15
-
- [API Change]
- - Requires OpenSSL 1.1.1 unless Ed25519 (algorithm 15)
-   has been disabled
+2.1.0 2019-11-29
 
  [Features]
- - Support for Ed25519 (algorithm 15) added (#85, #51, #84)
  - Updated to use libldns 1.7.0 or 1.7.1 (#85)
+ - Support for Ed25519 (algorithm 15) added (#85, #51, #84)
  
  [Fixed]
  - Make Travis not fail (#82)
