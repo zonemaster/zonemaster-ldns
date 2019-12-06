@@ -145,6 +145,22 @@ Enable with `--randomize`.
 Randomizes the capitalization of returned domain names.
 
 
+### Custom OpenSSL
+
+Disabled by default.
+Enabled with `--prefix-openssl=/path/to/openssl`.
+
+Enabling this makes the build tools look for OpenSSL in a non-standard place.
+
+Technically this does two things:
+ * Libcrypto is sought in the `lib` directory under the given directory.
+ * The `include` directory under the given directory is added to the include
+   path.
+
+> **Note:** The `lib` directory under the given path must be known to the
+> dynamic linker or feature checks will fail.
+
+
 [IDN]: #idn
 [Internal ldns]: #internal-ldns
 [Ed25519]: #ed25519
