@@ -2,6 +2,7 @@
 \.lo$
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
+^LDNS.bs$
 
 # Avoid the dist tarball
 ^Zonemaster-LDNS-.*\.tar\.gz$
