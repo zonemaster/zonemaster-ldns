@@ -12,6 +12,7 @@ Release history for Zonemaster component Zonemaster-LDNS
  - Exclude more ldns files from MANIFEST (#92)
  - Fixing links and table of contents in main README.md (#94)
  - Exclude LDNS.bs from distribution file (#101, #95)
+ - Eliminated locale dependency from unit test (#102, #103)
  
 
 2.0.1 2019-05-21
