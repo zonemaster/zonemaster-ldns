@@ -2,6 +2,7 @@
 \.lo$
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
+^LDNS.bs$
 
 # Avoid the dist tarball
 ^Zonemaster-LDNS-.*\.tar\.gz$
@@ -39,6 +40,7 @@
 ^ldns/doc/
 ^ldns/drill/
 ^ldns/examples/
+^ldns/.gitlab-ci.yml
 ^ldns/ldns/\.c-mode-rc.el$
 ^ldns/ldns/common\.h$
 ^ldns/ldns/config\.h$
@@ -56,6 +58,7 @@
 ^ldns/m4/ltversion\.m4$
 ^ldns/m4/lt~obsolete\.m4$
 ^ldns/makedist\.sh$
+^ldns/makewin.sh
 ^ldns/masterdont/
 ^ldns/packaging/fedora/ldns\.spec$
 ^ldns/packaging/ldns-config$
@@ -63,6 +66,7 @@
 ^ldns/packaging/libldns\.pc$
 ^ldns/pcat/
 ^ldns/test/
+^ldns/.travis.yml
 
 # Avoid C files generated from XS
 ^src/LDNS\.c$
