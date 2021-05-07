@@ -9,7 +9,7 @@ use parent 'Zonemaster::LDNS::RR';
 
 =head1 NAME
 
-Zonemaster::LDNS::RR::CDNSKEY - Type CDS record
+Zonemaster::LDNS::RR::CDNSKEY - Type CDNSKEY record
 
 =head1 DESCRIPTION
 
