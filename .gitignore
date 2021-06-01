@@ -1,7 +1,7 @@
 Makefile.old
 MYMETA.*
 META.yml
-Makefile
+/Makefile
 *.bs
 *.o
 blib
@@ -11,3 +11,6 @@ inc
 ppport.h
 MANIFEST.bak
 Net-LDNS-*.tar.gz
+
+# Emacs backup files
+*~
