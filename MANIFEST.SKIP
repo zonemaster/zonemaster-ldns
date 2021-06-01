@@ -7,6 +7,9 @@
 # Avoid the dist tarball
 ^Zonemaster-LDNS-.*\.tar\.gz$
 
+# Avoid Github control files
+^\.github/
+
 # Avoid autotools input files
 \.m4$
 \.ac$
