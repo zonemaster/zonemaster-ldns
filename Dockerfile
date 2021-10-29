@@ -31,4 +31,5 @@ COPY --from=build /usr/local/lib/perl5/site_perl/Zonemaster /usr/local/lib/perl5
 RUN apk add --no-cache \
     # Run-time dependencies
     ldns \
-    libidn
+    libidn \
+    perl

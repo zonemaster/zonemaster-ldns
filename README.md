@@ -112,6 +112,12 @@ Tag the local base image as the latest version:
 make docker-tag-latest
 ```
 
+Perform smoke test on the local base image:
+
+```sh
+sudo docker run --entrypoint=perl zonemaster/ldns:local -MZonemaster::LDNS -E 'say Zonemaster::LDNS->new("9.9.9.9")->query("zonemaster.net")->string'
+```
+
 ## Optional features
 
 When installing from source, you can choose to enable or disable a number
