@@ -142,10 +142,10 @@ END_CONTRIBUTORS
 docker-build: dist
 	sudo docker build --tag zonemaster/ldns:local --build-arg version=$(VERSION) .
 
-docker-tag-version: docker-image
+docker-tag-version: docker-build
 	sudo docker tag zonemaster/ldns:local zonemaster/ldns:$(VERSION)
 
-docker-tag-latest: docker-image
+docker-tag-latest: docker-build
 	sudo docker tag zonemaster/ldns:local zonemaster/ldns:latest
 
 END_DOCKER
