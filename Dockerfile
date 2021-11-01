@@ -1,7 +1,5 @@
 FROM alpine:3.14 as build
 
-ARG version
-
 RUN apk add --no-cache \
     # Compile-time dependencies
     build-base \
@@ -16,6 +14,8 @@ RUN apk add --no-cache \
     perl-test-fatal \
  && cpanm --notest --no-wget \
     Module::Install::XSUtil
+
+ARG version
 
 COPY ./Zonemaster-LDNS-${version}.tar.gz ./Zonemaster-LDNS-${version}.tar.gz
 
