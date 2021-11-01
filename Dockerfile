@@ -10,9 +10,10 @@ RUN apk add --no-cache \
     perl-app-cpanminus \
     perl-dev \
     perl-devel-checklib \
+    perl-lwp-protocol-https \
     perl-module-install \
     perl-test-fatal \
- && cpanm --notest --no-wget \
+ && cpanm --notest --no-wget --from=https://cpan.metacpan.org/ \
     Module::Install::XSUtil
 
 ARG version
