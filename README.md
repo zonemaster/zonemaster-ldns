@@ -97,7 +97,7 @@ TEST_WITH_NETWORK=1 make test
 Build a local base image:
 
 ```sh
-make docker-build
+make all dist docker-build
 ```
 
 Tag the local base image with the current version number:

@@ -139,13 +139,13 @@ END_CONTRIBUTORS
 
     my $docker_make = <<'END_DOCKER';
 
-docker-build: dist
+docker-build:
 	sudo docker build --tag zonemaster/ldns:local --build-arg version=$(VERSION) .
 
-docker-tag-version: docker-build
+docker-tag-version:
 	sudo docker tag zonemaster/ldns:local zonemaster/ldns:$(VERSION)
 
-docker-tag-latest: docker-build
+docker-tag-latest:
 	sudo docker tag zonemaster/ldns:local zonemaster/ldns:latest
 
 END_DOCKER
