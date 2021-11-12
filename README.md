@@ -10,6 +10,7 @@ Zonemaster LDNS
   * [Installation from source](#installation-from-source)
   * [Post-installation sanity check](#post-installation-sanity-check)
   * [Testing](#testing)
+* [Docker](#docker)
 * [Optional features](#optional-features)
   * [Ed25519]
   * [IDN]
@@ -89,6 +90,32 @@ is unset (those tests are not run). To run all tests, execute
 
 ```sh
 TEST_WITH_NETWORK=1 make test
+```
+
+## Docker
+
+Build a local base image:
+
+```sh
+make all dist docker-build
+```
+
+Tag the local base image with the current version number:
+
+```sh
+make docker-tag-version
+```
+
+Tag the local base image as the latest version:
+
+```sh
+make docker-tag-latest
+```
+
+Perform smoke test on the local base image:
+
+```sh
+docker run zonemaster/ldns:local perl -MZonemaster::LDNS -E 'say Zonemaster::LDNS->new("9.9.9.9")->query("zonemaster.net")->string'
 ```
 
 ## Optional features

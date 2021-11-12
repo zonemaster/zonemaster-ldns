@@ -3,6 +3,7 @@
 ^MANIFEST\.SKIP$
 ^\.travis\.yml$
 ^LDNS.bs$
+^Dockerfile$
 
 # Avoid the dist tarball
 ^Zonemaster-LDNS-.*\.tar\.gz$
