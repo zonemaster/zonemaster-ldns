@@ -19,9 +19,10 @@
 
 ## Introduction
 
-This module provides a Perl interface to the [ldns library] from [NLnet Labs].
-This module includes the necessary C code from ldns, so the library does not need
-to be globally installed. It does, however, rely on a sufficiently recent version
+This module provides a Perl interface to the [ldns library] from [NLnet Labs]
+and depends on it being available. The module can either compile and use those
+libraries internally or link to already available ldns library given that the
+version is high enough. In both cases it relies on a sufficiently recent version
 of OpenSSL being present.
 
 This module is written as part of the [Zonemaster project], and therefore
@@ -63,14 +64,13 @@ operating systems, in that it assumes that the file /dev/null exists.
 
 ### Recommended installation
 
-The recommended way to install Zonemaster::LDNS is to install it from CPAN as a
+The recommended way to install Zonemaster::LDNS is to install it as a
 dependency to Zonemaster::Engine. If you follow the
 [installation instructions for Zonemaster::Engine] you will get all the
-prerequisites and dependencies for Zonemaster::LDNS before installing it from
-CPAN.
+prerequisites and dependencies for Zonemaster::LDNS before installing it.
 
 
- ### Docker
+### Docker
 
 Zonemaster-CLI is available on [Docker Hub], and can be conveniently downloaded
 and run without any installation. See [USING] Zonemaster-CLI for how to run
@@ -108,7 +108,7 @@ The above command should print some `dig`-like output.
 
 ### Testing
 
-Some of the unit tests depend on data on Internet, which may change. To avoid
+Some of the unit tests depend on data on the Internet, which may change. To avoid
 false fails, those unit tests are only run if the environment variable
 `TEST_WITH_NETWORK` is `true`. By default that variable is unset (those tests are
 not run). To run all tests, execute
