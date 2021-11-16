@@ -64,9 +64,8 @@ operating systems, in that it assumes that the file /dev/null exists.
 
 ### Recommended installation
 
-The recommended way to install Zonemaster::LDNS is to install it as a
-dependency to Zonemaster::Engine. If you follow the
-[installation instructions for Zonemaster::Engine] you will get all the
+The recommended way to install Zonemaster::LDNS is to follow the
+[installation instructions for Zonemaster::Engine] where you will find all
 prerequisites and dependencies for Zonemaster::LDNS before installing it.
 
 
