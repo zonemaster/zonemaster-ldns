@@ -19,12 +19,16 @@ my $opt_idn            = 1;
 my $opt_internal_ldns  = 1;
 my $opt_randomize      = 0;
 my $opt_prefix_openssl = "";
+my $opt_openssl_inc    = "";
+my $opt_openssl_lib    = "";
 GetOptions(
     'ed25519!'         => \$opt_ed25519,
     'idn!'             => \$opt_idn,
     'internal-ldns!'   => \$opt_internal_ldns,
     'randomize!'       => \$opt_randomize,
     'prefix-openssl=s' => \$opt_prefix_openssl,
+    'openssl-inc=s'    => \$opt_openssl_inc,
+    'openssl-lib=s'    => \$opt_openssl_lib,
 );
 
 configure_requires 'Devel::CheckLib';
@@ -42,12 +46,31 @@ cc_src_paths 'src';
 # OpenSSL
 
 my %assert_lib_args_openssl;
-if ( $opt_prefix_openssl ) {
-    print "Custom prefix for OpenSSL: $opt_prefix_openssl\n";
-    cc_include_paths "$opt_prefix_openssl/include";
-    cc_libs "-L$opt_prefix_openssl/lib", "crypto";
-    $assert_lib_args_openssl{incpath} = "$opt_prefix_openssl/include";
-    $assert_lib_args_openssl{libpath} = "$opt_prefix_openssl/lib";
+my $custom_openssl = ( $opt_prefix_openssl or $opt_openssl_inc or $opt_openssl_lib );
+if ( $custom_openssl ) {
+    my $openssl_incpath = "";
+    my $openssl_libpath = "";
+
+    if ( $opt_prefix_openssl ) {
+        print "Custom prefix for OpenSSL: $opt_prefix_openssl\n";
+        $openssl_incpath = "$opt_prefix_openssl/include";
+        $openssl_libpath = "$opt_prefix_openssl/lib";
+    }
+
+    if ( $opt_openssl_inc ) {
+        print "Custom include directory for OpenSSL: $opt_openssl_inc\n";
+        $openssl_incpath = "$opt_openssl_inc";
+    }
+
+    if ( $opt_openssl_lib ) {
+        print "Custom library directory for OpenSSL: $opt_openssl_lib\n";
+        $openssl_libpath = "$opt_openssl_lib";
+    }
+
+    cc_include_paths "$openssl_incpath";
+    cc_libs "-L$openssl_libpath", "crypto";
+    $assert_lib_args_openssl{incpath} = "$openssl_incpath";
+    $assert_lib_args_openssl{libpath} = "$openssl_libpath";
 }
 else {
     cc_libs 'crypto';
