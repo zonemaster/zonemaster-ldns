@@ -14,6 +14,51 @@ all_from 'lib/Zonemaster/LDNS.pm';
 repository 'https://github.com/zonemaster/zonemaster-ldns';
 bugtracker 'https://github.com/zonemaster/zonemaster-ldns/issues';
 
+=head1 Optional features
+
+=over
+
+=item --[no-]ed25519
+
+Requires (or disable) support for Ed25519 in both openssl and ldns.
+Enabled by default.
+
+=item --[no-]idn
+
+Requires (or disable) support for GNU libidn library to add a simple function
+that converts strings from Perl's internal encoding to IDNA domain name format.
+Enabled by default.
+
+=item --[no-]internal-ldns
+
+Statically or dynamically link the LDNS library to Zonemaster::LDNS.
+Enabled by default (the library is statically linked).
+
+=item --[no-]randomize
+
+Experimental.
+Randomizes the capitalization of returned domain names.
+Enabled by default.
+
+=item --prefix-openssl=PATH
+
+Search for OpenSSL include and library in PATH.
+The LDNS script will look for an "include" and a "lib" folder.
+
+=item --openssl-inc=PATH
+
+Search for OpenSSL include in PATH.
+The PATH is passed to the LDNS compiler via the CFLAGS variable.
+
+=item --openssl-lib=PATH
+
+Search for OpenSSL library in PATH.
+The PATH is passed to the LDNS compiler via the LDFLAGS variable.
+
+=back
+
+=cut
+
 my $opt_ed25519        = 1;
 my $opt_idn            = 1;
 my $opt_internal_ldns  = 1;
