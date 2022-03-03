@@ -179,11 +179,18 @@ CONFIGURE_FLAGS += --disable-ldns-config --disable-dane
 
 END_CONFIGURE_FLAGS
 
-    my $openssl_make = <<END_ED25519;
+    my $openssl_make = <<END_OPENSSL_MAKE;
 
 CONFIGURE_FLAGS += --with-ssl=$opt_prefix_openssl
 
-END_ED25519
+END_OPENSSL_MAKE
+
+    my $openssl_flags = <<END_OPENSSL_FLAGS;
+
+CFLAGS += -I$opt_openssl_inc
+LDFLAGS += -L$opt_openssl_lib
+
+END_OPENSSL_FLAGS
 
     my $ed25519_make = <<'END_ED25519';
 
@@ -199,13 +206,14 @@ END_NO_ED25519
 
     my $internal_ldns_make = <<'END_INTERNAL_LDNS';
 
+CFLAGS += -fPIC
 LDFROM += ldns/.libs/libldns.a
 
 config :: ldns/.libs/libldns.a
 
 ldns/.libs/libldns.a: ldns/configure
 	cd ldns ;\
-	./configure CFLAGS=-fPIC $(CONFIGURE_FLAGS) ;\
+	./configure CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(CONFIGURE_FLAGS) ;\
 	make lib
 
 ldns/configure:
@@ -226,6 +234,7 @@ END_INTERNAL_LDNS
         $postamble .= $openssl_make if $opt_prefix_openssl;
         $postamble .= $ed25519_make if $opt_ed25519;
         $postamble .= $no_ed25519_make if !$opt_ed25519;
+        $postamble .= $openssl_flags if ( $opt_openssl_inc or $opt_openssl_lib );
         $postamble .= $internal_ldns_make;
     }
 
