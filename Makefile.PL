@@ -20,19 +20,21 @@ bugtracker 'https://github.com/zonemaster/zonemaster-ldns/issues';
 
 =item --[no-]ed25519
 
-Requires (or disable) support for Ed25519 in both openssl and ldns.
+Enable (or disable) support for Ed25519 in both openssl and ldns.
 Enabled by default.
 
 =item --[no-]idn
 
-Requires (or disable) support for GNU libidn library to add a simple function
-that converts strings from Perl's internal encoding to IDNA domain name format.
+Enable (or disable) support for converting domain names from unicode to A-label
+format.
 Enabled by default.
 
 =item --[no-]internal-ldns
 
-Statically or dynamically link the LDNS library to Zonemaster::LDNS.
-Enabled by default (the library is statically linked).
+When enabled, an included version of ldns is statically linked into
+Zonemaster::LDNS.
+When disabled, libldns is dynamically linked just like other dependencies.
+Enabled by default.
 
 =item --[no-]randomize
 
@@ -42,7 +44,7 @@ Enabled by default.
 
 =item --prefix-openssl=PATH
 
-Search for OpenSSL include and library in PATH.
+Search for OpenSSL headers and libraries in PATH.
 The LDNS script will look for an "include" and a "lib" folder.
 
 =item --openssl-inc=PATH
