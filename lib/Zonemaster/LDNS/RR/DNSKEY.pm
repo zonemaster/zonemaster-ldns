@@ -5,6 +5,52 @@ use warnings;
 
 use parent 'Zonemaster::LDNS::RR';
 
+sub keysize {
+    my ( $self ) = @_;
+
+    my $algo = $self->algorithm;
+    my $data = $self->keydata;
+
+    # RSA variants
+    if ( $algo == 1 || $algo == 5 || $algo == 7 || $algo == 8 || $algo == 10 ) {
+
+        # Read first byte
+        my $byte = unpack( "c1", $data );
+
+        my $remaining;
+        if ( $byte > 0 ) {
+            $remaining = length( $data ) - 1 - $byte;
+        }
+        else {
+            # Read bytes 1 and 2 as big-endian
+            my $short = unpack( "x1s>1", $data );
+
+            $remaining = length( $data ) - 3 - $short;
+        }
+
+        return 8 * $remaining;
+    }
+
+    # DSA variants
+    elsif ( $algo == 3 || $algo == 6 ) {
+
+        # Read first byte (the T value)
+        return unpack( "c1", $data );
+    }
+
+    # Diffie-Hellman
+    elsif ( $algo == 2 ) {
+
+        # Read bytes 4 and 5 as big-endian
+        return unpack( "x4s>1", $data );
+    }
+
+    # No idea what this is
+    else {
+        return 0;
+    }
+}
+
 1;
 
 =head1 NAME

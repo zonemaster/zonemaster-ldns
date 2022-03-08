@@ -1837,50 +1837,6 @@ rr_ds_verify(obj,other)
 
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::DNSKEY           PREFIX=rr_dnskey_
 
-U32
-rr_dnskey_keysize(obj)
-    Zonemaster::LDNS::RR::DNSKEY obj;
-    CODE:
-    {
-        U8 algorithm = D_U8(obj,2);
-        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
-        uint8_t *data = ldns_rdf_data(rdf);
-        size_t total = ldns_rdf_size(rdf);
-
-        /* RSA variants */
-        if(algorithm==1||algorithm==5||algorithm==7||algorithm==8||algorithm==10)
-        {
-            size_t ex_len;
-
-            if(data[0] == 0)
-            {
-                ex_len = 3+(U16)data[1];
-            }
-            else
-            {
-                ex_len = 1+(U8)data[0];
-            }
-            RETVAL = 8*(total-ex_len);
-        }
-        /* DSA variants */
-        else if(algorithm==3||algorithm==6)
-        {
-            RETVAL = (U8)data[0]; /* First octet is T value */
-        }
-        /* Diffie-Hellman */
-        else if(algorithm==2)
-        {
-            RETVAL = (U16)data[4];
-        }
-        /* No idea what this is */
-        else
-        {
-            RETVAL = 0;
-        }
-    }
-    OUTPUT:
-        RETVAL
-
 U16
 rr_dnskey_flags(obj)
     Zonemaster::LDNS::RR::DNSKEY obj;
