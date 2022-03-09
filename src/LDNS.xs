@@ -1910,8 +1910,15 @@ rr_dnskey_keydata(obj)
     Zonemaster::LDNS::RR::DNSKEY obj;
     CODE:
     {
-        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
-        RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+        if (ldns_rr_rd_count(obj)>3)
+        {
+            ldns_rdf *rdf = ldns_rr_rdf(obj,3);
+            RETVAL = newSVpvn((char*)ldns_rdf_data(rdf), ldns_rdf_size(rdf));
+        }
+        else
+        {
+            RETVAL = newSVpvn("",0);
+        }
     }
     OUTPUT:
         RETVAL

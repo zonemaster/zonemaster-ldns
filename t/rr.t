@@ -2,6 +2,7 @@ use Test::More;
 use Test::Fatal;
 use Devel::Peek;
 use MIME::Base64;
+use Test::Differences;
 
 BEGIN { use_ok( 'Zonemaster::LDNS' ) }
 
@@ -107,6 +108,15 @@ subtest 'DNSKEY' => sub {
             ok( $rr->algorithm == 8 );
         }
     }
+
+    my $data = decode_base64( "BleFgAABAAEAAAAADW5sYWdyaWN1bHR1cmUCbmwAAAEAAcAMADAAAQAAAAAABAEBAwg=");
+    my $p = Zonemaster::LDNS::Packet->new_from_wireformat( $data );
+    my ( $rr, @extra ) = $p->answer;
+    eq_or_diff \@extra, [], "no extra RRs found";
+    if ( !defined $rr ) {
+        BAIL_OUT( "no RR found" );
+    }
+    is $rr->keydata, "", "we're able to extract the public key field even when it's empty";
 };
 
 subtest 'RRSIG' => sub {
