@@ -31,6 +31,12 @@ sub answer {
 
     my @records = $self->answer_unfiltered;
 
+    for ( my $i = $#records ; $i >= 0 ; --$i ) {
+        if ( $records[$i]->type() eq 'DNSKEY' && $records[$i]->keysize() == -1 ) {
+            splice @records, $i, 1;
+        }
+    }
+
     return @records;
 }
 

@@ -111,13 +111,16 @@ subtest 'DNSKEY' => sub {
 
     my $data = decode_base64( "BleFgAABAAEAAAAADW5sYWdyaWN1bHR1cmUCbmwAAAEAAcAMADAAAQAAAAAABAEBAwg=");
     my $p = Zonemaster::LDNS::Packet->new_from_wireformat( $data );
-    my ( $rr, @extra ) = $p->answer;
+    my ( $rr, @extra ) = $p->answer_unfiltered;
     eq_or_diff \@extra, [], "no extra RRs found";
     if ( !defined $rr ) {
         BAIL_OUT( "no RR found" );
     }
     is $rr->keydata, "", "we're able to extract the public key field even when it's empty";
     is $rr->keysize, -1, "insufficient data to calculate key size is reported as -1";
+
+    my ( @rrs ) = $p->answer;
+    eq_or_diff \@rrs, [], "DNSKEY record with empty public key is filtered out by answer()";
 };
 
 subtest 'RRSIG' => sub {
