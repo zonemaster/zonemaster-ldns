@@ -117,6 +117,7 @@ subtest 'DNSKEY' => sub {
         BAIL_OUT( "no RR found" );
     }
     is $rr->keydata, "", "we're able to extract the public key field even when it's empty";
+    is $rr->keysize, -1, "insufficient data to calculate key size is reported as -1";
 };
 
 subtest 'RRSIG' => sub {
