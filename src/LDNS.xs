@@ -1064,7 +1064,7 @@ packet_timestamp(obj,...)
         RETVAL
 
 SV *
-packet_answer(obj)
+packet_answer_unfiltered(obj)
     Zonemaster::LDNS::Packet obj;
     PPCODE:
     {
@@ -1092,7 +1092,7 @@ packet_answer(obj)
     }
 
 SV *
-packet_authority(obj)
+packet_authority_unfiltered(obj)
     Zonemaster::LDNS::Packet obj;
     PPCODE:
     {
@@ -1120,7 +1120,7 @@ packet_authority(obj)
     }
 
 SV *
-packet_additional(obj)
+packet_additional_unfiltered(obj)
     Zonemaster::LDNS::Packet obj;
     PPCODE:
     {

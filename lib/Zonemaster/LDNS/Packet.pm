@@ -26,6 +26,30 @@ sub data {
     return $self->wireformat;
 }
 
+sub answer {
+    my ( $self ) = @_;
+
+    my @records = $self->answer_unfiltered;
+
+    return @records;
+}
+
+sub authority {
+    my ( $self ) = @_;
+
+    my @records = $self->authority_unfiltered;
+
+    return @records;
+}
+
+sub additional {
+    my ( $self ) = @_;
+
+    my @records = $self->additional_unfiltered;
+
+    return @records;
+}
+
 1;
 
 =head1 NAME
