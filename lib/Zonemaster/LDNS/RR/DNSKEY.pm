@@ -32,7 +32,12 @@ sub keysize {
             $remaining = length( $data ) - 3 - $short;
         }
 
-        return 8 * $remaining;
+        if ( $remaining < 0 ) {
+            return -1;
+        }
+        else {
+            return 8 * $remaining;
+        }
     }
 
     # DSA variants
