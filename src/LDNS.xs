@@ -1736,6 +1736,33 @@ rr_check_rd_count(obj)
         size_t rd_min = ldns_rr_descriptor_minimum(desc);
         size_t rd_max = ldns_rr_descriptor_maximum(desc);
         size_t rd_count = ldns_rr_rd_count(obj);
+
+        // Workaround for when the last field is variable length with length
+        // zero, and ldns represents this by omitting the last field from
+        // the field list.
+        if (rd_min > 0 && rd_min == rd_max)
+        {
+            switch (ldns_rr_descriptor_field_type(desc,rd_min-1))
+            {
+            // This list is taken from ldns_wire2rdf()
+            case LDNS_RDF_TYPE_APL:
+            case LDNS_RDF_TYPE_B64:
+            case LDNS_RDF_TYPE_HEX:
+            case LDNS_RDF_TYPE_NSEC:
+            case LDNS_RDF_TYPE_UNKNOWN:
+            case LDNS_RDF_TYPE_SERVICE:
+            case LDNS_RDF_TYPE_LOC:
+            case LDNS_RDF_TYPE_WKS:
+            case LDNS_RDF_TYPE_NSAP:
+            case LDNS_RDF_TYPE_ATMA:
+            case LDNS_RDF_TYPE_IPSECKEY:
+            case LDNS_RDF_TYPE_LONG_STR:
+            case LDNS_RDF_TYPE_AMTRELAY:
+            case LDNS_RDF_TYPE_NONE:
+                rd_min -= 1;
+            }
+        }
+
         RETVAL = rd_min <= rd_count && rd_count <= rd_max;
     OUTPUT:
         RETVAL
