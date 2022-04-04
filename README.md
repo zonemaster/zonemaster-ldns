@@ -127,12 +127,11 @@ commands.
 Enabled by default.
 Disabled with `--no-ed25519`
 
-Requires support for algorithms Ed25519 and Ed448 in both openssl and ldns.
+Requires support for Ed25519 in both openssl and ldns.
 
 >
 > *Note:* Zonemaster Engine relies on this feature for its analysis when Ed25519
-> (DNSKEY algorithm 15) or Ed448 (DNSKEY algorithm 16) is being used in DNSSEC
-> signatures.
+> (algorithm 15) is being used in DNS records.
 >
 
 ### IDN
