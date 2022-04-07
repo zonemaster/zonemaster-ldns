@@ -40,7 +40,7 @@ Enabled by default.
 
 Experimental.
 Randomizes the capitalization of returned domain names.
-Enabled by default.
+Disabled by default.
 
 =item --prefix-openssl=PATH
 
