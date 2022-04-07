@@ -173,7 +173,8 @@ Randomizes the capitalization of returned domain names.
 ### Custom OpenSSL
 
 Disabled by default.
-Enabled with `--prefix-openssl=/path/to/openssl`.
+Enabled with `--prefix-openssl=/path/to/openssl` or
+`--openssl-inc=/path/to/openssl_inc` or `--openssl-lib=/path/to/openssl_lib`
 
 Enabling this makes the build tools look for OpenSSL in a non-standard place.
 
@@ -184,6 +185,10 @@ Technically this does two things:
 
 > **Note:** The `lib` directory under the given path must be known to the
 > dynamic linker or feature checks will fail.
+
+If both headers and libraries directories (`include` and `lib`) are not in the
+same parent directory, use `--openssl-inc` and `--openssl-lib` options to
+specify both paths.
 
 
 [DNS::LDNS]:                                         http://search.cpan.org/~erikoest/DNS-LDNS/
