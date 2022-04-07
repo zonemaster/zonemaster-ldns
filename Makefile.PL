@@ -25,8 +25,9 @@ Enabled by default.
 
 =item --[no-]idn
 
-Enable (or disable) support for converting domain names from unicode to A-label
-format.
+Enable (or disable) support for converting IDN labels in U-label format (with
+non-ASCII Unicode characters) to the same IDN labels in A-label format (encoded
+in ASCII).
 Enabled by default.
 
 =item --[no-]internal-ldns
