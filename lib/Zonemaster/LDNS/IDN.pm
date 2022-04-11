@@ -38,5 +38,10 @@ sub to_idn {
           croak( "Error: %s\n", Net::LibIDN2::idn2_strerror( $rc ) );
         }
     }
-    return @dst;
+
+    if ( scalar @dst > 1 ) {
+        return @dst;
+    } else {
+        return $dst[0];
+    }
 }
