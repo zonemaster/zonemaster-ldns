@@ -5,6 +5,9 @@ use warnings;
 
 use Carp;
 
+use parent 'Exporter';
+our @EXPORT_OK = qw[has_idn to_idn];
+
 my $idn_available = 0;
 
 eval {
@@ -20,14 +23,14 @@ sub has_idn {
 }
 
 sub to_idn {
-    if ( !has_idn ) {
+    if ( !has_idn() ) {
         croak( "Module Net::LibIDN2 not installed." );
     }
 
     my @dst;
-    for ( $@ ) {
-        my $rc;
-        my $out = Net::LibIDN2::idn2_to_ascii_8( $_, undef, $rc );
+    for ( @_ ) {
+        my $rc = -1;
+        my $out = Net::LibIDN2::idn2_to_ascii_8( $_, IDN2_NFC_INPUT, $rc );
         if ( $rc == IDN2_OK ) {
             push @dst, $out;
         }

@@ -4,50 +4,6 @@ MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS
 
 PROTOTYPES: ENABLE
 
-SV *
-to_idn(...)
-    PPCODE:
-    {
-#ifdef WE_CAN_HAZ_IDN
-        int i;
-        for( i = 0; i<items; i++ )
-        {
-            char *out;
-            int status;
-            SV *obj = ST(i);
-
-            if (SvPOK(ST(i)))
-            {
-               status = idna_to_ascii_8z(SvPVutf8_nolen(obj), &out, IDNA_ALLOW_UNASSIGNED);
-               if (status == IDNA_SUCCESS)
-               {
-                  SV *new = newSVpv(out,0);
-                  SvUTF8_on(new); /* We know the string is plain ASCII, so let Perl know too */
-                  mXPUSHs(new);
-                  free(out);
-               }
-               else
-               {
-                  croak("Error: %s\n", idna_strerror(status));
-               }
-            }
-        }
-#else
-        croak("libidn not installed");
-#endif
-    }
-
-bool
-has_idn()
-    CODE:
-#ifdef WE_CAN_HAZ_IDN
-        RETVAL = 1;
-#else
-        RETVAL = 0;
-#endif
-    OUTPUT:
-        RETVAL
-
 bool
 has_gost()
 	CODE:

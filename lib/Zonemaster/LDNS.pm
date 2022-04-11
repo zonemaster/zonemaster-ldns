@@ -13,7 +13,7 @@ XSLoader::load( __PACKAGE__, $VERSION );
 
 use Zonemaster::LDNS::RR;
 use Zonemaster::LDNS::Packet;
-use Zonemaster::LDNS::IDN;
+use Zonemaster::LDNS::IDN qw(has_idn to_idn);
 
 1;
 
