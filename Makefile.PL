@@ -100,7 +100,6 @@ if ( $opt_idn ) {
     print "Feature idn enabled\n";
     eval( "use Net::LibIDN2" );
     die "Missing Net::LibIDN2 module. Aborting.\n" if ( $@ );
-    cc_define '-DWE_CAN_HAZ_IDN';
 }
 else {
     print "Feature idn disabled\n";
