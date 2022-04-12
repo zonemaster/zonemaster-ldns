@@ -1,7 +1,5 @@
 use Test::More;
 use Test::Fatal;
-use Encode;
-use Devel::Peek;
 use utf8;
 
 BEGIN { use_ok( "Zonemaster::LDNS" => qw[:all] ) }
