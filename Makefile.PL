@@ -98,14 +98,8 @@ else {
 
 if ( $opt_idn ) {
     print "Feature idn enabled\n";
-    check_lib_or_exit(
-        lib    => 'idn',
-        header => 'idna.h',
-        function =>
-          'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;'
-    );
-    cc_libs 'idn';
-    cc_define '-DWE_CAN_HAZ_IDN';
+    eval( "use Net::LibIDN2" );
+    die "Missing Net::LibIDN2 module. Aborting.\n" if ( $@ );
 }
 else {
     print "Feature idn disabled\n";

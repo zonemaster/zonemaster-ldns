@@ -12,10 +12,6 @@
 #include <ctype.h>
 #include <ldns/ldns.h>
 
-#ifdef WE_CAN_HAZ_IDN
-#include <idna.h>
-#endif
-
 /* ldns 1.6.17 does not have this in its header files, but it is in the published documentation and we need it */
 /* It looks like 1.6.18 will have it, but we'll fix that when it happens. */
 #if (LDNS_REVISION) >= ((1<<16)|(6<<8)|(17))

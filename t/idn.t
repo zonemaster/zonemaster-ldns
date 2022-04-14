@@ -1,13 +1,11 @@
 use Test::More;
 use Test::Fatal;
-use Encode;
-use Devel::Peek;
 use utf8;
 
 BEGIN { use_ok( "Zonemaster::LDNS" => qw[:all] ) }
 
 no warnings 'uninitialized';
-if (exception {to_idn("whatever")} =~ /libidn not installed/) {
+if (exception {to_idn("whatever")} =~ /Module Net::LibIDN2 not installed/) {
     ok(!has_idn(), 'No IDN');
     done_testing;
     exit;
