@@ -4,7 +4,7 @@ RUN apk add --no-cache \
     # Compile-time dependencies
     build-base \
     ldns-dev \
-    libidn-dev \
+    libidn2-dev \
     make \
     openssl-dev \
     perl-app-cpanminus \
@@ -32,5 +32,5 @@ COPY --from=build /usr/local/lib/perl5/site_perl/Zonemaster /usr/local/lib/perl5
 RUN apk add --no-cache \
     # Run-time dependencies
     ldns \
-    libidn \
+    libidn2 \
     perl
