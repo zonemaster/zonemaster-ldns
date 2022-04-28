@@ -99,12 +99,11 @@ else {
 if ( $opt_idn ) {
     print "Feature idn enabled\n";
     check_lib_or_exit(
-        lib    => 'idn',
-        header => 'idna.h',
+        lib    => 'idn2',
+        header => 'idn2.h',
         function =>
-          'if(strcmp(IDNA_ACE_PREFIX,"xn--")==0) return 0; else return 1;'
-    );
-    cc_libs 'idn';
+          'return IDN2_OK;');
+    cc_libs 'idn2';
     cc_define '-DWE_CAN_HAZ_IDN';
 }
 else {

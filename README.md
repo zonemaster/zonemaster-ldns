@@ -39,7 +39,7 @@ Initially this module was named Net::LDNS.
 
 Run-time dependencies:
  * `openssl` (openssl >= 1.1.1 unless [Ed25519] is disabled)
- * `libidn` (if [IDN] is enabled)
+ * `libidn2` (if [IDN] is enabled)
  * `libldns` (if [Internal ldns] is disabled; libldns >= 1.7.0, or
    libldns >= 1.7.1 if [Ed25519] is enabled)
 
@@ -140,7 +140,7 @@ Requires support for algorithms Ed25519 and Ed448 in both openssl and ldns.
 Enabled by default.
 Disable with `--no-idn`.
 
-If the IDN feature is enabled, the GNU `libidn` library will be used to
+If the IDN feature is enabled, the GNU `libidn2` library will be used to
 add a simple function that converts strings from Perl's internal encoding
 to IDNA domain name format.
 In order to convert strings from whatever encoding you have to Perl's

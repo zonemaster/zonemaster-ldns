@@ -46,12 +46,12 @@ labels converted to A-labels unless they are already in ASCII.
 Assumes that the strings have been converted to Perl's internal encoding before
 it's called. Can be exported, but is not by default.
 
-This function requires that GNU libidn was present when L<Zonemaster::LDNS> was
+This function requires that GNU libidn2 was present when L<Zonemaster::LDNS> was
 compiled. If not, calling C<to_idn> will result in an exception getting thrown.
 
 =item has_idn()
 
-Takes no arguments. Returns true if libidn was present at compilation, false if not.
+Takes no arguments. Returns true if libidn2 was present at compilation, false if not.
 
 =item has_gost()
 
