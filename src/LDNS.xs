@@ -33,7 +33,7 @@ to_idn(...)
             }
         }
 #else
-        croak("libidn not installed");
+        croak("libidn2 not installed");
 #endif
     }
 
