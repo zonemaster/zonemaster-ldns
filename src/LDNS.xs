@@ -19,17 +19,13 @@ to_idn(...)
             if (SvPOK(ST(i)))
             {
                status = idn2_to_ascii_8z(SvPVutf8_nolen(obj), &out, IDN2_ALLOW_UNASSIGNED);
-               if (status == IDN2_OK)
-               {
-                  SV *new = newSVpv(out,0);
-                  SvUTF8_on(new); /* We know the string is plain ASCII, so let Perl know too */
-                  mXPUSHs(new);
-                  free(out);
-               }
-               else
-               {
+               if (status != IDN2_OK)
                   croak("Error: %s\n", idn2_strerror(status));
-               }
+
+               SV *new = newSVpv(out,0);
+               SvUTF8_on(new); /* We know the string is plain ASCII, so let Perl know too */
+               mXPUSHs(new);
+               free(out);
             }
         }
 #else
