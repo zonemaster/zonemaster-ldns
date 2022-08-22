@@ -18,7 +18,11 @@ to_idn(...)
 
             if (SvPOK(ST(i)))
             {
-               status = idn2_to_ascii_8z(SvPVutf8_nolen(obj), &out, IDN2_ALLOW_UNASSIGNED);
+               status = idn2_to_ascii_8z(SvPVutf8_nolen(obj), &out, IDN2_NONTRANSITIONAL);
+
+               if (status == IDN2_DISALLOWED)
+                  status = idn2_to_ascii_8z(SvPVutf8_nolen(obj), &out, IDN2_TRANSITIONAL);
+
                if (status != IDN2_OK)
                   croak("Error: %s\n", idn2_strerror(status));
 
