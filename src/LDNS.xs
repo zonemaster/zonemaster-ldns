@@ -1416,6 +1416,8 @@ void
 packet_nsid(obj)
     Zonemaster::LDNS::Packet obj;
     CODE:
+    {
+#ifdef NSID_SUPPORT
         ldns_edns_option_list* edns_list;
         ldns_edns_option*      edns_opt;
 
@@ -1426,6 +1428,10 @@ packet_nsid(obj)
         if ( ! ldns_edns_option_list_push(edns_list, edns_opt) )
             croak("Could not attach EDNS option NSID");
         ldns_pkt_set_edns_option_list(obj, edns_list);
+#else
+        croak("NSID not supported");
+#endif
+    }
 
 #
 # Function: get_nsid
@@ -1438,6 +1444,8 @@ SV *
 packet_get_nsid(obj)
     Zonemaster::LDNS::Packet obj;
     CODE:
+    {
+#ifdef NSID_SUPPORT
         ldns_edns_option_list* edns_list;
         ldns_edns_option* edns_opt;
         size_t count;
@@ -1458,6 +1466,10 @@ packet_get_nsid(obj)
         }
         if ( RETVAL == NULL )
             XSRETURN_UNDEF;
+#else
+        croak("NSID not supported");
+#endif
+    }
     OUTPUT:
         RETVAL
 

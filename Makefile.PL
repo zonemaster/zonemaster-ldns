@@ -243,6 +243,23 @@ else {
     }
 }
 
+# NSID feature requires LDNS version >= 1.8.2
+my $ldns_has_nsid = check_lib(
+    debug    => $opt_debug,
+    lib      => 'ldns',
+    header   => 'ldns/util.h',
+    %{ $assert_lib_args{ldns} },
+    function => 'if ( LDNS_REVISION >= ((1<<16)|(8<<8)|(2)) ) return 0; else return 1;'
+);
+
+if ( $ldns_has_nsid ) {
+    print "Feature NSID enabled\n";
+    cc_define '-DNSID_SUPPORT';
+}
+else {
+    print "Feature NSID disabled\n";
+}
+
 
 # Libidn
 
