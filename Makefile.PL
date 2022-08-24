@@ -58,6 +58,22 @@ The PATH is passed to the LDNS compiler via the CFLAGS variable.
 Search for OpenSSL library in PATH.
 The PATH is passed to the LDNS compiler via the LDFLAGS variable.
 
+=item --libidn-inc=PATH
+
+Search for Libidn include in PATH.
+
+=item --libidn-lib=PATH
+
+Search for Libidn library in PATH.
+
+=item --ldns-inc=PATH
+
+Search for LDNS include in PATH.
+
+=item --ldns-lib=PATH
+
+Search for LDNS library in PATH.
+
 =item --debug
 
 Enable debug mode, more verbose output.
@@ -73,6 +89,10 @@ my $opt_randomize      = 0;
 my $opt_prefix_openssl = "";
 my $opt_openssl_inc    = "";
 my $opt_openssl_lib    = "";
+my $opt_libidn_inc     = "";
+my $opt_libidn_lib     = "";
+my $opt_ldns_inc       = "";
+my $opt_ldns_lib       = "";
 my $opt_debug          = 0;
 GetOptions(
     'ed25519!'         => \$opt_ed25519,
@@ -82,6 +102,10 @@ GetOptions(
     'prefix-openssl=s' => \$opt_prefix_openssl,
     'openssl-inc=s'    => \$opt_openssl_inc,
     'openssl-lib=s'    => \$opt_openssl_lib,
+    'libidn-inc=s'     => \$opt_libidn_inc,
+    'libidn-lib=s'     => \$opt_libidn_lib,
+    'ldns-inc=s'       => \$opt_ldns_inc,
+    'ldns-lib=s'       => \$opt_ldns_lib,
     'debug!'           => \$opt_debug,
 );
 
@@ -161,12 +185,39 @@ if ( $opt_internal_ldns ) {
 }
 else {
     print "Feature internal ldns disabled\n";
-    cc_libs 'ldns';
+
+    my %assert_lib_args_ldns;
+    my $custom_ldns = ( $opt_ldns_inc or $opt_ldns_lib );
+    if ( $custom_ldns ) {
+        my $ldns_incpath = "";
+        my $ldns_libpath = "";
+
+        if ( $opt_ldns_inc ) {
+            print "Custom include directory for LDNS: $opt_ldns_inc\n";
+            $ldns_incpath = "$opt_ldns_inc";
+        }
+
+        if ( $opt_ldns_lib ) {
+            print "Custom library directory for LDNS: $opt_ldns_lib\n";
+            $ldns_libpath = "$opt_ldns_lib";
+        }
+
+        cc_include_paths "$ldns_incpath";
+        cc_libs "-L$ldns_libpath", "ldns";
+
+        $assert_lib_args_ldns{incpath} = "$ldns_incpath";
+        $assert_lib_args_ldns{libpath} = "$ldns_libpath";
+    }
+    else {
+        cc_libs 'ldns';
+    }
+
     if ( $opt_ed25519 ) {
         cc_assert_lib(
             debug    => $opt_debug,
             lib      => 'ldns',
             header   => 'ldns/ldns.h',
+            %assert_lib_args_ldns,
             ccflags  => '-DUSE_ED25519',
             function => 'if(LDNS_ED25519) return 0; else return 1;'
         );
@@ -174,16 +225,44 @@ else {
 }
 
 
-# IDN
+# Libidn
 
 if ( $opt_idn ) {
     print "Feature idn enabled\n";
+
+    my %assert_lib_args_libidn;
+    my $custom_libidn = ( $opt_libidn_inc or $opt_libidn_lib );
+    if ( $custom_libidn ) {
+        my $libidn_incpath = "";
+        my $libidn_libpath = "";
+
+        if ( $opt_libidn_inc ) {
+            print "Custom include directory for Libidn: $opt_libidn_inc\n";
+            $libidn_incpath = "$opt_libidn_inc";
+        }
+
+        if ( $opt_libidn_lib ) {
+            print "Custom library directory for Libidn: $opt_libidn_lib\n";
+            $libidn_libpath = "$opt_libidn_lib";
+        }
+
+        cc_include_paths "$libidn_incpath";
+        cc_libs "-L$libidn_libpath", "idn2";
+
+        $assert_lib_args_libidn{incpath} = "$libidn_incpath";
+        $assert_lib_args_libidn{libpath} = "$libidn_libpath";
+    }
+    else {
+        cc_libs 'idn2';
+    }
+
     check_lib_or_exit(
+        debug    => $opt_debug,
         lib    => 'idn2',
         header => 'idn2.h',
-        function =>
-          'return IDN2_OK;');
-    cc_libs 'idn2';
+        %assert_lib_args_libidn,
+        function => 'return IDN2_OK;'
+    );
     cc_define '-DWE_CAN_HAZ_IDN';
 }
 else {
