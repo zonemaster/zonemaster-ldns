@@ -58,6 +58,10 @@ The PATH is passed to the LDNS compiler via the CFLAGS variable.
 Search for OpenSSL library in PATH.
 The PATH is passed to the LDNS compiler via the LDFLAGS variable.
 
+=item --debug
+
+Enable debug mode, more verbose output.
+
 =back
 
 =cut
@@ -69,6 +73,7 @@ my $opt_randomize      = 0;
 my $opt_prefix_openssl = "";
 my $opt_openssl_inc    = "";
 my $opt_openssl_lib    = "";
+my $opt_debug          = 0;
 GetOptions(
     'ed25519!'         => \$opt_ed25519,
     'idn!'             => \$opt_idn,
@@ -77,6 +82,7 @@ GetOptions(
     'prefix-openssl=s' => \$opt_prefix_openssl,
     'openssl-inc=s'    => \$opt_openssl_inc,
     'openssl-lib=s'    => \$opt_openssl_lib,
+    'debug!'           => \$opt_debug,
 );
 
 configure_requires 'Devel::CheckLib';
@@ -125,6 +131,7 @@ else {
 }
 
 cc_assert_lib(
+    debug    => $opt_debug,
     lib      => 'crypto',
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;',
@@ -133,6 +140,7 @@ cc_assert_lib(
 if ( $opt_ed25519 ) {
     print "Feature Ed25519 enabled\n";
     cc_assert_lib(
+        debug    => $opt_debug,
         lib      => 'crypto',
         header   => 'openssl/evp.h',
         function => 'EVP_PKEY_ED25519; return 0;',
@@ -156,6 +164,7 @@ else {
     cc_libs 'ldns';
     if ( $opt_ed25519 ) {
         cc_assert_lib(
+            debug    => $opt_debug,
             lib      => 'ldns',
             header   => 'ldns/ldns.h',
             ccflags  => '-DUSE_ED25519',
