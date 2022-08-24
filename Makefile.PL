@@ -86,27 +86,36 @@ my $opt_ed25519        = 1;
 my $opt_idn            = 1;
 my $opt_internal_ldns  = 1;
 my $opt_randomize      = 0;
-my $opt_prefix_openssl = "";
-my $opt_openssl_inc    = "";
-my $opt_openssl_lib    = "";
-my $opt_libidn_inc     = "";
-my $opt_libidn_lib     = "";
-my $opt_ldns_inc       = "";
-my $opt_ldns_lib       = "";
 my $opt_debug          = 0;
+my $opt_assets         = {
+    openssl => {
+        prefix => "",
+        inc    => "",
+        lib    => ""
+    },
+    ldns    => {
+        inc    => "",
+        lib    => ""
+    },
+    libidn => {
+        inc    => "",
+        lib    => ""
+    }
+};
+
 GetOptions(
     'ed25519!'         => \$opt_ed25519,
     'idn!'             => \$opt_idn,
     'internal-ldns!'   => \$opt_internal_ldns,
     'randomize!'       => \$opt_randomize,
-    'prefix-openssl=s' => \$opt_prefix_openssl,
-    'openssl-inc=s'    => \$opt_openssl_inc,
-    'openssl-lib=s'    => \$opt_openssl_lib,
-    'libidn-inc=s'     => \$opt_libidn_inc,
-    'libidn-lib=s'     => \$opt_libidn_lib,
-    'ldns-inc=s'       => \$opt_ldns_inc,
-    'ldns-lib=s'       => \$opt_ldns_lib,
     'debug!'           => \$opt_debug,
+    'prefix-openssl=s' => \$$opt_assets{openssl}{prefix},
+    'openssl-inc=s'    => \$$opt_assets{openssl}{inc},
+    'openssl-lib=s'    => \$$opt_assets{openssl}{lib},
+    'libidn-inc=s'     => \$$opt_assets{libidn}{inc},
+    'libidn-lib=s'     => \$$opt_assets{libidn}{lib},
+    'ldns-inc=s'       => \$$opt_assets{ldns}{inc},
+    'ldns-lib=s'       => \$$opt_assets{ldns}{lib},
 );
 
 configure_requires 'Devel::CheckLib';
@@ -121,45 +130,73 @@ cc_include_paths 'include';
 cc_src_paths 'src';
 
 
+my %assert_lib_args = (
+    openssl => {},
+    libidn  => {},
+    ldns    => {}
+);
+
+sub custom_assets
+{
+    my ( $href ) = @_;
+    # $href = { key => "openssl", lib => "crypto", name => "OpenSSL" }
+
+    my $key  = $$href{key};
+    my $name = $$href{name};
+    my $lib  = $$href{lib};
+
+    my $input_prefix = $$opt_assets{$key}{prefix};
+    my $input_inc    = $$opt_assets{$key}{inc};
+    my $input_lib    = $$opt_assets{$key}{lib};
+
+    my $custom_lib = ( $input_prefix or $input_inc or $input_lib );
+    if ( $custom_lib ) {
+        my $incpath = "";
+        my $libpath = "";
+
+        if ( $input_prefix ) {
+            print "Custom prefix for $name: $input_prefix\n";
+            $incpath = "$input_prefix/include";
+            $libpath = "$input_prefix/lib";
+        }
+
+        if ( $input_inc ) {
+            print "Custom include directory for $name: $input_inc\n";
+            $incpath = "$input_inc";
+        }
+
+        if ( $input_lib ) {
+            print "Custom library directory for $name: $input_lib\n";
+            $libpath = "$input_lib";
+        }
+
+        cc_include_paths "$incpath";
+        cc_libs "-L$libpath", "$lib";
+
+        $assert_lib_args{$key}{incpath} = "$incpath";
+        $assert_lib_args{$key}{libpath} = "$libpath";
+    }
+    else {
+        cc_libs "$lib";
+    }
+}
+
 # OpenSSL
 
-my %assert_lib_args_openssl;
-my $custom_openssl = ( $opt_prefix_openssl or $opt_openssl_inc or $opt_openssl_lib );
-if ( $custom_openssl ) {
-    my $openssl_incpath = "";
-    my $openssl_libpath = "";
-
-    if ( $opt_prefix_openssl ) {
-        print "Custom prefix for OpenSSL: $opt_prefix_openssl\n";
-        $openssl_incpath = "$opt_prefix_openssl/include";
-        $openssl_libpath = "$opt_prefix_openssl/lib";
+custom_assets(
+    {
+        name => "OpenSSL",
+        lib  => "crypto",
+        key  => "openssl"
     }
-
-    if ( $opt_openssl_inc ) {
-        print "Custom include directory for OpenSSL: $opt_openssl_inc\n";
-        $openssl_incpath = "$opt_openssl_inc";
-    }
-
-    if ( $opt_openssl_lib ) {
-        print "Custom library directory for OpenSSL: $opt_openssl_lib\n";
-        $openssl_libpath = "$opt_openssl_lib";
-    }
-
-    cc_include_paths "$openssl_incpath";
-    cc_libs "-L$openssl_libpath", "crypto";
-    $assert_lib_args_openssl{incpath} = "$openssl_incpath";
-    $assert_lib_args_openssl{libpath} = "$openssl_libpath";
-}
-else {
-    cc_libs 'crypto';
-}
+);
 
 cc_assert_lib(
     debug    => $opt_debug,
     lib      => 'crypto',
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;',
-    %assert_lib_args_openssl,
+    %{ %assert_lib_args{openssl} },
 );
 if ( $opt_ed25519 ) {
     print "Feature Ed25519 enabled\n";
@@ -168,7 +205,7 @@ if ( $opt_ed25519 ) {
         lib      => 'crypto',
         header   => 'openssl/evp.h',
         function => 'EVP_PKEY_ED25519; return 0;',
-        %assert_lib_args_openssl,
+        %{ %assert_lib_args{openssl} },
     );
 }
 else {
@@ -186,38 +223,20 @@ if ( $opt_internal_ldns ) {
 else {
     print "Feature internal ldns disabled\n";
 
-    my %assert_lib_args_ldns;
-    my $custom_ldns = ( $opt_ldns_inc or $opt_ldns_lib );
-    if ( $custom_ldns ) {
-        my $ldns_incpath = "";
-        my $ldns_libpath = "";
-
-        if ( $opt_ldns_inc ) {
-            print "Custom include directory for LDNS: $opt_ldns_inc\n";
-            $ldns_incpath = "$opt_ldns_inc";
+    custom_assets(
+        {
+            name => "LDNS",
+            lib  => "ldns",
+            key  => "ldns"
         }
-
-        if ( $opt_ldns_lib ) {
-            print "Custom library directory for LDNS: $opt_ldns_lib\n";
-            $ldns_libpath = "$opt_ldns_lib";
-        }
-
-        cc_include_paths "$ldns_incpath";
-        cc_libs "-L$ldns_libpath", "ldns";
-
-        $assert_lib_args_ldns{incpath} = "$ldns_incpath";
-        $assert_lib_args_ldns{libpath} = "$ldns_libpath";
-    }
-    else {
-        cc_libs 'ldns';
-    }
+    );
 
     if ( $opt_ed25519 ) {
         cc_assert_lib(
             debug    => $opt_debug,
             lib      => 'ldns',
             header   => 'ldns/ldns.h',
-            %assert_lib_args_ldns,
+            %{ %assert_lib_args{ldns} },
             ccflags  => '-DUSE_ED25519',
             function => 'if(LDNS_ED25519) return 0; else return 1;'
         );
@@ -230,37 +249,19 @@ else {
 if ( $opt_idn ) {
     print "Feature idn enabled\n";
 
-    my %assert_lib_args_libidn;
-    my $custom_libidn = ( $opt_libidn_inc or $opt_libidn_lib );
-    if ( $custom_libidn ) {
-        my $libidn_incpath = "";
-        my $libidn_libpath = "";
-
-        if ( $opt_libidn_inc ) {
-            print "Custom include directory for Libidn: $opt_libidn_inc\n";
-            $libidn_incpath = "$opt_libidn_inc";
+    custom_assets(
+        {
+            name => "Libidn",
+            lib  => "idn2",
+            key  => "libidn"
         }
-
-        if ( $opt_libidn_lib ) {
-            print "Custom library directory for Libidn: $opt_libidn_lib\n";
-            $libidn_libpath = "$opt_libidn_lib";
-        }
-
-        cc_include_paths "$libidn_incpath";
-        cc_libs "-L$libidn_libpath", "idn2";
-
-        $assert_lib_args_libidn{incpath} = "$libidn_incpath";
-        $assert_lib_args_libidn{libpath} = "$libidn_libpath";
-    }
-    else {
-        cc_libs 'idn2';
-    }
+    );
 
     check_lib_or_exit(
         debug    => $opt_debug,
         lib    => 'idn2',
         header => 'idn2.h',
-        %assert_lib_args_libidn,
+        %{ %assert_lib_args{libidn} },
         function => 'return IDN2_OK;'
     );
     cc_define '-DWE_CAN_HAZ_IDN';
@@ -316,14 +317,14 @@ END_CONFIGURE_FLAGS
 
     my $openssl_make = <<END_OPENSSL_MAKE;
 
-CONFIGURE_FLAGS += --with-ssl=$opt_prefix_openssl
+CONFIGURE_FLAGS += --with-ssl=$$opt_assets{openssl}{prefix}
 
 END_OPENSSL_MAKE
 
     my $openssl_flags = <<END_OPENSSL_FLAGS;
 
-CFLAGS += -I$opt_openssl_inc
-LDFLAGS += -L$opt_openssl_lib
+CFLAGS += -I$$opt_assets{penssl}{inc}
+LDFLAGS += -L$$opt_assets{openssl}{lib}
 
 END_OPENSSL_FLAGS
 
@@ -366,10 +367,10 @@ END_INTERNAL_LDNS
     $postamble .= $docker_make;
     if ( $opt_internal_ldns ) {
         $postamble .= $configure_flags_make;
-        $postamble .= $openssl_make if $opt_prefix_openssl;
+        $postamble .= $openssl_make if $$opt_assets{openssl}{prefix};
         $postamble .= $ed25519_make if $opt_ed25519;
         $postamble .= $no_ed25519_make if !$opt_ed25519;
-        $postamble .= $openssl_flags if ( $opt_openssl_inc or $opt_openssl_lib );
+        $postamble .= $openssl_flags if ( $$opt_assets{openssl}{inc} or $$opt_assets{openssl}{lib} );
         $postamble .= $internal_ldns_make;
     }
 
