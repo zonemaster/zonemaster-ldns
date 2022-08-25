@@ -15,6 +15,10 @@
   * [IDN]
   * [Internal ldns]
   * [Randomized capitalization](#randomized-capitalization)
+  * [Custom OpenSSL]
+  * [Custom LDNS]
+  * [Custom Libidn]
+  * [Debug]
 
 
 ## Introduction
@@ -175,7 +179,7 @@ Randomizes the capitalization of returned domain names.
 
 Disabled by default.
 Enabled with `--prefix-openssl=/path/to/openssl` or
-`--openssl-inc=/path/to/openssl_inc` or `--openssl-lib=/path/to/openssl_lib`
+`--openssl-inc=/path/to/openssl_inc` or `--openssl-lib=/path/to/openssl_lib`.
 
 Enabling this makes the build tools look for OpenSSL in a non-standard place.
 
@@ -192,6 +196,39 @@ same parent directory, use `--openssl-inc` and `--openssl-lib` options to
 specify both paths.
 
 
+### Custom LDNS
+
+Disabled by default.
+Enabled with `--ldns-inc=/path/to/ldns_inc` or `--ldns-lib=/path/to/ldns_lib`.
+
+Enabling this makes the build tools look for LDNS in a non-standard place.
+
+> Requires [Internal LDNS] to be disabled.
+
+
+### Custom Libidn
+
+Disabled by default.
+Enabled with `--libidn-inc=/path/to/libidn_inc` or
+`--libidn-lib=/path/to/ldns_lib`.
+
+Enabling this makes the build tools look for Libidn in a non-standard place.
+
+> Requires [IDN] to be enabled.
+
+
+### Debug
+
+Disabled by default.
+Enabled with `--debug`.
+
+Gives a more verbose output.
+
+
+[Custom LDNS]:                                       #custom-ldns
+[Custom Libidn]:                                     #custom-libidn
+[Custom OpenSSL]:                                    #custom-openssl
+[Debug]:                                             #debug
 [DNS::LDNS]:                                         http://search.cpan.org/~erikoest/DNS-LDNS/
 [Docker Hub]:                                        https://hub.docker.com/u/zonemaster
 [Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
