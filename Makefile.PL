@@ -196,7 +196,7 @@ cc_assert_lib(
     lib      => 'crypto',
     header   => 'openssl/crypto.h',
     function => 'if(SSLeay()) return 0; else return 1;',
-    %{ %assert_lib_args{openssl} },
+    %{ $assert_lib_args{openssl} },
 );
 if ( $opt_ed25519 ) {
     print "Feature Ed25519 enabled\n";
@@ -205,7 +205,7 @@ if ( $opt_ed25519 ) {
         lib      => 'crypto',
         header   => 'openssl/evp.h',
         function => 'EVP_PKEY_ED25519; return 0;',
-        %{ %assert_lib_args{openssl} },
+        %{ $assert_lib_args{openssl} },
     );
 }
 else {
@@ -236,7 +236,7 @@ else {
             debug    => $opt_debug,
             lib      => 'ldns',
             header   => 'ldns/ldns.h',
-            %{ %assert_lib_args{ldns} },
+            %{ $assert_lib_args{ldns} },
             ccflags  => '-DUSE_ED25519',
             function => 'if(LDNS_ED25519) return 0; else return 1;'
         );
@@ -261,7 +261,7 @@ if ( $opt_idn ) {
         debug    => $opt_debug,
         lib    => 'idn2',
         header => 'idn2.h',
-        %{ %assert_lib_args{libidn} },
+        %{ $assert_lib_args{libidn} },
         function => 'return IDN2_OK;'
     );
     cc_define '-DWE_CAN_HAZ_IDN';
