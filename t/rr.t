@@ -226,4 +226,12 @@ subtest 'SPF' => sub {
     is( $spf->spfdata, '"v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"' );
 };
 
+subtest 'croak when given malformed CAA records' => sub {
+    my $will_croak = sub {
+        Zonemaster::LDNS::RR->new(
+            'bad-caa.example.       3600    IN      CAA     \# 4 C0000202' )
+    };
+    like( exception { $will_croak->() }, qr/^Failed to convert RR to string/ );
+};
+
 done_testing;
