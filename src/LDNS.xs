@@ -1233,7 +1233,14 @@ packet_string(obj)
     Zonemaster::LDNS::Packet obj;
     CODE:
         RETVAL = ldns_pkt2str(obj);
-        RETVAL[strlen(RETVAL)-1] = '\0';
+        if(RETVAL == NULL || RETVAL[0] == '\0')
+        {
+            croak("Failed to convert packet to string");
+        }
+        else
+        {
+            strip_newline(RETVAL);
+        }
     OUTPUT:
         RETVAL
     CLEANUP:
@@ -1597,7 +1604,14 @@ rr_string(obj)
     Zonemaster::LDNS::RR obj;
     CODE:
         RETVAL = ldns_rr2str(obj);
-        RETVAL[strlen(RETVAL)-1] = '\0';
+        if(RETVAL == NULL || RETVAL[0] == '\0')
+        {
+            croak("Failed to convert RR to string");
+        }
+        else
+        {
+            strip_newline(RETVAL);
+        }
     OUTPUT:
         RETVAL
     CLEANUP:
