@@ -6,7 +6,7 @@
 * [Dependencies and Compatibility](#dependencies-and-compatibility)
 * [Installation and verification](#installation-and-verification)
   * [Recommended installation](#recommended-installation)
-  * [Docker](#Docker)
+  * [Docker](#docker)
   * [Installation from source](#installation-from-source)
   * [Post-installation sanity check](#post-installation-sanity-check)
   * [Testing](#testing)
