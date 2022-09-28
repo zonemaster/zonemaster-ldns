@@ -182,6 +182,7 @@ t/example.org
 t/idn.t
 t/load_zonefile.t
 t/netldns.t
+t/nsid.t
 t/packet.t
 t/regression.t
 t/resolver.t
