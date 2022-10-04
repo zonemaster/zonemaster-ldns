@@ -1421,7 +1421,11 @@ packet_nsid(obj)
         ldns_edns_option_list* edns_list;
         ldns_edns_option*      edns_opt;
 
-        edns_list = ldns_edns_option_list_new();
+        edns_list = ldns_pkt_edns_get_option_list(obj);
+
+        if ( !edns_list )
+            edns_list = ldns_edns_option_list_new();
+
         edns_opt  = ldns_edns_new_from_data(LDNS_EDNS_NSID, 0, NULL);
         if ( edns_list == NULL || edns_opt == NULL )
             croak("Could not allocate EDNS option");
