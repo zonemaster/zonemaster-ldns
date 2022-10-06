@@ -226,4 +226,28 @@ subtest 'SPF' => sub {
     is( $spf->spfdata, '"v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"' );
 };
 
+subtest 'CDS' => sub {
+    my $data = "cds.example. 0 IN CDS 51298 13 2 60A48DB6C1F4B993E3D7C0869C0C535A70C9A6D1899DE86563D485B5 15EE1918";
+
+    my $rr = Zonemaster::LDNS::RR->new($data);
+
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::CDS' );
+    is( $rr->keytag,    51298 );
+    is( $rr->algorithm, 13 );
+    is( $rr->digtype, 2 );
+    is( $rr->hexdigest, '60a48db6c1f4b993e3d7c0869c0c535a70c9a6d1899de86563d485b515ee1918' );
+};
+
+subtest 'CDNSKEY' => sub {
+    my $data = "cdnskey.example. 0 IN CDNSKEY 257 3 13 6/8fEc37k5iabGoWgsl7rmreQth8ADr9sYFGd0pxmgxN19MBR629YAH5 ntzSus7SjJx6PAVqGzHHpCPVyDLQHQ==";
+
+    my $rr = Zonemaster::LDNS::RR->new($data);
+
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::CDNSKEY' );
+    is( $rr->flags, 257 );
+    is( $rr->protocol,  3 );
+    is( $rr->algorithm, 13 );
+    is( $rr->keytag,    51298 );
+};
+
 done_testing;
