@@ -2366,18 +2366,6 @@ rr_cname_cname(obj)
     CLEANUP:
         free(RETVAL);
 
-MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::SPF              PREFIX=rr_spf_
-
-char *
-rr_spf_spfdata(obj)
-    Zonemaster::LDNS::RR::SPF obj;
-    CODE:
-        RETVAL = D_STRING(obj,0);
-    OUTPUT:
-        RETVAL
-    CLEANUP:
-        free(RETVAL);
-
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::KEY           PREFIX=rr_key_
 
 U16

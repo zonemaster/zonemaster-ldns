@@ -220,10 +220,19 @@ subtest 'SRV' => sub {
 };
 
 subtest 'SPF' => sub {
-    my $spf = Zonemaster::LDNS::RR->new(
-        'frobbit.se.		1127	IN	SPF	"v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"' );
-    isa_ok( $spf, 'Zonemaster::LDNS::RR::SPF' );
-    is( $spf->spfdata, '"v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"' );
+    my @data = (
+        q{frobbit.se.           1127    IN      SPF     "v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all"},
+        q{spf.example.          3600    IN      SPF     "v=spf1 " "ip4:192.0.2.25/24 " "mx:mail.spf.example " "ip6:2001:db8::25/64 -all"}
+    );
+
+    my @rr = map { Zonemaster::LDNS::RR->new($_) } @data;
+    for my $spf (@rr) {
+        isa_ok( $spf, 'Zonemaster::LDNS::RR::SPF' );
+    }
+
+    is( $rr[0]->spfdata(), 'v=spf1 ip4:85.30.129.185/24 mx:mail.frobbit.se ip6:2a02:80:3ffe::0/64 ~all' );
+    is( $rr[1]->spfdata(), 'v=spf1 ip4:192.0.2.25/24 mx:mail.spf.example ip6:2001:db8::25/64 -all' );
+
 };
 
 done_testing;
