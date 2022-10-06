@@ -77,18 +77,18 @@ subtest 'AAAA' => sub {
 };
 
 subtest 'TXT' => sub {
-    SKIP: {
-        skip 'no network', 1 unless $ENV{TEST_WITH_NETWORK};
+    my @data = (
+        q{txt.test. 3600 IN TXT "Handling TXT RRs can be challenging"},
+        q{txt.test. 3600 IN TXT "because " "the data can " "be spl" "it up like " "this!"}
+    );
+    my @rrs = map { Zonemaster::LDNS::RR->new($_) } @data;
 
-        my $se = Zonemaster::LDNS->new( '192.36.144.107' );
-        my $pt = $se->query( 'se', 'TXT' );
-        plan skip_all => 'No response, cannot test' if not $pt;
-
-        foreach my $rr ( $pt->answer ) {
-            isa_ok( $rr, 'Zonemaster::LDNS::RR::TXT' );
-            like( $rr->txtdata, qr/^"SE zone update: / );
-        }
+    foreach my $rr ( @rrs ) {
+        isa_ok( $rr, 'Zonemaster::LDNS::RR::TXT' );
     }
+
+    is( $rrs[0]->txtdata(), q{Handling TXT RRs can be challenging} );
+    is( $rrs[1]->txtdata(), q{because the data can be split up like this!} );
 };
 
 subtest 'DNSKEY' => sub {
