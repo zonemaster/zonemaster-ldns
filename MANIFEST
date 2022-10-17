@@ -11,6 +11,8 @@ inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 inc/Module/Install/XSUtil.pm
 include/LDNS.h
+ldns/.github/FUNDING.yml
+ldns/.github/workflows/testsuite.yml
 ldns/buffer.c
 ldns/compat/b64_ntop.c
 ldns/compat/b64_pton.c
@@ -66,6 +68,7 @@ ldns/ldns/update.h
 ldns/ldns/util.h.in
 ldns/ldns/wire2host.h
 ldns/ldns/zone.h
+ldns/libdns.doxygen.in
 ldns/LICENSE
 ldns/ltmain.sh
 ldns/Makefile.in
@@ -77,6 +80,7 @@ ldns/parse.c
 ldns/radix.c
 ldns/rbtree.c
 ldns/rdata.c
+ldns/README-Travis.md
 ldns/resolver.c
 ldns/rr.c
 ldns/rr_functions.c
