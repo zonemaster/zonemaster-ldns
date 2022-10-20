@@ -12,6 +12,7 @@ inc/Module/Install/WriteAll.pm
 inc/Module/Install/XSUtil.pm
 include/LDNS.h
 ldns/buffer.c
+ldns/Changelog
 ldns/compat/b64_ntop.c
 ldns/compat/b64_pton.c
 ldns/compat/strlcpy.c
