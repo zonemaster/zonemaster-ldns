@@ -352,12 +352,14 @@ ldns/.libs/libldns.a: ldns/configure
 	./configure CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(CONFIGURE_FLAGS) ;\
 	make lib
 
-ldns/configure:
+ldns/configure: ldns/Changelog
+	cd ldns ; libtoolize -ci
+	cd ldns ; autoreconf -fi
+
+ldns/Changelog:
 	git submodule init
 	git submodule sync
 	git submodule update
-	cd ldns ; libtoolize -ci
-	cd ldns ; autoreconf -fi
 
 END_INTERNAL_LDNS
 
