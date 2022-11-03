@@ -213,12 +213,15 @@ else {
 }
 
 
-# LDNS
+# LDNS and NSID
+
+my $ldns_has_nsid;
 
 if ( $opt_internal_ldns ) {
     print "Feature internal ldns enabled\n";
     cc_libs '-Lldns/lib';
     cc_include_paths 'ldns';
+    $ldns_has_nsid = 1;
 }
 else {
     print "Feature internal ldns disabled\n";
@@ -241,6 +244,23 @@ else {
             function => 'if(LDNS_ED25519) return 0; else return 1;'
         );
     }
+
+    # NSID feature requires LDNS version >= 1.8.2
+    $ldns_has_nsid = check_lib(
+        debug    => $opt_debug,
+        lib      => 'ldns',
+        header   => 'ldns/util.h',
+        %{ $assert_lib_args{ldns} },
+        function => 'if ( LDNS_REVISION >= ((1<<16)|(8<<8)|(2)) ) return 0; else return 1;'
+    );
+}
+
+if ( $ldns_has_nsid ) {
+    print "Feature NSID enabled\n";
+    cc_define '-DNSID_SUPPORT';
+}
+else {
+    print "Feature NSID disabled\n";
 }
 
 
