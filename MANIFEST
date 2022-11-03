@@ -14,6 +14,7 @@ include/LDNS.h
 ldns/.github/FUNDING.yml
 ldns/.github/workflows/testsuite.yml
 ldns/buffer.c
+ldns/Changelog
 ldns/compat/b64_ntop.c
 ldns/compat/b64_pton.c
 ldns/compat/strlcpy.c
