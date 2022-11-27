@@ -19,7 +19,7 @@
   * [Custom LDNS]
   * [Custom Libidn]
   * [Debug]
-
+* [License](#license)
 
 ## Introduction
 
@@ -223,6 +223,11 @@ Disabled by default.
 Enabled with `--debug`.
 
 Gives a more verbose output.
+
+## License
+
+This is free software under a 2-clause BSD license. The full text of the license can
+be found in the [LICENSE](LICENSE) file included in this respository.
 
 
 [Custom LDNS]:                                       #custom-ldns
