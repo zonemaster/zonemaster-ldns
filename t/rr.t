@@ -235,4 +235,15 @@ subtest 'SPF' => sub {
 
 };
 
+subtest 'croak when given malformed CAA records' => sub {
+    my $will_croak = sub {
+        # This will croak if LDNS.xs is compiled with -DUSE_ITHREADS
+        my $bad_caa = Zonemaster::LDNS::RR->new(
+            'bad-caa.example.       3600    IN      CAA     \# 4 C0000202' );
+        # This will always croak
+        $bad_caa->string();
+    };
+    like( exception { $will_croak->() }, qr/^Failed to convert RR to string/ );
+};
+
 done_testing;
