@@ -343,7 +343,7 @@ END_OPENSSL_MAKE
 
     my $openssl_flags = <<END_OPENSSL_FLAGS;
 
-CFLAGS += -I$$opt_assets{penssl}{inc}
+CFLAGS += -I$$opt_assets{openssl}{inc}
 LDFLAGS += -L$$opt_assets{openssl}{lib}
 
 END_OPENSSL_FLAGS

@@ -1459,7 +1459,7 @@ packet_get_nsid(obj)
 #ifdef NSID_SUPPORT
         ldns_edns_option_list* edns_list;
         ldns_edns_option* edns_opt;
-        size_t count;
+        size_t i,count;
 
         edns_list = ldns_pkt_edns_get_option_list(obj);
         if ( edns_list == NULL )
@@ -1467,7 +1467,7 @@ packet_get_nsid(obj)
 
         RETVAL = NULL;
         count = ldns_edns_option_list_get_count(edns_list);
-        for ( int i=0; i<count; i++ )
+        for ( i=0; i<count; i++ )
         {
             edns_opt = ldns_edns_option_list_get_option(edns_list, i);
             if ( edns_opt == NULL )
