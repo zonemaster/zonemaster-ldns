@@ -3,7 +3,6 @@ FROM alpine:3.14 as build
 RUN apk add --no-cache \
     # Compile-time dependencies
     build-base \
-    ldns-dev \
     libidn2-dev \
     make \
     openssl-dev \
@@ -20,7 +19,7 @@ ARG version
 
 COPY ./Zonemaster-LDNS-${version}.tar.gz ./Zonemaster-LDNS-${version}.tar.gz
 
-RUN cpanm --notest --no-wget --configure-args="--no-internal-ldns" \
+RUN cpanm --notest --no-wget \
     ./Zonemaster-LDNS-${version}.tar.gz
 
 FROM alpine:3.14
@@ -31,6 +30,5 @@ COPY --from=build /usr/local/lib/perl5/site_perl/Zonemaster /usr/local/lib/perl5
 
 RUN apk add --no-cache \
     # Run-time dependencies
-    ldns \
     libidn2 \
     perl
