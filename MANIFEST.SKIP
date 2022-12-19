@@ -16,7 +16,6 @@
 \.ac$
 
 # Avoid ldns files we don't need
-^ldns/Changelog$
 ^ldns/README$
 ^ldns/README\.
 ^ldns/\.libs/
