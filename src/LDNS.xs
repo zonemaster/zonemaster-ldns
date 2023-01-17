@@ -1375,42 +1375,39 @@ packet_edns_version(obj,...)
 # -------------------
 # Get/set EDNS data
 # 
-# This function will set EDNS RDATA in a packet when given a parameter,
-# otherwise it will return the entire EDNS RDATA of the packet (if any).
+# This function will set OPT RDATA in a packet when given a parameter,
+# otherwise it will return the entire OPT RDATA of the packet (if any).
 #
-# Beware, when setting EDNS RDATA, this code can only take a unique U32 parameter
+# Beware, when setting OPT RDATA, this code can only take a unique U32 parameter
 # which means it is not a full implementation of EDNS data but it is enough for our
 # current purpose. It can only deal with option codes with OPTION-LENGTH=0
 # (see 6.1.2 section of RFC 6891) which means OPTION-DATA is always empty.
 #
-# returns: a bytes string (or undef if no EDNS data is found)
+# returns: a bytes string (or undef if no OPT RDATA is found)
 #
 SV *
 packet_edns_data(obj,...)
     Zonemaster::LDNS::Packet obj;
     CODE:
-        ldns_rdf* rdf;
+        ldns_rdf* opt;
         if(items>=2)
         {
             SvGETMAGIC(ST(1));
-            rdf = ldns_native2rdf_int32(LDNS_RDF_TYPE_INT32, (U32)SvIV(ST(1)));
-            if(rdf == NULL)
+            opt = ldns_native2rdf_int32(LDNS_RDF_TYPE_INT32, (U32)SvIV(ST(1)));
+            if(opt == NULL)
             {
-                croak("Failed to set rdf RDATA");
+                croak("Failed to set OPT RDATA");
             }
-            ldns_pkt_set_edns_data(obj, rdf);
-            RETVAL = newSVpvn((char*)(rdf), 4);
+            ldns_pkt_set_edns_data(obj, opt);
         }
         else {
-            rdf = ldns_pkt_edns_data(obj);
-            if(rdf == NULL)
+            opt = ldns_pkt_edns_data(obj);
+            if(opt == NULL)
             {
                 XSRETURN_UNDEF;
             }
-            else{
-                RETVAL = newSVpvn((char*)(rdf->_data), rdf->_size);
-            }
         }
+        RETVAL = newSVpvn((char*)(opt->_data), opt->_size);
     OUTPUT:
         RETVAL
 
