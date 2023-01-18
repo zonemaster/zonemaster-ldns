@@ -1375,8 +1375,10 @@ packet_edns_version(obj,...)
 # -------------------
 # Get/set EDNS data
 # 
-# This function will set OPT RDATA in a packet when given a parameter,
-# otherwise it will return the entire OPT RDATA of the packet (if any).
+# This function acts on the OPT RDATA field of a packet. An OPT RDATA consists of at least one triplet
+# {OPTION-CODE, OPTION-LENGTH, OPTION-DATA}.
+# When given a parameter, this function will set and return the field, although with the limitation described below.
+# Otherwise, it will get and return the field (if any).
 #
 # Beware, when setting OPT RDATA, this code can only take a unique U32 parameter
 # which means it is not a full implementation of EDNS data but it is enough for our
