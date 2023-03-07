@@ -235,6 +235,12 @@ subtest 'SPF' => sub {
 
 };
 
+subtest 'DNAME' => sub {
+    my $rr = Zonemaster::LDNS::RR->new( 'examplë.fake 3600  IN  DNAME example.fake' );
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::DNAME' );
+    is($rr->dname(), 'example.fake.');
+};
+
 subtest 'croak when given malformed CAA records' => sub {
     my $will_croak = sub {
         # This will croak if LDNS.xs is compiled with -DUSE_ITHREADS
