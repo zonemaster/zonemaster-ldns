@@ -2459,6 +2459,18 @@ rr_cname_cname(obj)
     CLEANUP:
         free(RETVAL);
 
+MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::DNAME            PREFIX=rr_dname_
+
+char *
+rr_dname_dname(obj)
+    Zonemaster::LDNS::RR::DNAME obj;
+    CODE:
+        RETVAL = randomize_capitalization(D_STRING(obj,0));
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        free(RETVAL);
+
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::KEY           PREFIX=rr_key_
 
 U16
