@@ -2337,6 +2337,16 @@ bool
 rr_nsec3_covers(obj,name)
     Zonemaster::LDNS::RR::NSEC3 obj;
     const char *name;
+    INIT:
+        /* Sanity test on owner name */
+        if (ldns_dname_label_count(ldns_rr_owner(obj)) == 0)
+            XSRETURN_UNDEF;
+
+        /* Sanity test on hashed next owner field */
+        ldns_rdf *next_owner = ldns_nsec3_next_owner(obj);
+        if (!next_owner || ldns_rdf_size(next_owner) <= 1)
+            XSRETURN_UNDEF;
+
     CODE:
     {
         ldns_rr *clone;
