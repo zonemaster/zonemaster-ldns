@@ -65,10 +65,7 @@ my $nsec3 = Zonemaster::LDNS::RR->new('NR2E513KM693MBTNVHH56ENF54F886T0.com. 864
 isa_ok($nsec3, 'Zonemaster::LDNS::RR::NSEC3');
 ok($nsec3->covers('xx-example.com'), 'Covers xx-example.com');
 
-SKIP: {
-    skip 'guaranteed crash', 1;
-    is($nsec3->covers('.'), undef, 'Does not cover the root domain');
-}
+is($nsec3->covers('.'), undef, 'Does not cover the root domain');
 
 subtest 'malformed NSEC3 do not cover anything' => sub {
     SKIP: {

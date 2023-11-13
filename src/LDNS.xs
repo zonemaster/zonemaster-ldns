@@ -2344,15 +2344,28 @@ rr_nsec3_covers(obj,name)
         ldns_rdf *hashed;
         ldns_rdf *chopped;
 
-        clone = ldns_rr_clone(obj);
         dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        if (!dname)
+            XSRETURN_UNDEF;
+
         ldns_dname2canonical(dname);
+
+        chopped = ldns_dname_left_chop(dname);
+        if (!chopped) {
+            ldns_rdf_deep_free(dname);
+            XSRETURN_UNDEF;
+        }
+
+        clone = ldns_rr_clone(obj);
         ldns_rr2canonical(clone);
         hashed = ldns_nsec3_hash_name_frm_nsec3(clone, dname);
-        chopped = ldns_dname_left_chop(dname);
+
         ldns_rdf_deep_free(dname);
+
         ldns_dname_cat(hashed,chopped);
+
         RETVAL = ldns_nsec_covers_name(clone,hashed);
+
         ldns_rdf_deep_free(hashed);
         ldns_rdf_deep_free(chopped);
         ldns_rr_free(clone);
