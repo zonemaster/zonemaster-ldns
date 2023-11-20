@@ -2429,12 +2429,17 @@ rr_nsec3param_iterations(obj)
 SV *
 rr_nsec3param_salt(obj)
     Zonemaster::LDNS::RR::NSEC3PARAM obj;
-    PPCODE:
-        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
-        if(ldns_rdf_size(rdf) > 0)
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj, 3);
+        size_t size = ldns_rdf_size(rdf);
+        if (size > 0)
         {
-            mPUSHs(newSVpvn((char *)ldns_rdf_data(rdf), ldns_rdf_size(rdf)));
+            RETVAL = newSVpvn((char *)(ldns_rdf_data(rdf) + 1), size - 1);
         }
+    }
+    OUTPUT:
+        RETVAL
 
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::PTR              PREFIX=rr_ptr_
 

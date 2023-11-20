@@ -234,13 +234,24 @@ subtest 'NSEC3 with salt' => sub {
     is_deeply( [ sort keys %{ $nsec3->typehref } ], [qw(A DNSKEY MX NS NSEC3PARAM RRSIG SOA TXT)] );
 };
 
-subtest 'NSEC3PARAM' => sub {
+subtest 'NSEC3PARAM without salt and non-zero flags' => sub {
+    my $nsec3param = Zonemaster::LDNS::RR->new_from_string(
+        'empty-nsec3param.example. 86400 IN NSEC3PARAM 1 165 0 -' );
+    isa_ok( $nsec3param, 'Zonemaster::LDNS::RR::NSEC3PARAM' );
+    is( $nsec3param->algorithm,  1 );
+    is( $nsec3param->flags,      0xA5 );
+    is( $nsec3param->iterations, 0 );
+    is( $nsec3param->salt,       '', 'Salt');
+    is( lc($nsec3param->owner),  'empty-nsec3param.example.' );
+};
+
+subtest 'NSEC3PARAM with salt' => sub {
     my $nsec3param = Zonemaster::LDNS::RR->new_from_string( 'whitehouse.gov.		3600	IN	NSEC3PARAM 1 0 1 B2C19AB526819347' );
     isa_ok( $nsec3param, 'Zonemaster::LDNS::RR::NSEC3PARAM' );
     is( $nsec3param->algorithm,  1 );
     is( $nsec3param->flags,      0 );
     is( $nsec3param->iterations, 1, "Iterations" );
-    is( encode_base64( $nsec3param->salt, '' ), "CLLBmrUmgZNH", "Salt" );
+    is( uc(unpack( 'H*', $nsec3param->salt )), 'B2C19AB526819347', "Salt" );
     is( lc($nsec3param->owner), 'whitehouse.gov.' );
 };
 
