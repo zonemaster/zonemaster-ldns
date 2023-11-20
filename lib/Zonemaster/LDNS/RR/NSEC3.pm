@@ -41,7 +41,7 @@ Returns the contents of the salt field as a binary string, if non-empty; otherwi
 
 =item next_owner()
 
-Returns the next owner field.
+Returns the next hashed owner name field, in binary form. To convert the return value to the human-readable presentation format, use L<MIME::Base32/encode_base32hex>.
 
 =item typelist()
 

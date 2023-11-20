@@ -1,6 +1,7 @@
 use Test::More;
 use Test::Fatal;
 use Devel::Peek;
+use MIME::Base32 qw(encode_base32hex);
 use MIME::Base64;
 use Test::Differences;
 
@@ -212,7 +213,7 @@ subtest 'NSEC3 without salt' => sub {
     ok( $nsec3->optout );
     is( $nsec3->iterations,                  0 );
     is( $nsec3->salt,                        '' );
-    is( encode_base64( $nsec3->next_owner, '' ), "FPtBccW1LaCSAtjy2PLa9aQb1O39" );
+    is( encode_base32hex( $nsec3->next_owner ), "VD0N3HDL5MG940MOUBCF5MNLKGDT9RFT" );
     is( $nsec3->typelist,                    'NS DS RRSIG ' );
 
     is_deeply( [ sort keys %{ $nsec3->typehref } ], [qw(DS NS RRSIG)] );
@@ -227,7 +228,7 @@ subtest 'NSEC3 with salt' => sub {
     ok( $nsec3->optout );
     is( $nsec3->iterations,                  1 );
     is( unpack('H*', $nsec3->salt),          '8104' );
-    is( encode_base64( $nsec3->next_owner, '' ), "FGJDpwiEu0Gi6iOdbjKpAE2lRDRp" );
+    is( encode_base32hex( $nsec3->next_owner ), "C91QE244ND0Q5QH3JLN35A809MIK8D39" );
     is( $nsec3->typelist,                    'A NS SOA MX TXT RRSIG DNSKEY NSEC3PARAM ' );
 
     is_deeply( [ sort keys %{ $nsec3->typehref } ], [qw(A DNSKEY MX NS NSEC3PARAM RRSIG SOA TXT)] );
