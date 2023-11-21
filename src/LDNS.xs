@@ -2275,13 +2275,16 @@ rr_nsec3_iterations(obj)
 SV *
 rr_nsec3_salt(obj)
     Zonemaster::LDNS::RR::NSEC3 obj;
-    PPCODE:
-        if(ldns_nsec3_salt_length(obj) > 0)
-        {
-            ldns_rdf *buf = ldns_nsec3_salt(obj);
-            ST(0) = sv_2mortal(newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf)));
-            ldns_rdf_deep_free(buf);
+    CODE:
+    {
+        uint8_t *salt = ldns_nsec3_salt_data(obj);
+        if (salt) {
+            RETVAL = newSVpvn((char *)salt, ldns_nsec3_salt_length(obj));
+            LDNS_FREE(salt);
         }
+    }
+    OUTPUT:
+        RETVAL
 
 SV *
 rr_nsec3_next_owner(obj)

@@ -203,7 +203,7 @@ subtest 'DS' => sub {
     }
 };
 
-subtest 'NSEC3' => sub {
+subtest 'NSEC3 without salt' => sub {
     my $nsec3 = Zonemaster::LDNS::RR->new_from_string(
         'VD0J8N54V788IUBJL9CN5MUD416BS5I6.com. 86400 IN NSEC3 1 1 0 - VD0N3HDL5MG940MOUBCF5MNLKGDT9RFT NS DS RRSIG' );
     isa_ok( $nsec3, 'Zonemaster::LDNS::RR::NSEC3' );
@@ -211,11 +211,26 @@ subtest 'NSEC3' => sub {
     is( $nsec3->flags,     1 );
     ok( $nsec3->optout );
     is( $nsec3->iterations,                  0 );
-    is( $nsec3->salt,                        undef );
-    is( encode_base64( $nsec3->next_owner ), "FPtBccW1LaCSAtjy2PLa9aQb1O39\n" );
+    is( $nsec3->salt,                        '' );
+    is( encode_base64( $nsec3->next_owner, '' ), "FPtBccW1LaCSAtjy2PLa9aQb1O39" );
     is( $nsec3->typelist,                    'NS DS RRSIG ' );
 
     is_deeply( [ sort keys %{ $nsec3->typehref } ], [qw(DS NS RRSIG)] );
+};
+
+subtest 'NSEC3 with salt' => sub {
+    my $nsec3 = Zonemaster::LDNS::RR->new_from_string(
+        'BP7OICBR09FICEULBF46U8DMJ1J1V8R3.bad-values.dnssec03.xa. 900 IN NSEC3 2 1 1 8104 c91qe244nd0q5qh3jln35a809mik8d39 A NS SOA MX TXT RRSIG DNSKEY NSEC3PARAM' );
+    isa_ok( $nsec3, 'Zonemaster::LDNS::RR::NSEC3' );
+    is( $nsec3->algorithm, 2 );
+    is( $nsec3->flags,     1 );
+    ok( $nsec3->optout );
+    is( $nsec3->iterations,                  1 );
+    is( unpack('H*', $nsec3->salt),          '8104' );
+    is( encode_base64( $nsec3->next_owner, '' ), "FGJDpwiEu0Gi6iOdbjKpAE2lRDRp" );
+    is( $nsec3->typelist,                    'A NS SOA MX TXT RRSIG DNSKEY NSEC3PARAM ' );
+
+    is_deeply( [ sort keys %{ $nsec3->typehref } ], [qw(A DNSKEY MX NS NSEC3PARAM RRSIG SOA TXT)] );
 };
 
 subtest 'NSEC3PARAM' => sub {
@@ -224,7 +239,7 @@ subtest 'NSEC3PARAM' => sub {
     is( $nsec3param->algorithm,  1 );
     is( $nsec3param->flags,      0 );
     is( $nsec3param->iterations, 1, "Iterations" );
-    is( encode_base64( $nsec3param->salt ), "CLLBmrUmgZNH\n", "Salt" );
+    is( encode_base64( $nsec3param->salt, '' ), "CLLBmrUmgZNH", "Salt" );
     is( lc($nsec3param->owner), 'whitehouse.gov.' );
 };
 
