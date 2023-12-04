@@ -5,10 +5,9 @@ env:
 
 language: perl
 perl:
-    - "5.32"
+    - "5.36"
     - "5.30.2"
     - "5.26"
-    - "5.14.4"
 
 before_install:
       # quoting preserves newlines in the script and then avoid error if the
