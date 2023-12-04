@@ -2289,9 +2289,22 @@ rr_nsec3_salt(obj)
 SV *
 rr_nsec3_next_owner(obj)
     Zonemaster::LDNS::RR::NSEC3 obj;
+    INIT:
+        ldns_rdf *buf = NULL;
+        size_t size;
     CODE:
-        ldns_rdf *buf = ldns_nsec3_next_owner(obj);
-        RETVAL = newSVpvn((char *)ldns_rdf_data(buf), ldns_rdf_size(buf));
+        buf = ldns_nsec3_next_owner(obj);
+        if (!buf) {
+            XSRETURN_UNDEF;
+        }
+        size = ldns_rdf_size(buf);
+        if (size < 1) {
+            XSRETURN_UNDEF;
+        }
+
+        /* ldns_rdf_data(buf) points to the hashed next owner name preceded by a
+         * length byte, which we don't want. */
+        RETVAL = newSVpvn((char *)(ldns_rdf_data(buf) + 1), size - 1);
     OUTPUT:
         RETVAL
 
@@ -2416,12 +2429,17 @@ rr_nsec3param_iterations(obj)
 SV *
 rr_nsec3param_salt(obj)
     Zonemaster::LDNS::RR::NSEC3PARAM obj;
-    PPCODE:
-        ldns_rdf *rdf = ldns_rr_rdf(obj,3);
-        if(ldns_rdf_size(rdf) > 0)
+    CODE:
+    {
+        ldns_rdf *rdf = ldns_rr_rdf(obj, 3);
+        size_t size = ldns_rdf_size(rdf);
+        if (size > 0)
         {
-            mPUSHs(newSVpvn((char *)ldns_rdf_data(rdf), ldns_rdf_size(rdf)));
+            RETVAL = newSVpvn((char *)(ldns_rdf_data(rdf) + 1), size - 1);
         }
+    }
+    OUTPUT:
+        RETVAL
 
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::PTR              PREFIX=rr_ptr_
 
