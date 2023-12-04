@@ -255,6 +255,13 @@ subtest 'NSEC3PARAM with salt' => sub {
     is( lc($nsec3param->owner), 'whitehouse.gov.' );
 };
 
+subtest 'SIG' => sub {
+    my $sig = Zonemaster::LDNS::RR->new_from_string('sig.example. 3600 IN SIG A 1 2 3600 19970102030405 19961211100908 2143 sig.example. AIYADP8d3zYNyQwW2EM4wXVFdslEJcUx/fxkfBeH1El4ixPFhpfHFElxbvKoWmvjDTCmfiYy2X+8XpFjwICHc398kzWsTMKlxovpz2FnCTM=');
+    isa_ok( $sig, 'Zonemaster::LDNS::RR::SIG' );
+    can_ok( 'Zonemaster::LDNS::RR::SIG', qw(check_rd_count) );
+    is( $sig->check_rd_count(), '1' );
+};
+
 subtest 'SRV' => sub {
     my $srv = Zonemaster::LDNS::RR->new( '_nicname._tcp.se.	172800	IN	SRV	0 0 43 whois.nic-se.se.' );
     is( $srv->type, 'SRV' );
