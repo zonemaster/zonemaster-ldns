@@ -90,6 +90,10 @@ Returns the protocol number.
 
 Returns the algorithm number.
 
+=item keytag()
+
+Returns the keytag value.
+
 =item keydata()
 
 Returns the cryptographic key in binary form.
