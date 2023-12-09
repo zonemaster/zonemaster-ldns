@@ -27,4 +27,11 @@ is_deeply(
 
 like( exception { to_idn( "ö" x 63 ) }, qr/Punycode/i, 'Boom today' );
 
+subtest 'test domain with symbol (backward compatibility)' => sub {
+    my $domain = "👍.example";
+    $encoded = to_idn( $domain );
+    my $expected = "xn--yp8h.example";
+    is( $encoded, $expected, 'IDNA2003 supported' );
+};
+
 done_testing;
