@@ -244,6 +244,6 @@ be found in the [LICENSE](LICENSE) file included in this respository.
 [Internal ldns]:                                     #internal-ldns
 [Ldns library]:                                      https://www.nlnetlabs.nl/projects/ldns/
 [NLnet Labs]:                                        https://www.nlnetlabs.nl/
-[USING]:                                             https://github.com/zonemaster/zonemaster-cli/blob/master/USING.md
+[USING]:                                             https://github.com/zonemaster/zonemaster/tree/master/docs/public/using
 [Zonemaster project]:                                http://github.com/zonemaster/zonemaster
 
