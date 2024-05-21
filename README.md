@@ -237,7 +237,7 @@ be found in the [LICENSE](LICENSE) file included in this respository.
 [Debug]:                                             #debug
 [DNS::LDNS]:                                         http://search.cpan.org/~erikoest/DNS-LDNS/
 [Docker Hub]:                                        https://hub.docker.com/u/zonemaster
-[Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
+[Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal/maintenance/ReleaseProcess-create-docker-image.md
 [Ed25519]:                                           #ed25519
 [IDN]:                                               #idn
 [Installation instructions for Zonemaster::Engine]:  https://github.com/zonemaster/zonemaster/tree/master/docs/public/installation
