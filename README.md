@@ -240,7 +240,7 @@ be found in the [LICENSE](LICENSE) file included in this respository.
 [Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal-documentation/maintenance/ReleaseProcess-create-docker-image.md
 [Ed25519]:                                           #ed25519
 [IDN]:                                               #idn
-[Installation instructions for Zonemaster::Engine]:  https://github.com/zonemaster/zonemaster-engine/blob/master/docs/Installation.md
+[Installation instructions for Zonemaster::Engine]:  https://github.com/zonemaster/zonemaster/tree/master/docs/public/installation
 [Internal ldns]:                                     #internal-ldns
 [Ldns library]:                                      https://www.nlnetlabs.nl/projects/ldns/
 [NLnet Labs]:                                        https://www.nlnetlabs.nl/
