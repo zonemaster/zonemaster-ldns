@@ -14,7 +14,7 @@ before_install:
       # script contains comments
     - eval "$(curl https://travis-perl.github.io/init)"
     - sudo apt-get install -y libidn2-dev
-    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil
+    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil Test::Fatal
 
 install:
     - cpanm --verbose --notest --configure-args="--no-ed25519" .
