@@ -5,8 +5,8 @@ env:
 
 language: perl
 perl:
-    - "5.36"
-    - "5.30.2"
+    - "5.38"
+    - "5.34"
     - "5.26"
 
 before_install:
@@ -14,7 +14,7 @@ before_install:
       # script contains comments
     - eval "$(curl https://travis-perl.github.io/init)"
     - sudo apt-get install -y libidn2-dev
-    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil
+    - cpan-install --deps Devel::CheckLib Module::Install Module::Install::XSUtil Test::Fatal
 
 install:
     - cpanm --verbose --notest --configure-args="--no-ed25519" .
