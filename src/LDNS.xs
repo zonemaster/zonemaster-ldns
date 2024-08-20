@@ -2012,6 +2012,16 @@ rr_dnskey_keydata(obj)
     OUTPUT:
         RETVAL
 
+char *
+rr_dnskey_hexkeydata(obj)
+    Zonemaster::LDNS::RR::DNSKEY obj;
+    CODE:
+        RETVAL = D_STRING(obj,3);
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        free(RETVAL);
+
 U16
 rr_dnskey_keytag(obj)
     Zonemaster::LDNS::RR::DNSKEY obj;
