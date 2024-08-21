@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+      - 'releases/**'
+  pull_request:
+    branches:
+      - develop
+      - master
+      - 'releases/**'
+
+jobs:
+  run-tests:
+    strategy:
+      fail-fast: false 
+      matrix:
+        perl:
+          - '5.38'
+          - '5.34'
+          - '5.26'
+        runner:
+          - ubuntu-22.04
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - name: perl version
+        run: perl -v
+
+      - name: apt install
+        run: sudo apt install -y libidn2-dev
+
+      - name: cpan module
+        run: cpanm Module::Install Devel::CheckLib Module::Install::XSUtil Test::Fatal
+
+      - name: installation
+        run: cpanm --verbose --notest --configure-args="--no-ed25519" .
+
+      - name: test
+        run: prove -bl
+
+      - name: check manifest
+        run: |
+          output=$(make distcheck 2>&1 >/dev/null)
+          if [ -n "$output" ]; then
+            echo "some file are not in MANIFEST or MANIFEST.SKIP"
+            make distcheck
+            exit 1
+          fi
