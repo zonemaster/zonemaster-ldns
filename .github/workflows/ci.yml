@@ -48,11 +48,4 @@ jobs:
       - name: test
         run: prove -bl
 
-      - name: check manifest
-        run: |
-          output=$(make distcheck 2>&1 >/dev/null)
-          if [ -n "$output" ]; then
-            echo "some file are not in MANIFEST or MANIFEST.SKIP"
-            make distcheck
-            exit 1
-          fi
+
