@@ -1732,7 +1732,7 @@ rr_check_rd_count(obj)
     Zonemaster::LDNS::RR obj;
     CODE:
         ldns_rr_type rr_type = ldns_rr_get_type(obj);
-        ldns_rr_descriptor *desc = ldns_rr_descript(rr_type);
+        const ldns_rr_descriptor *desc = ldns_rr_descript(rr_type);
         size_t rd_min = ldns_rr_descriptor_minimum(desc);
         size_t rd_max = ldns_rr_descriptor_maximum(desc);
         size_t rd_count = ldns_rr_rd_count(obj);
