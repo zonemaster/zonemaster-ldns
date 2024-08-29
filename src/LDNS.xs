@@ -28,7 +28,7 @@ to_idn(...)
                }
                else
                {
-                  croak("Error: %s\n", idn2_strerror(status));
+                  croak("IDN encoding error: %s\n", idn2_strerror_name(status));
                }
             }
         }
