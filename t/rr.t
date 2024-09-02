@@ -1,3 +1,5 @@
+use v5.16;
+
 use Test::More;
 use Test::Fatal;
 use Devel::Peek;
@@ -67,7 +69,7 @@ subtest 'AAAA' => sub {
     SKIP: {
         skip 'no network', 1 unless $ENV{TEST_WITH_NETWORK};
 
-        $p = $s->query( 'a.ns.se', 'AAAA' );
+        my $p = $s->query( 'a.ns.se', 'AAAA' );
         plan skip_all => 'No response, cannot test' if not $p;
 
         foreach my $rr ( $p->answer ) {
@@ -286,7 +288,7 @@ subtest 'SPF' => sub {
 subtest 'DNAME' => sub {
     my $rr = Zonemaster::LDNS::RR->new( 'examplë.fake 3600  IN  DNAME example.fake' );
     isa_ok( $rr, 'Zonemaster::LDNS::RR::DNAME' );
-    is($rr->dname(), 'example.fake.');
+    is(fc($rr->dname()), fc('example.fake.'));
 };
 
 subtest 'croak when given malformed CAA records' => sub {
@@ -297,7 +299,7 @@ subtest 'croak when given malformed CAA records' => sub {
         # This will always croak
         $bad_caa->string();
     };
-    like( exception { $will_croak->() }, qr/^Failed to convert RR to string/ );
+    like( exception(sub { $will_croak->() }), qr/^Failed to convert RR to string/ );
 };
 
 done_testing;
