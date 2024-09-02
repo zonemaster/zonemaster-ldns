@@ -180,28 +180,6 @@ net_ldns_clone_packets()
 
 #endif
 
-char *
-randomize_capitalization(char *in)
-{
-#ifdef RANDOMIZE
-#warning "Case randomization is deprecated and will be removed in v2025.1."
-    char *str;
-    str = in;
-    while(*str) {
-        if(Drand01() < 0.5)
-        {
-            *str = tolower(*str);
-        }
-        else
-        {
-            *str = toupper(*str);
-        }
-        str++;
-    }
-#endif
-    return in;
-}
-
 SV *
 rr2sv(ldns_rr *rr)
 {
