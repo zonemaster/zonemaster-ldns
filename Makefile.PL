@@ -39,7 +39,7 @@ Enabled by default.
 
 =item --[no-]randomize
 
-Experimental.
+This feature is deprecated and will be removed in Zonemaster 2025.1.
 Randomizes the capitalization of returned domain names.
 Disabled by default.
 
@@ -298,6 +298,7 @@ else {
 
 if ( $opt_randomize ) {
     print "Feature randomized capitalization enabled\n";
+    print "WARNING: This feature is DEPRECATED and will be removed in Zonemaster v2025.1.\n";
     cc_define '-DRANDOMIZE';
 }
 else {
