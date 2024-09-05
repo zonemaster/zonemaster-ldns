@@ -51,7 +51,7 @@ Returns the number of RRs in the list.
 
 =item compare($other)
 
-Compares two L<Zonemaster::LDNS::RRList>. The order of L<Zonemaster::LDNS::RR> objects in the list do not matter.
+Compares two L<Zonemaster::LDNS::RRList>. The order of L<Zonemaster::LDNS::RR> objects in the list does not matter.
 The TTL field is ignored, and the comparison of domain names is case insensitive.
 
 Returns an integer, where 0 indicates equality.
@@ -78,7 +78,7 @@ Pops an RR off the list.
 
 Returns true or false depending on if the list is an RRset or not.
 
-Note that the underlying LDNS function appears bugged as the comparison of the owner name field is case sensitive. See https://github.com/NLnetLabs/ldns/pull/251.
+Note that the underlying LDNS function appears to have a bug as the comparison of the owner name field is case sensitive. See https://github.com/NLnetLabs/ldns/pull/251.
 
 =item string()
 
