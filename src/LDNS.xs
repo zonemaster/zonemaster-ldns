@@ -1552,11 +1552,70 @@ packet_CLONE(class)
 
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RRList           PREFIX=rrlist_
 
+SV *
+rrlist_new(objclass,rrs_in)
+    char* objclass;
+    AV *rrs_in;
+    CODE:
+    {
+        size_t i;
+        ldns_rr_list *rrs = ldns_rr_list_new();
+
+        if(av_len(rrs_in)==-1)
+        {
+           croak("List is empty");
+        }
+
+        /* Take RRs out of the array and stick them in a list */
+        for(i = 0; i <= av_len(rrs_in); ++i)
+        {
+            ldns_rr *rr;
+            SV **rrsv = av_fetch(rrs_in,i,1);
+            if (rrsv != NULL && sv_isobject(*rrsv) && sv_derived_from(*rrsv, "Zonemaster::LDNS::RR")) {
+                SvGETMAGIC(*rrsv);
+                IV tmp = SvIV((SV*)SvRV(*rrsv));
+                rr = INT2PTR(ldns_rr *,tmp);
+                if(rr != NULL)
+                {
+                    ldns_rr_list_push_rr(rrs, ldns_rr_clone(rr));
+                }
+            }
+            else {
+                croak("Incorrect type in list");
+            }
+        }
+
+        RETVAL = newSV(0);
+        sv_setref_pv(RETVAL, objclass, rrs);
+#ifdef USE_ITHREADS
+        net_ldns_remember_rrlist(RETVAL);
+#endif
+    }
+    OUTPUT:
+        RETVAL
+
 size_t
 rrlist_count(obj)
     Zonemaster::LDNS::RRList obj;
     CODE:
         RETVAL = ldns_rr_list_rr_count(obj);
+    OUTPUT:
+        RETVAL
+
+SV *
+rrlist_get(obj,pos)
+    Zonemaster::LDNS::RRList obj;
+    size_t pos;
+    CODE:
+        size_t n;
+        n = ldns_rr_list_rr_count(obj);
+
+        if(n==0 || pos > n-1)
+        {
+            XSRETURN_UNDEF;
+        }
+
+        RETVAL = rr2sv(ldns_rr_clone(ldns_rr_list_rr(obj, pos)));
     OUTPUT:
         RETVAL
 
@@ -1592,6 +1651,42 @@ rrlist_is_rrset(obj)
         RETVAL = ldns_is_rrset(obj);
     OUTPUT:
         RETVAL
+
+I32
+rrlist_compare(obj1,obj2)
+    Zonemaster::LDNS::RRList obj1;
+    Zonemaster::LDNS::RRList obj2;
+    CODE:
+        ldns_rr_list *rrl1 = ldns_rr_list_clone(obj1);
+        ldns_rr_list *rrl2 = ldns_rr_list_clone(obj2);
+
+        ldns_rr_list_sort(rrl1);
+        ldns_rr_list_sort(rrl2);
+
+        RETVAL = ldns_rr_list_compare(rrl1, rrl2);
+
+        ldns_rr_list_deep_free(rrl1);
+        ldns_rr_list_deep_free(rrl2);
+    OUTPUT:
+        RETVAL
+
+char *
+rrlist_string(obj)
+    Zonemaster::LDNS::RRList obj;
+    CODE:
+        RETVAL = ldns_rr_list2str(obj);
+        if(RETVAL == NULL || RETVAL[0] == '\0')
+        {
+            croak("Failed to convert RRList to string");
+        }
+        else
+        {
+            strip_newline(RETVAL);
+        }
+    OUTPUT:
+        RETVAL
+    CLEANUP:
+        free(RETVAL);
 
 void
 rrlist_DESTROY(obj)

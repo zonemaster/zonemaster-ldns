@@ -12,6 +12,7 @@ require XSLoader;
 XSLoader::load( __PACKAGE__, $VERSION );
 
 use Zonemaster::LDNS::RR;
+use Zonemaster::LDNS::RRList;
 use Zonemaster::LDNS::Packet;
 
 1;
