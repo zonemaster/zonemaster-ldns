@@ -1,9 +1,39 @@
+use strict;
+use warnings;
+
 use Test::More;
 use Test::Exception;
 use Test::Differences;
 use Devel::Peek;
 
 use Zonemaster::LDNS;
+
+subtest "Empty RRList" => sub {
+    my $empty_a = Zonemaster::LDNS::RRList->new([]);
+    my $empty_b = Zonemaster::LDNS::RRList->new([]);
+    my $nonempty = Zonemaster::LDNS::RRList->new([
+        Zonemaster::LDNS::RR->new_from_string('test. 0 IN TXT "hello"')
+    ]);
+
+    isa_ok($empty_a, 'Zonemaster::LDNS::RRList');
+    isa_ok($empty_b, 'Zonemaster::LDNS::RRList');
+    isa_ok($nonempty, 'Zonemaster::LDNS::RRList');
+
+    eq_or_diff( $empty_a->string, '', "stringifying an empty list gives empty string" );
+    ok( $empty_a eq $empty_b, "two distinct empty RRLists are equal to each other" );
+    ok( $empty_a ne $nonempty, "an empty RRlist is not equal to a non-empty RRlist" );
+
+    $nonempty->pop();
+    ok( $empty_a eq $nonempty, "now both lists are empty" );
+
+    is( $empty_a->count(), 0, "count() on empty list is 0" );
+
+    is( $empty_a->get(0), undef, "get(0) on empty list gives undef" );
+    is( $empty_a->get(42), undef, "get(42) on empty list also gives undef" );
+
+    ok( !$empty_a->is_rrset(), "an empty list is not an RRset" );
+    ok( !$empty_b->is_rrset(), "an empty list is not an RRset" );
+};
 
 subtest "Good RRList" => sub {
     my $rr1 = Zonemaster::LDNS::RR->new_from_string( 'example. 10 IN NS ns1.example.' );

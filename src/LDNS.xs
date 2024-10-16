@@ -1558,13 +1558,8 @@ rrlist_new(objclass,rrs_in)
     AV *rrs_in;
     CODE:
     {
-        size_t i;
+        SSize_t i;
         ldns_rr_list *rrs = ldns_rr_list_new();
-
-        if(av_len(rrs_in)==-1)
-        {
-           croak("List is empty");
-        }
 
         /* Take RRs out of the array and stick them in a list */
         for(i = 0; i <= av_len(rrs_in); ++i)
@@ -1675,7 +1670,7 @@ rrlist_string(obj)
     Zonemaster::LDNS::RRList obj;
     CODE:
         RETVAL = ldns_rr_list2str(obj);
-        if(RETVAL == NULL || RETVAL[0] == '\0')
+        if(RETVAL == NULL)
         {
             croak("Failed to convert RRList to string");
         }
