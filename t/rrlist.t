@@ -9,7 +9,7 @@ use Devel::Peek;
 use Zonemaster::LDNS;
 
 subtest "Empty RRList" => sub {
-    my $empty_a = Zonemaster::LDNS::RRList->new([]);
+    my $empty_a = Zonemaster::LDNS::RRList->new();
     my $empty_b = Zonemaster::LDNS::RRList->new([]);
     my $nonempty = Zonemaster::LDNS::RRList->new([
         Zonemaster::LDNS::RR->new_from_string('test. 0 IN TXT "hello"')
