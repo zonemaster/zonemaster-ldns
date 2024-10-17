@@ -4,7 +4,6 @@ use warnings;
 use Test::More;
 use Test::Exception;
 use Test::Differences;
-use Devel::Peek;
 
 use Zonemaster::LDNS;
 
