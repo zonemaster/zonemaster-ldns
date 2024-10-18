@@ -1553,35 +1553,34 @@ packet_CLONE(class)
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RRList           PREFIX=rrlist_
 
 SV *
-rrlist_new(objclass,rrs_in)
+rrlist_new(objclass, ...)
     char* objclass;
-    AV *rrs_in;
     CODE:
     {
-        size_t i;
+        AV *rrs_in = NULL;
         ldns_rr_list *rrs = ldns_rr_list_new();
 
-        if(av_len(rrs_in)==-1)
-        {
-           croak("List is empty");
-        }
-
         /* Take RRs out of the array and stick them in a list */
-        for(i = 0; i <= av_len(rrs_in); ++i)
-        {
-            ldns_rr *rr;
-            SV **rrsv = av_fetch(rrs_in,i,1);
-            if (rrsv != NULL && sv_isobject(*rrsv) && sv_derived_from(*rrsv, "Zonemaster::LDNS::RR")) {
-                SvGETMAGIC(*rrsv);
-                IV tmp = SvIV((SV*)SvRV(*rrsv));
-                rr = INT2PTR(ldns_rr *,tmp);
-                if(rr != NULL)
-                {
-                    ldns_rr_list_push_rr(rrs, ldns_rr_clone(rr));
+        if (items > 1) {
+            SSize_t i;
+            rrs_in = (AV *) SvRV(ST(1));
+
+            for(i = 0; i <= av_len(rrs_in); ++i)
+            {
+                ldns_rr *rr;
+                SV **rrsv = av_fetch(rrs_in,i,1);
+                if (rrsv != NULL && sv_isobject(*rrsv) && sv_derived_from(*rrsv, "Zonemaster::LDNS::RR")) {
+                    SvGETMAGIC(*rrsv);
+                    IV tmp = SvIV((SV*)SvRV(*rrsv));
+                    rr = INT2PTR(ldns_rr *,tmp);
+                    if(rr != NULL)
+                    {
+                        ldns_rr_list_push_rr(rrs, ldns_rr_clone(rr));
+                    }
                 }
-            }
-            else {
-                croak("Incorrect type in list");
+                else {
+                    croak("Incorrect type in list");
+                }
             }
         }
 
@@ -1675,7 +1674,7 @@ rrlist_string(obj)
     Zonemaster::LDNS::RRList obj;
     CODE:
         RETVAL = ldns_rr_list2str(obj);
-        if(RETVAL == NULL || RETVAL[0] == '\0')
+        if(RETVAL == NULL)
         {
             croak("Failed to convert RRList to string");
         }
