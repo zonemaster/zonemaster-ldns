@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     perl-app-cpanminus \
     perl-dev \
     perl-devel-checklib \
+    perl-extutils-pkgconfig \
     perl-lwp-protocol-https \
     perl-module-install \
     perl-test-fatal \
