@@ -206,7 +206,7 @@ subtest 'NSEC' => sub {
             ok( $rr->typehref->{TXT} );
             ok( !$rr->typehref->{MX} );
             ok( $rr->typehref->{TXT} );
-            is( $rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ' );
+            is( $rr->typelist, 'NS SOA TXT RRSIG NSEC DNSKEY ZONEMD ' );
         }
     }
 };
