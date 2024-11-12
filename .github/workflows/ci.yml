@@ -41,7 +41,7 @@ jobs:
         run: sudo apt install -y libidn2-dev
 
       - name: cpan module
-        run: cpanm Module::Install Devel::CheckLib Module::Install::XSUtil Test::Fatal Test::Exception
+        run: cpanm Devel::CheckLib ExtUtils::PkgConfig Module::Install Module::Install::XSUtil Test::Exception Test::Fatal 
 
       - name: installation
         run: cpanm --verbose --notest --configure-args="--no-ed25519" .
