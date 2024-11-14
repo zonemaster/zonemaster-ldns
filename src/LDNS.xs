@@ -2552,7 +2552,6 @@ rr_nsec3_hash_name(obj,name)
             XSRETURN_UNDEF;
     CODE:
     {
-        ldns_rr *clone;
         ldns_rdf *hashed;
         ldns_rdf *dname;
 
@@ -2560,18 +2559,13 @@ rr_nsec3_hash_name(obj,name)
         if (!dname)
             XSRETURN_UNDEF;
 
-        ldns_dname2canonical(dname);
-
-        clone = ldns_rr_clone(obj);
-        ldns_rr2canonical(clone);
-
-        hashed = ldns_nsec3_hash_name_frm_nsec3(clone, dname);
+        hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
 
         if (!hashed || ldns_rdf_size(hashed) < 1 ) {
             XSRETURN_UNDEF;
         }
 
-        RETVAL = newSVpvn((char*)(ldns_rdf_data(hashed) + 1), ldns_rdf_size(hashed) - 2);
+        RETVAL = newSVpvn((char*)(ldns_rdf2str(hashed)), ldns_rdf_size(hashed) - 2 );
     }
     OUTPUT:
         RETVAL
@@ -2628,7 +2622,6 @@ rr_nsec3param_hash_name(obj,name)
             XSRETURN_UNDEF;
     CODE:
     {
-        ldns_rr *clone;
         ldns_rdf *hashed;
         ldns_rdf *dname;
 
@@ -2636,18 +2629,13 @@ rr_nsec3param_hash_name(obj,name)
         if (!dname)
             XSRETURN_UNDEF;
 
-        ldns_dname2canonical(dname);
-
-        clone = ldns_rr_clone(obj);
-        ldns_rr2canonical(clone);
-
-        hashed = ldns_nsec3_hash_name_frm_nsec3(clone, dname);
+        hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
 
         if (!hashed || ldns_rdf_size(hashed) < 1 ) {
             XSRETURN_UNDEF;
         }
 
-        RETVAL = newSVpvn((char*)(ldns_rdf_data(hashed) + 1), ldns_rdf_size(hashed) - 2);
+        RETVAL = newSVpvn((char*)(ldns_rdf2str(hashed)), ldns_rdf_size(hashed) - 2 );
     }
     OUTPUT:
         RETVAL
