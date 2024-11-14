@@ -319,7 +319,6 @@ subtest 'NSEC3 with unknown algorithm' => sub {
     is( $nsec3->optout,    '' );
     is( $nsec3->iterations,                  0 );
     is( unpack('H*', $nsec3->salt),          '' );
-    say $nsec3->typelist;
     is( encode_base32hex( $nsec3->next_owner ), "UP848IGD2MT1JGD0ISJEB6LAS1DCB11R" );
     is( $nsec3->typelist,                    'NS SOA RRSIG DNSKEY NSEC3PARAM TYPE65534 ' );
     eq_or_diff( $nsec3->hash_name( $name ), undef );
@@ -328,6 +327,7 @@ subtest 'NSEC3 with unknown algorithm' => sub {
 };
 
 subtest 'NSEC3PARAM without salt and non-zero flags' => sub {
+    my $name = 'empty-nsec3param.example';
     my $nsec3param = Zonemaster::LDNS::RR->new_from_string(
         'empty-nsec3param.example. 86400 IN NSEC3PARAM 1 165 0 -' );
     isa_ok( $nsec3param, 'Zonemaster::LDNS::RR::NSEC3PARAM' );
@@ -336,16 +336,31 @@ subtest 'NSEC3PARAM without salt and non-zero flags' => sub {
     is( $nsec3param->iterations, 0 );
     is( $nsec3param->salt,       '', 'Salt');
     is( lc($nsec3param->owner),  'empty-nsec3param.example.' );
+    eq_or_diff( $nsec3param->hash_name( $name ), 'l73q01jb3imjq6krmm5h00evfsdpmbvl' );
 };
 
 subtest 'NSEC3PARAM with salt' => sub {
-    my $nsec3param = Zonemaster::LDNS::RR->new_from_string( 'whitehouse.gov.		3600	IN	NSEC3PARAM 1 0 1 B2C19AB526819347' );
+    my $name = 'whitehouse.gov.';
+    my $nsec3param = Zonemaster::LDNS::RR->new_from_string( 'whitehouse.gov.		3600	IN	NSEC3PARAM 1 0 2 B2C19AB526819347' );
     isa_ok( $nsec3param, 'Zonemaster::LDNS::RR::NSEC3PARAM' );
     is( $nsec3param->algorithm,  1 );
     is( $nsec3param->flags,      0 );
-    is( $nsec3param->iterations, 1, "Iterations" );
+    is( $nsec3param->iterations, 2, "Iterations" );
     is( uc(unpack( 'H*', $nsec3param->salt )), 'B2C19AB526819347', "Salt" );
     is( lc($nsec3param->owner), 'whitehouse.gov.' );
+    eq_or_diff( $nsec3param->hash_name( $name ), '2mo42ugf34bnruvljv91vv9vqd4kckda' );
+};
+
+subtest 'NSEC3PARAM with unknown algorithm' => sub {
+    my $name = 'GOOD-NSEC3-1.dnssec10.xa';
+    my $nsec3param = Zonemaster::LDNS::RR->new_from_string( 'good-nsec3-1.dnssec10.xa. 0     IN      NSEC3PARAM 3 0 0 -' );
+    isa_ok( $nsec3param, 'Zonemaster::LDNS::RR::NSEC3PARAM' );
+    is( $nsec3param->algorithm, 3 );
+    is( $nsec3param->flags,     0 );
+    is( $nsec3param->iterations,                  0 );
+    is( unpack('H*', $nsec3param->salt),          '' );
+    is( lc($nsec3param->owner), 'good-nsec3-1.dnssec10.xa.' );
+    eq_or_diff( $nsec3param->hash_name( $name ), undef );
 };
 
 subtest 'SIG' => sub {

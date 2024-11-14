@@ -2618,6 +2618,40 @@ rr_nsec3param_salt(obj)
     OUTPUT:
         RETVAL
 
+SV *
+rr_nsec3param_hash_name(obj,name)
+    Zonemaster::LDNS::RR::NSEC3PARAM obj;
+    const char *name;
+    INIT:
+        /* Sanity test on owner name */
+        if (ldns_dname_label_count(ldns_rr_owner(obj)) == 0)
+            XSRETURN_UNDEF;
+    CODE:
+    {
+        ldns_rr *clone;
+        ldns_rdf *hashed;
+        ldns_rdf *dname;
+
+        dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        if (!dname)
+            XSRETURN_UNDEF;
+
+        ldns_dname2canonical(dname);
+
+        clone = ldns_rr_clone(obj);
+        ldns_rr2canonical(clone);
+
+        hashed = ldns_nsec3_hash_name_frm_nsec3(clone, dname);
+
+        if (!hashed || ldns_rdf_size(hashed) < 1 ) {
+            XSRETURN_UNDEF;
+        }
+
+        RETVAL = newSVpvn((char*)(ldns_rdf_data(hashed) + 1), ldns_rdf_size(hashed) - 2);
+    }
+    OUTPUT:
+        RETVAL
+
 MODULE = Zonemaster::LDNS        PACKAGE = Zonemaster::LDNS::RR::PTR              PREFIX=rr_ptr_
 
 char *
