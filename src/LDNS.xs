@@ -2561,11 +2561,15 @@ rr_nsec3_hash_name(obj,name)
 
         hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
 
+        ldns_rdf_deep_free(dname);
+
         if (!hashed || ldns_rdf_size(hashed) < 1 ) {
             XSRETURN_UNDEF;
         }
 
-        RETVAL = newSVpvn((char*)(ldns_rdf2str(hashed)), ldns_rdf_size(hashed) - 2 );
+        char *hash_str = ldns_rdf2str(hashed);
+        RETVAL = newSVpv(hash_str, ldns_rdf_size(hashed) - 2);
+        free(hash_str);
     }
     OUTPUT:
         RETVAL
@@ -2631,11 +2635,15 @@ rr_nsec3param_hash_name(obj,name)
 
         hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
 
+        ldns_rdf_deep_free(dname);
+
         if (!hashed || ldns_rdf_size(hashed) < 1 ) {
             XSRETURN_UNDEF;
         }
 
-        RETVAL = newSVpvn((char*)(ldns_rdf2str(hashed)), ldns_rdf_size(hashed) - 2 );
+        char *hash_str = ldns_rdf2str(hashed);
+        RETVAL = newSVpv(hash_str, ldns_rdf_size(hashed) - 2);
+        free(hash_str);
     }
     OUTPUT:
         RETVAL

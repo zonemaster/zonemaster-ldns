@@ -57,6 +57,6 @@ Returns true or false depending on if the record covers the given name or not.
 
 =item hash_name($name)
 
-Returns a hash, in canonical form, of the given name using the parameters (algorithm, iterations, salt) of the resource record.
+Computes and returns a hash, in canonical form, of the given name using the parameters (algorithm, iterations, salt) of the resource record.
 
 =back
