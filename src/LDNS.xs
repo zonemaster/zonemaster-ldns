@@ -2506,7 +2506,6 @@ rr_nsec3_covers(obj,name)
         ldns_rdf *next_owner = ldns_nsec3_next_owner(obj);
         if (!next_owner || ldns_rdf_size(next_owner) <= 1)
             XSRETURN_UNDEF;
-
     CODE:
     {
         ldns_rr *clone;
@@ -2539,6 +2538,38 @@ rr_nsec3_covers(obj,name)
         ldns_rdf_deep_free(hashed);
         ldns_rdf_deep_free(chopped);
         ldns_rr_free(clone);
+    }
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_nsec3_hash_name(obj,name)
+    Zonemaster::LDNS::RR::NSEC3 obj;
+    const char *name;
+    INIT:
+        /* Sanity test on owner name */
+        if (ldns_dname_label_count(ldns_rr_owner(obj)) == 0)
+            XSRETURN_UNDEF;
+    CODE:
+    {
+        ldns_rdf *hashed;
+        ldns_rdf *dname;
+
+        dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        if (!dname)
+            XSRETURN_UNDEF;
+
+        hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
+
+        ldns_rdf_deep_free(dname);
+
+        if (!hashed || ldns_rdf_size(hashed) < 1 ) {
+            XSRETURN_UNDEF;
+        }
+
+        char *hash_str = ldns_rdf2str(hashed);
+        RETVAL = newSVpv(hash_str, ldns_rdf_size(hashed) - 2);
+        free(hash_str);
     }
     OUTPUT:
         RETVAL
@@ -2581,6 +2612,38 @@ rr_nsec3param_salt(obj)
         {
             RETVAL = newSVpvn((char *)(ldns_rdf_data(rdf) + 1), size - 1);
         }
+    }
+    OUTPUT:
+        RETVAL
+
+SV *
+rr_nsec3param_hash_name(obj,name)
+    Zonemaster::LDNS::RR::NSEC3PARAM obj;
+    const char *name;
+    INIT:
+        /* Sanity test on owner name */
+        if (ldns_dname_label_count(ldns_rr_owner(obj)) == 0)
+            XSRETURN_UNDEF;
+    CODE:
+    {
+        ldns_rdf *hashed;
+        ldns_rdf *dname;
+
+        dname = ldns_rdf_new_frm_str(LDNS_RDF_TYPE_DNAME, name);
+        if (!dname)
+            XSRETURN_UNDEF;
+
+        hashed = ldns_nsec3_hash_name_frm_nsec3(obj, dname);
+
+        ldns_rdf_deep_free(dname);
+
+        if (!hashed || ldns_rdf_size(hashed) < 1 ) {
+            XSRETURN_UNDEF;
+        }
+
+        char *hash_str = ldns_rdf2str(hashed);
+        RETVAL = newSVpv(hash_str, ldns_rdf_size(hashed) - 2);
+        free(hash_str);
     }
     OUTPUT:
         RETVAL
