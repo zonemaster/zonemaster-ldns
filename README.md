@@ -50,6 +50,7 @@ Run-time dependencies:
 Compile-time dependencies (only when installing from source):
  * `make`
  * `Devel::CheckLib`
+ * `ExtUtils::PkgConfig`
  * `Module::Install`
  * `Module::Install::XSUtil`
  * `Test::More >= 1.302015`
