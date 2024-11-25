@@ -193,12 +193,13 @@ sub custom_assets
             cc_libs $lib;
         }
         else {
-            if ((my $cflags = $pkg_info{cflags}) ne '') {
-                say "Adding CFLAGS for $name using pkg-config: $cflags";
-                cc_include_paths $cflags;
+            if (defined (my $includes = ExtUtils::PkgConfig->cflags_only_I($pcname))) {
+                my @inc = map { s/^-I//r } (split /\s+/, $includes);
+                say "Adding include paths for $name using pkg-config: " . join(", ", @inc);
+                cc_include_paths @inc;
             }
             if ((my $libs = $pkg_info{libs}) ne '') {
-                say "Adding LDFLAGS for $name using pkg-config: $libs";
+                say "Adding library paths and names for $name using pkg-config: $libs";
                 cc_libs $libs;
             }
         }
