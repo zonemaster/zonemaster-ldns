@@ -200,7 +200,7 @@ sub custom_assets
             }
             if ((my $libs = $pkg_info{libs}) ne '') {
                 say "Adding library paths and names for $name using pkg-config: $libs";
-                cc_libs $libs;
+                cc_libs (split /\s+/, $libs);
             }
         }
     }
