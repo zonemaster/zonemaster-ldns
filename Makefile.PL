@@ -196,11 +196,17 @@ sub custom_assets
             if (defined (my $includes = ExtUtils::PkgConfig->cflags_only_I($pcname))) {
                 my @inc = map { s/^-I//r } (split /\s+/, $includes);
                 say "Adding include paths for $name using pkg-config: " . join(", ", @inc);
+
                 cc_include_paths @inc;
+                $assert_lib_args{$key}{incpath} = \@inc;
             }
             if ((my $libs = $pkg_info{libs}) ne '') {
                 say "Adding library paths and names for $name using pkg-config: $libs";
-                cc_libs (split /\s+/, $libs);
+                my @libs = (split /\s+/, $libs);
+                my @libpaths = grep { /^-L/ } @libs;
+
+                cc_libs @libs;
+                $assert_lib_args{$key}{libpath} = \@libs;
             }
         }
     }
