@@ -5,8 +5,8 @@ Release history for Zonemaster component Zonemaster-LDNS
  [Deprecation]
  - Deprecates case randomization feature, to be removed in v2025.1 release (#206)
 
- [Feature]
- - Adds a methods to compute the hash of a name based on the settings of a NSEC3
+ [Features]
+ - Adds a method to compute the hash of a name based on the settings of a NSEC3
    or NSEC3PARAM record (#211)
  - Allows construction of empty Zonemaster::LDNS::RRList objects (#209)
  - Extends the functionalities of Zonemaster::LDNS::RRList (#203)
