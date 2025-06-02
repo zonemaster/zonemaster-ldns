@@ -5,13 +5,16 @@ on:
     branches:
       - develop
       - master
-      - 'releases/**'
+      - 'release/**'
 
   pull_request:
     branches:
       - develop
       - master
-      - 'releases/**'
+      - 'release/**'
+
+env:
+  TEST_WITH_NETWORK: 1
 
 jobs:
   run-tests:
