@@ -22,9 +22,9 @@ jobs:
       fail-fast: false 
       matrix:
         perl:
-          - '5.38'
-          - '5.34'
-          - '5.26'
+          - '5.40'
+          - '5.36'
+          - '5.32'
         runner:
           - ubuntu-22.04
 
