@@ -113,6 +113,8 @@ GetOptions(
     'ldns-lib=s'       => \$$opt_assets{ldns}{lib},
 );
 
+perl_version '5.026000'; # Perl v5.26.0 or higher is required for installation.
+
 configure_requires 'Devel::CheckLib'         => 0;
 configure_requires 'ExtUtils::PkgConfig'     => 0;
 configure_requires 'Module::Install'         => 1.19;
