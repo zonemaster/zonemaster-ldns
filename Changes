@@ -1,5 +1,16 @@
 Release history for Zonemaster component Zonemaster-LDNS
 
+
+4.1.1 2025-06-26 (part of Zonemaster v2025.1 release)
+
+ [Fixes]
+- Updates Dockerfile for release 2025.1 #229
+- Sets minimum Perl version to v5.26.0 #228
+- Improves performance by removing dubious code #217
+- Removes unused feature "randomized capitalization" #207
+- Fixes export of methods #219
+
+
 4.1.0 2024-12-09 (part of Zonemaster v2024.2 release)
 
  [Deprecation]
