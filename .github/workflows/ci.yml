@@ -52,3 +52,32 @@ jobs:
       - name: test
         run: prove -bl
 
+  build-artifact:
+    needs: run-tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: apt install
+        run: sudo apt-get install -y git build-essential libmodule-install-perl libdevel-checklib-perl libextutils-pkgconfig-perl libmodule-install-xsutil-perl libssl-dev libidn2-dev
+
+      - name: build
+        run: perl Makefile.PL && make all dist
+
+      - name: Get short SHA
+        id: short_sha
+        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+     
+      - name: Get Zonemaster-LDNS version 
+        id: version
+        run: |
+          result=`grep 'our $VERSION' lib/Zonemaster/LDNS.pm`
+          result+='printf $VERSION;'
+          VERSION=`perl -e "$result"`
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+     
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zonemaster-LDNS-${{ steps.version.outputs.version }}-${{ steps.short_sha.outputs.short_sha }}
+          path: Zonemaster-LDNS-${{ steps.version.outputs.version }}.tar.gz
