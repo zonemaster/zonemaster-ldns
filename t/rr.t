@@ -41,7 +41,7 @@ subtest 'SOA' => sub {
             is( lc($rr->mname), 'nsa.dnsnode.net.' );
             is( lc($rr->rname), 'hostmaster.nic.se.' );
             ok( $rr->serial >= 1381471502, 'serial' );
-            is( $rr->refresh, 10800,   'refresh' );
+            is( $rr->refresh, 14400,   'refresh' );
             is( $rr->retry,   3600,    'retry' );
             is( $rr->expire,  2592000, 'expire' );
             is( $rr->minimum, 480,     'minimum' );
