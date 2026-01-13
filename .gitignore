@@ -11,6 +11,8 @@ inc
 ppport.h
 MANIFEST.bak
 Net-LDNS-*.tar.gz
+Zonemaster-*
+Zonemaster-*.tar.gz
 
 # Emacs backup files
 *~
