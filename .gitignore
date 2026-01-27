@@ -10,7 +10,6 @@ LDNS.c
 inc
 ppport.h
 MANIFEST.bak
-Net-LDNS-*.tar.gz
 Zonemaster-*
 Zonemaster-*.tar.gz
 
