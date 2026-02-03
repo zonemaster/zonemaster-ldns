@@ -510,15 +510,13 @@ subtest 'DNAME' => sub {
 
 subtest 'SVCB' => sub {
     my $rr = Zonemaster::LDNS::RR->new( q{_8443._foo.api.example.com. 7200 IN SVCB 0 svc4.example.net.} );
-    # Zonemaster::LDNS::RR::SVCB does not exist yet
-    isa_ok( $rr, 'Zonemaster::LDNS::RR' );
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::SVCB' );
     lives_ok { $rr->check_rd_count() } '$rr->check_rd_count() does not crash';
 };
 
 subtest 'HTTPS' => sub {
     my $rr = Zonemaster::LDNS::RR->new( q{example.com. 3600 IN HTTPS 0 svc.example.net.} );
-    # Zonemaster::LDNS::RR::HTTPS does not exist yet
-    isa_ok( $rr, 'Zonemaster::LDNS::RR' );
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::HTTPS' );
     lives_ok { $rr->check_rd_count() } '$rr->check_rd_count() does not crash';
 };
 
