@@ -132,7 +132,20 @@ This class overloads stringify and comparisons ('""', '<=>' and 'cmp').
 
 =item new($string)
 
-Creates a new RR object of a suitable subclass, given a string representing an RR in common presentation format.
+Creates a new RR object, which is an instance of a suitable subclass of
+L<Zonemaster::LDNS::RR>, given a string representing an RR in common
+presentation format.
+
+If a subclass of L<Zonemaster::LDNS::RR> exists that is suitable for the
+resource record’s type (e.g. L<Zonemaster::LDNS::RR::AAAA>,
+L<Zonemaster::LDNS::RR::TXT>, etc.), then the resulting object is an instance
+of that subclass.
+
+If no such subclass exists (e.g. when passed a resource record of an unknown
+type or a type not yet supported by Zonemaster-LDNS), the resulting object is
+an instance of L<Zonemaster::LDNS::RR>. The instance methods defined in this
+class will still work, but there is no support for structured access to the
+resource record’s RDATA.
 
 =back
 
