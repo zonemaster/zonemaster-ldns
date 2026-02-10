@@ -124,6 +124,7 @@ test_requires 'JSON::PP'          => 0;
 test_requires 'MIME::Base32'      => 0;
 test_requires 'Test::Fatal'       => 0;
 test_requires 'Test::Differences' => 0;
+test_requires 'Test::Exception'   => 0;
 test_requires 'Test::More'        => 1.302015;
 test_requires 'Test::NoWarnings'  => 0;
 
