@@ -1,7 +1,7 @@
 use v5.16;
 
 use Test::More;
-use Test::Fatal;
+use Test::Fatal qw(exception lives_ok);
 use Devel::Peek;
 use MIME::Base32 qw(encode_base32hex);
 use MIME::Base64;
@@ -506,6 +506,24 @@ subtest 'DNAME' => sub {
     my $rr = Zonemaster::LDNS::RR->new( 'examplë.fake 3600  IN  DNAME example.fake' );
     isa_ok( $rr, 'Zonemaster::LDNS::RR::DNAME' );
     is($rr->dname(), 'example.fake.');
+};
+
+subtest 'SVCB' => sub {
+    my $rr = Zonemaster::LDNS::RR->new( q{_8443._foo.api.example.com. 7200 IN SVCB 0 svc4.example.net.} );
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::SVCB' );
+    lives_ok { $rr->check_rd_count() } '$rr->check_rd_count() does not crash';
+};
+
+subtest 'HTTPS' => sub {
+    my $rr = Zonemaster::LDNS::RR->new( q{example.com. 3600 IN HTTPS 0 svc.example.net.} );
+    isa_ok( $rr, 'Zonemaster::LDNS::RR::HTTPS' );
+    lives_ok { $rr->check_rd_count() } '$rr->check_rd_count() does not crash';
+};
+
+subtest 'generic type' => sub {
+    my $rr = Zonemaster::LDNS::RR->new( q{type1234.example. 3600 IN TYPE1234 \# 4 ABCDABCD} );
+    isa_ok( $rr, 'Zonemaster::LDNS::RR' );
+    lives_ok { $rr->check_rd_count() } '$rr->check_rd_count() does not crash';
 };
 
 subtest 'croak when given malformed CAA records' => sub {
