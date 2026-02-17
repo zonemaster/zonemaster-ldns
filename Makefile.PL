@@ -79,23 +79,23 @@ Enable debug mode, more verbose output.
 
 =cut
 
-my $opt_ed25519        = 1;
-my $opt_idn            = 1;
-my $opt_internal_ldns  = 1;
-my $opt_debug          = 0;
-my $opt_assets         = {
+my $opt_ed25519       = 1;
+my $opt_idn           = 1;
+my $opt_internal_ldns = 1;
+my $opt_debug         = 0;
+my $opt_assets        = {
     openssl => {
         prefix => "",
         inc    => "",
         lib    => ""
     },
-    ldns    => {
-        inc    => "",
-        lib    => ""
+    ldns => {
+        inc => "",
+        lib => ""
     },
     libidn => {
-        inc    => "",
-        lib    => ""
+        inc => "",
+        lib => ""
     }
 };
 
@@ -113,24 +113,24 @@ GetOptions(
     'ldns-lib=s'       => \$$opt_assets{ldns}{lib},
 );
 
-perl_version '5.026000'; # Perl v5.26.0 or higher is required for installation.
+perl_version '5.026000';    # Perl v5.26.0 or higher is required for installation.
 
 configure_requires 'Devel::CheckLib'         => 0;
 configure_requires 'ExtUtils::PkgConfig'     => 0;
 configure_requires 'Module::Install'         => 1.19;
 configure_requires 'Module::Install::XSUtil' => 0;
 #
-test_requires      'JSON::PP'                => 0;
-test_requires      'MIME::Base32'            => 0;
-test_requires      'Test::Fatal'             => 0;
-test_requires      'Test::Differences'       => 0;
-test_requires      'Test::More'              => 1.302015;
-test_requires      'Test::NoWarnings'        => 0;
+test_requires 'JSON::PP'          => 0;
+test_requires 'MIME::Base32'      => 0;
+test_requires 'Test::Fatal'       => 0;
+test_requires 'Test::Differences' => 0;
+test_requires 'Test::Exception'   => 0;
+test_requires 'Test::More'        => 1.302015;
+test_requires 'Test::NoWarnings'  => 0;
 
 use_ppport 3.19;
 cc_include_paths 'include';
 cc_src_paths 'src';
-
 
 my %assert_lib_args = (
     openssl => {},
@@ -138,9 +138,9 @@ my %assert_lib_args = (
     ldns    => {}
 );
 
-sub custom_assets
-{
+sub custom_assets {
     my ( $href ) = @_;
+
     # $href = { key => "openssl", lib => "crypto", name => "OpenSSL" }
 
     my $key    = $href->{key};
@@ -180,18 +180,18 @@ sub custom_assets
         $assert_lib_args{$key}{libpath} = "$libpath";
     }
     else {
-        my %pkg_info = eval { ExtUtils::PkgConfig->find($pcname); };
-        if ($@) {
+        my %pkg_info = eval { ExtUtils::PkgConfig->find( $pcname ); };
+        if ( $@ ) {
             warn "$@\n";
             say "Guessing LDFLAGS for $name: -l${lib}";
             cc_libs $lib;
         }
         else {
-            if ((my $cflags = $pkg_info{cflags}) ne '') {
+            if ( ( my $cflags = $pkg_info{cflags} ) ne '' ) {
                 say "Adding CFLAGS for $name using pkg-config: $cflags";
                 cc_include_paths $cflags;
             }
-            if ((my $libs = $pkg_info{libs}) ne '') {
+            if ( ( my $libs = $pkg_info{libs} ) ne '' ) {
                 say "Adding LDFLAGS for $name using pkg-config: $libs";
                 cc_libs $libs;
             }
@@ -231,7 +231,6 @@ else {
     print "Feature Ed25519 disabled\n";
 }
 
-
 # LDNS and NSID
 
 my $ldns_has_nsid;
@@ -256,9 +255,9 @@ else {
 
     if ( $opt_ed25519 ) {
         cc_assert_lib(
-            debug    => $opt_debug,
-            lib      => 'ldns',
-            header   => 'ldns/ldns.h',
+            debug  => $opt_debug,
+            lib    => 'ldns',
+            header => 'ldns/ldns.h',
             %{ $assert_lib_args{ldns} },
             ccflags  => '-DUSE_ED25519',
             function => 'if(LDNS_ED25519) return 0; else return 1;'
@@ -267,9 +266,9 @@ else {
 
     # NSID feature requires LDNS version >= 1.8.2
     $ldns_has_nsid = check_lib(
-        debug    => $opt_debug,
-        lib      => 'ldns',
-        header   => 'ldns/util.h',
+        debug  => $opt_debug,
+        lib    => 'ldns',
+        header => 'ldns/util.h',
         %{ $assert_lib_args{ldns} },
         function => 'if ( LDNS_REVISION >= ((1<<16)|(8<<8)|(2)) ) return 0; else return 1;'
     );
@@ -282,7 +281,6 @@ if ( $ldns_has_nsid ) {
 else {
     print "Feature NSID disabled\n";
 }
-
 
 # Libidn
 
@@ -299,7 +297,7 @@ if ( $opt_idn ) {
     );
 
     check_lib_or_exit(
-        debug    => $opt_debug,
+        debug  => $opt_debug,
         lib    => 'idn2',
         header => 'idn2.h',
         %{ $assert_lib_args{libidn} },
@@ -398,10 +396,10 @@ END_INTERNAL_LDNS
     $postamble .= $docker_make;
     if ( $opt_internal_ldns ) {
         $postamble .= $configure_flags_make;
-        $postamble .= $openssl_make if $$opt_assets{openssl}{prefix};
-        $postamble .= $ed25519_make if $opt_ed25519;
+        $postamble .= $openssl_make    if $$opt_assets{openssl}{prefix};
+        $postamble .= $ed25519_make    if $opt_ed25519;
         $postamble .= $no_ed25519_make if !$opt_ed25519;
-        $postamble .= $openssl_flags if ( $$opt_assets{openssl}{inc} or $$opt_assets{openssl}{lib} );
+        $postamble .= $openssl_flags   if ( $$opt_assets{openssl}{inc} or $$opt_assets{openssl}{lib} );
         $postamble .= $internal_ldns_make;
     }
 
@@ -409,13 +407,13 @@ END_INTERNAL_LDNS
 }
 
 sub MY::test_via_harness {
-    local $_ = shift()->MM::test_via_harness(@_);
+    local $_ = shift()->MM::test_via_harness( @_ );
     s/\bPERL_DL_NONLAZY=1 +//g;
     return $_;
 }
 
 sub MY::test_via_script {
-    local $_ = shift()->MM::test_via_script(@_);
+    local $_ = shift()->MM::test_via_script( @_ );
     s/\bPERL_DL_NON_LAZY=1 +//g;
     return $_;
 }
