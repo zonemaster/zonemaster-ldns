@@ -103,7 +103,19 @@ sub additional_rrlist {
     return Zonemaster::LDNS::RRList->new( \@records );
 }
 
+sub ede {
+    my $self = shift @_;
+    if ( scalar @_ > 0 ) {
+        return $self->_set_ede(@_);
+    }
+    else {
+        return $self->_get_ede();
+    }
+}
+
 1;
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -309,5 +321,47 @@ Returns a Perl string holding the packet in wire format.
 =item type()
 
 Returns the ldns library's guess as to the content of the packet. One of the strings C<question>, C<referral>, C<answer>, C<nxdomain>, C<nodata> or C<unknown>.
+
+=item ede( [ $error_code, [ $extra_text ] ] )
+
+Gets (if called without any arguments) or sets (if called with one or two
+arguments) the first Extended DNS Error (EDE) in the packet.
+
+As a setter, always returns C<undef>.
+
+As a getter, the return value depends on the context.
+
+In scalar context, returns the value of the EDE INFO-CODE field, or C<undef>
+if the packet contains no EDE.
+
+In list context, returns:
+
+=over
+
+=item *
+
+an empty list if there is no EDE;
+
+=item *
+
+a list of one item, the EDE INFO-CODE, if there is an EDE without EXTRA-TEXT;
+
+=item *
+
+a list of two items, the EDE INFO-CODE and the EXTRA-TEXT, if there is an EDE with EXTRA-TEXT.
+
+=back
+
+This list can be unpacked into a pair of variables, like this:
+
+    my ( $code, $extra_text ) = $packet->first_ede();
+
+The EDE EXTRA-TEXT is specified in RFC 8914 to be UTF-8 encoded text. When
+retrieving the EXTRA-TEXT from a packet, UTF-8 valid text is returned as a
+Unicode character string, and UTF-8 invalid text, although forbidden, is
+returned as a (binary) byte string. Trailing NUL bytes are preserved both when
+setting the EXTRA-TEXT in a packet or when getting a packet’s EXTRA-TEXT.
+
+
 
 =back
