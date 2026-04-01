@@ -103,6 +103,16 @@ sub additional_rrlist {
     return Zonemaster::LDNS::RRList->new( \@records );
 }
 
+sub ede {
+    my $self = shift @_;
+    if ( scalar @_ > 0 ) {
+        return $self->_set_ede(@_);
+    }
+    else {
+        return $self->_get_ede();
+    }
+}
+
 1;
 
 =head1 NAME
@@ -309,5 +319,13 @@ Returns a Perl string holding the packet in wire format.
 =item type()
 
 Returns the ldns library's guess as to the content of the packet. One of the strings C<question>, C<referral>, C<answer>, C<nxdomain>, C<nodata> or C<unknown>.
+
+=item ede( [ $error_code, [ $extra_text ] ] )
+
+Gets or sets the first Extended DNS Error (EDE) in the packet.
+
+In scalar context, returns the EDE code, or C<undef> if there is none.
+
+In list context, returns both the EDE code (or C<undef> if there is no EDE), and the extra text (or C<undef> if there is no EDE or if the EDE has no extra text).
 
 =back
