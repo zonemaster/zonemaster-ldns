@@ -13,7 +13,7 @@ BEGIN { use_ok( 'Zonemaster::LDNS' ) }
 # order to save a packet in Base64 while showing its presentation format, just
 # run the following script:
 #
-# $ perl -MZonemaster::LDNS -MMIME::Base64
+# $ perl -MZonemaster::LDNS -MMIME::Base64 -Mfeature=say
 # my $p = Zonemaster::LDNS->new("86.54.11.100")->query("iis.se", "SOA");
 # say $p->string();
 # say encode_base64($p->wireformat());
