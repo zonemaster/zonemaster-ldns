@@ -192,7 +192,7 @@ Gets and/or sets the EDNS0 UDP size.
 
 Gets and/or sets the EDNS0 Extended RCODE field.
 
-=item ends_z()
+=item edns_z()
 
 Gets and/or sets the EDNS0 Z bits.
 
