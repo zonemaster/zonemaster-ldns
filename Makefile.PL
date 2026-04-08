@@ -261,6 +261,10 @@ else {
         }
     );
 
+    # LDNS needs OpenSSL, so we need openssl’s compiler flags for ldns too
+    push @{$assert_lib_args{ldns}{$_}}, @{$assert_lib_args{openssl}{$_}}
+        for ( qw(incpath libpath) );
+
     if ( $opt_ed25519 ) {
         cc_assert_lib(
             debug  => $opt_debug,
