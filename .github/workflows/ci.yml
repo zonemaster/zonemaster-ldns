@@ -22,7 +22,7 @@ jobs:
       fail-fast: false 
       matrix:
         perl:
-          - '5.40'
+          - '5.42'
           - '5.36'
           - '5.26'
         runner:
