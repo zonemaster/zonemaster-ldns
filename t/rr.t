@@ -194,8 +194,8 @@ subtest 'CDNSKEY' => sub {
         is( $rrs[0]->algorithm(),    q{8} );
         ok( $rrs[0]->keydata() );
         is( $rrs[0]->hexkeydata(),   q{BleFgAABAAEAAAAADW5sYWdyaWN1bHR1cmUCbmwAAAEAAcAMADAAAQAAAAAABAEBAwg=} );
-        is( $rrs[0]->keytag(),       q{0} );  # RR type not supported by LDNS
-        is( $rrs[0]->ds('sha256'),   undef ); # RR type not supported by LDNS
+        is( $rrs[0]->keytag(),       q{27018} );
+        is( $rrs[0]->ds('sha256'),   Zonemaster::LDNS::RR->new(q{cdnskey.test. 0 IN DS 27018 8 2 11144150cb6c0690613d6cca962c3939de03a41cdac0787aae59db93b0ae8530} ));
         is( $rrs[0]->keysize(),      q{344} );
     };
 
