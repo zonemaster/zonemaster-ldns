@@ -1,4 +1,4 @@
-FROM alpine:3.22 as build
+FROM alpine:3.22 AS build
 
 RUN apk add --no-cache \
     # Compile-time dependencies
