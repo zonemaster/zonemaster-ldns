@@ -15,9 +15,9 @@ RUN apk add --no-cache \
     perl-mime-base32 \
     perl-module-install \
     perl-test-differences \
+    perl-test-exception \
     perl-test-fatal \
     perl-test-nowarnings \
-    perl-test-exception \
  && cpanm --notest --no-wget --from=https://cpan.metacpan.org/ \
     Module::Install::XSUtil
 
