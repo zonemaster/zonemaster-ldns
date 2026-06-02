@@ -12,31 +12,29 @@ use Test::Differences;
 
 BEGIN { use_ok( 'Zonemaster::LDNS' ) }
 
-sub test_ede {
+sub test_first_ede {
     my ( $packet, $expected_ede, $expected_extra_text ) = @_;
 
-    my $expected_ede_message = (defined $expected_ede) ? 
+    my $expected_ede_message = (defined $expected_ede) ?
         'Got expected EDE' : 'Got no EDE';
-    my $expected_ede_text_message = (defined $expected_extra_text) ? 
+    my $expected_ede_text_message = (defined $expected_extra_text) ?
         'Got expected extra text' : 'Got no extra text';
 
     {
         my $ede;
         is(
-            exception { $ede = $packet->ede() },
+            exception { $ede = $packet->first_ede() },
             undef,
-            'ede() method works in scalar context'
+            'first_ede() method works in scalar context'
         );
         is( $ede, $expected_ede, $expected_ede_message );
     }
     {
         my @array;
         is(
-            exception {
-                @array = $packet->ede();
-            },
+            exception { @array = $packet->first_ede() },
             undef,
-            'ede() method works in list context'
+            'first_ede() method works in list context'
         );
         # In some scenarios, list context calls can return 0 or 1 item. This
         # is acceptable because missing values in the code that unpacks the
@@ -65,7 +63,7 @@ Gd/Ahl4BAAAAac0D6x4N9CxTQ07sAA8AMAANVGhpcyBFREUgd2FzIGludGVudGlvbmFsbHkgaW5zZX
 J0ZWQgYnkgZG5zZGlzdA==
 DATA
 
-    test_ede( $p, 13, 'This EDE was intentionally inserted by dnsdist' );
+    test_first_ede( $p, 13, 'This EDE was intentionally inserted by dnsdist' );
 };
 
 #
@@ -81,7 +79,7 @@ subtest 'Packet with EDE + UTF-8 text' => sub {
 AOABfwn5Sl8J+UpfCflKU=
 DATA
 
-    test_ede( $p, 23, '🔥🔥🔥' );
+    test_first_ede( $p, 23, '🔥🔥🔥' );
 };
 
 #
@@ -102,7 +100,7 @@ subtest 'Packet with EDE + invalid UTF-8 text' => sub {
 000f 000a 0000               # EDNS option 15 (EDE), length and code 0
 48 65 6c 70 aa 6d 65 bb      # Extra text
 DATA
-    test_ede( $p, 0, "Help\xAAme\xBB" );
+    test_first_ede( $p, 0, "Help\xAAme\xBB" );
 };
 
 #
@@ -118,7 +116,7 @@ subtest 'Test packet with plain EDE' => sub {
 s5yABQABAAAAAAABBGJsYWgAAAYAAQAAKRAAAAAAAAAGAA8AAgAU
 DATA
 
-    test_ede( $p, 20, undef );
+    test_first_ede( $p, 20, undef );
 };
 
 #
@@ -132,14 +130,14 @@ subtest 'setting plain EDE in packet' => sub {
     $p->opcode('QUERY');
     $p->rcode('REFUSED');
 
-    test_ede( $p, undef, undef );
+    test_first_ede( $p, undef, undef );
 
     is(
-        exception { $p->ede(1) },
+        exception { $p->first_ede(1) },
         undef,
         'Setting plain EDE doesn’t crash'
     );
-    test_ede( $p, 1, undef );
+    test_first_ede( $p, 1, undef );
 
     my $expected_wireformat = (<<DATA =~ s/ \s | \# [^\n]* \n //mgrx);
 000084050001000000000001     # Header
@@ -163,11 +161,11 @@ subtest 'setting EDE multiple times only keeps one instance of EDE' => sub {
     $p->rcode('REFUSED');
 
     is(
-        exception { $p->ede($_) for 1..4 },
+        exception { $p->first_ede($_) for 1..4 },
         undef,
         'Setting plain EDE 4 times in a row doesn’t crash'
     );
-    test_ede( $p, 4, undef );
+    test_first_ede( $p, 4, undef );
 
     my $expected_wireformat = (<<DATA =~ s/ \s | \# [^\n]* \n //mgrx);
 000084050001000000000001     # Header
@@ -191,11 +189,11 @@ subtest 'setting EDE with extra text' => sub {
     $p->rcode('REFUSED');
 
     is(
-        exception { $p->ede(13, 'AXFR failed: REFUSED') },
+        exception { $p->first_ede(13, 'AXFR failed: REFUSED') },
         undef,
         'Setting EDE with text doesn’t crash'
     );
-    test_ede( $p, 13, 'AXFR failed: REFUSED' );
+    test_first_ede( $p, 13, 'AXFR failed: REFUSED' );
 
     my $expected_wireformat = (<<DATA =~ s/ \s | \# [^\n]* \n //mgrx);
 000084050001000000000001     # Header
@@ -223,11 +221,11 @@ subtest 'setting EDE with UTF-8 text' => sub {
     my $extra_text = '🐈';
 
     is(
-        exception { $p->ede(29, $extra_text) },
+        exception { $p->first_ede(29, $extra_text) },
         undef,
         'Setting EDE with UTF-8 text doesn’t crash'
     );
-    test_ede( $p, 29, $backup );
+    test_first_ede( $p, 29, $backup );
 
     is( $extra_text, $backup, 'Setting EDE has no ill side-effects on input variable' );
 
@@ -256,11 +254,11 @@ subtest 'setting EDE with null bytes in it' => sub {
     my $extra_text = "Messing\0with\0you\0";
 
     is(
-        exception { $p->ede(65530, $extra_text) },
+        exception { $p->first_ede(65530, $extra_text) },
         undef,
         'Setting EDE with embedded null bytes doesn’t crash'
     );
-    test_ede( $p, 65530, $extra_text );
+    test_first_ede( $p, 65530, $extra_text );
 
     my $expected_wireformat = (<<DATA =~ s/ \s | \# [^\n]* \n //mgrx);
 000084050001000000000001     # Header

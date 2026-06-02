@@ -1500,7 +1500,7 @@ packet_type(obj)
 
 
 void
-packet__get_ede(obj)
+packet__get_first_ede(obj)
     Zonemaster::LDNS::Packet obj;
     INIT:
         ldns_edns_option_list *edns_opts;
@@ -1548,7 +1548,7 @@ packet__get_ede(obj)
         }
 
 void
-packet__set_ede(obj, ede, ...)
+packet__set_first_ede(obj, ede, ...)
     Zonemaster::LDNS::Packet obj;
     U16 ede;
     INIT:

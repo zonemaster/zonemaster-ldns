@@ -103,13 +103,13 @@ sub additional_rrlist {
     return Zonemaster::LDNS::RRList->new( \@records );
 }
 
-sub ede {
+sub first_ede {
     my $self = shift @_;
     if ( scalar @_ > 0 ) {
-        return $self->_set_ede(@_);
+        return $self->_set_first_ede(@_);
     }
     else {
-        return $self->_get_ede();
+        return $self->_get_first_ede();
     }
 }
 
@@ -322,7 +322,7 @@ Returns a Perl string holding the packet in wire format.
 
 Returns the ldns library's guess as to the content of the packet. One of the strings C<question>, C<referral>, C<answer>, C<nxdomain>, C<nodata> or C<unknown>.
 
-=item ede( [ $error_code, [ $extra_text ] ] )
+=item first_ede( [ $error_code, [ $extra_text ] ] )
 
 Gets (if called without any arguments) or sets (if called with one or two
 arguments) the first Extended DNS Error (EDE) in the packet.
