@@ -1,4 +1,4 @@
-FROM alpine:3.22 as build
+FROM alpine:3.22 AS build
 
 RUN apk add --no-cache \
     # Compile-time dependencies
@@ -15,6 +15,7 @@ RUN apk add --no-cache \
     perl-mime-base32 \
     perl-module-install \
     perl-test-differences \
+    perl-test-exception \
     perl-test-fatal \
     perl-test-nowarnings \
  && cpanm --notest --no-wget --from=https://cpan.metacpan.org/ \
