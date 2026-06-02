@@ -30,12 +30,20 @@ sub test_ede {
         is( $ede, $expected_ede, $expected_ede_message );
     }
     {
-        my ( $ede, $extra_text );
+        my @array;
         is(
-            exception { ( $ede, $extra_text ) = $packet->ede() },
+            exception {
+                @array = $packet->ede();
+            },
             undef,
             'ede() method works in list context'
         );
+        # In some scenarios, list context calls can return 0 or 1 item. This
+        # is acceptable because missing values in the code that unpacks the
+        # following array become undef. As long as we don’t return more than
+        # two, it’s fine.
+        cmp_ok( scalar @array, '<=', 2 );
+        my ( $ede, $extra_text ) = @array;
         is( $ede, $expected_ede, $expected_ede_message );
         is( $extra_text, $expected_extra_text, $expected_ede_text_message );
     }
