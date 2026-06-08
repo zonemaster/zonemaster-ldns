@@ -1579,8 +1579,8 @@ packet__set_first_ede(obj, ede, ...)
             }
         }
 
-        if (items > 2) {
-            extra_text = SvPVutf8(ST(2), len);
+        if (items > 2 && SvOK(ST(2))) {
+            extra_text = SvPV(ST(2), len);
             len += sizeof(uint16_t);
             buf = malloc(len);
             memcpy(buf + sizeof(uint16_t), extra_text, len - sizeof(uint16_t));

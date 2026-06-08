@@ -104,9 +104,18 @@ sub additional_rrlist {
 }
 
 sub first_ede {
-    my $self = shift @_;
-    if ( scalar @_ > 0 ) {
-        return $self->_set_first_ede(@_);
+    my ( $self, @args ) = @_;
+    if ( scalar @args > 0 ) {
+        my ( $ede, $text ) = @args;
+
+        # Encode string into UTF-8 byte sequence if not already done so
+        if ( defined $text and utf8::is_utf8( $text ) ) {
+            $text = Encode::encode( 'UTF-8', $text );
+            return $self->_set_first_ede( $ede, $text );
+        }
+        else {
+            return $self->_set_first_ede( @args );
+        }
     }
     else {
         return $self->_get_first_ede();

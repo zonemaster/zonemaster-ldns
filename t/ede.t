@@ -5,10 +5,12 @@ use v5.16;
 use utf8;
 
 use open ':std', ':encoding(UTF-8)';
-use Test::More;
-use Test::Fatal qw(exception lives_ok);
+
+use Encode;
 use MIME::Base64;
 use Test::Differences;
+use Test::Fatal qw(exception lives_ok);
+use Test::More;
 
 BEGIN { use_ok( 'Zonemaster::LDNS' ) }
 
@@ -210,7 +212,41 @@ DATA
     );
 };
 
-subtest 'setting EDE with UTF-8 text' => sub {
+subtest 'setting EDE with UTF-8 Latin text' => sub {
+    my $p = Zonemaster::LDNS::Packet->new( 'test' );
+    $p->qr(1);
+    $p->aa(1);
+    $p->opcode('QUERY');
+    $p->rcode('REFUSED');
+
+    my $backup = 'français';
+    my $extra_text = 'français';
+
+    is(
+        exception { $p->first_ede(29, $extra_text) },
+        undef,
+        'Setting EDE with UTF-8 text doesn’t crash'
+    );
+    test_first_ede( $p, 29, $backup );
+
+    is( $extra_text, $backup, 'Setting EDE has no ill side-effects on input variable' );
+
+    my $expected_wireformat = (<<DATA =~ s/ \s | \# [^\n]* \n //mgrx);
+000084050001000000000001     # Header
+04746573740000010001         # Question section: test./IN/A
+00 0029 0000 00000000 000f   # Additional section: OPT pseudo-RR
+000f 000b                    # EDNS option 15 (EDE) and length
+001d 6672616ec3a7616973      # EDE code 29 and text
+DATA
+
+    is(
+        unpack( 'H*', $p->wireformat() ),
+        $expected_wireformat,
+        'Packet contains only one instance of EDE'
+    );
+};
+
+subtest 'setting EDE with UTF-8 emoji text' => sub {
     my $p = Zonemaster::LDNS::Packet->new( 'test' );
     $p->qr(1);
     $p->aa(1);
@@ -266,6 +302,38 @@ subtest 'setting EDE with null bytes in it' => sub {
 00 0029 0000 00000000 0017   # Additional section: OPT pseudo-RR
 000f 0013                    # EDNS option 15 (EDE) and length
 fffa 4d657373696e67 00 77697468 00 796f75 00 # EDE code and string
+DATA
+
+    is(
+        unpack( 'H*', $p->wireformat() ),
+        $expected_wireformat,
+        'Packet’s wireformat is correct'
+    );
+};
+
+subtest 'setting EDE with invalid UTF-8 sequence in extra-text' => sub {
+    my $p = Zonemaster::LDNS::Packet->new( 'test' );
+
+    $p->qr(1);
+    $p->aa(1);
+    $p->opcode('QUERY');
+    $p->rcode('REFUSED');
+
+    my $extra_text = Encode::encode('iso-8859-1', "\x80\x81\x82\x83");
+
+    is(
+        exception { $p->first_ede(65530, $extra_text) },
+        undef,
+        'Setting EDE with embedded null bytes doesn’t crash'
+    );
+    test_first_ede( $p, 65530, $extra_text );
+
+    my $expected_wireformat = (<<DATA =~ s/ \s | \# [^\n]* \n //mgrx);
+000084050001000000000001     # Header
+04746573740000010001         # Question section: test./IN/A
+00 0029 0000 00000000 000a   # Additional section: OPT pseudo-RR
+000f 0006                    # EDNS option 15 (EDE) and length
+fffa 80818283                # EDE code and string
 DATA
 
     is(
