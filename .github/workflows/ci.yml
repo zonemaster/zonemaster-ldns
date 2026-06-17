@@ -40,6 +40,9 @@ jobs:
       - name: perl version
         run: perl -v
 
+      - name: update
+        run: sudo apt update -y
+
       - name: apt install
         run: sudo apt install -y libidn2-dev
 
@@ -57,6 +60,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
+      - name: update
+        run: sudo apt update -y
 
       - name: apt install
         run: sudo apt-get install -y git build-essential libmodule-install-perl libdevel-checklib-perl libextutils-pkgconfig-perl libmodule-install-xsutil-perl libssl-dev libidn2-dev
