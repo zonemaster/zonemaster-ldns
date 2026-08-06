@@ -187,13 +187,21 @@ sub custom_assets {
             cc_libs $lib;
         }
         else {
-            if ( ( my $cflags = $pkg_info{cflags} ) ne '' ) {
-                say "Adding CFLAGS for $name using pkg-config: $cflags";
-                cc_include_paths $cflags;
+            if ( defined ( my $includes = ExtUtils::PkgConfig->cflags_only_I($pcname) ) ) {
+                my @inc = map { s/^-I//r } (split " ", $includes);
+                say "Adding include paths for $name using pkg-config: " . join(", ", @inc);
+
+                cc_include_paths @inc;
+                $assert_lib_args{$key}{incpath} = \@inc;
             }
-            if ( ( my $libs = $pkg_info{libs} ) ne '' ) {
-                say "Adding LDFLAGS for $name using pkg-config: $libs";
-                cc_libs $libs;
+            if ( defined ( my $libs = ExtUtils::PkgConfig->libs($pcname) ) ) {
+                cc_libs (split " ", $libs);
+            }
+            if ( defined ( my $libpaths = ExtUtils::PkgConfig->libs_only_L($pcname) ) ) {
+                my @libpaths = map { s/^-L//r } (split " ", $libpaths);
+                say "Adding library paths for $name using pkg-config: " . join(", ", @libpaths);
+
+                $assert_lib_args{$key}{libpath} = \@libpaths;
             }
         }
     }
@@ -252,6 +260,10 @@ else {
             pcname => "libldns"
         }
     );
+
+    # LDNS needs OpenSSL, so we need openssl’s compiler flags for ldns too
+    push @{$assert_lib_args{ldns}{$_}}, @{$assert_lib_args{openssl}{$_}}
+        for ( qw(incpath libpath) );
 
     if ( $opt_ed25519 ) {
         cc_assert_lib(
@@ -312,6 +324,7 @@ else {
 # OpenSSL with SHA-1 support
 
 check_lib(
+    debug    => $opt_debug,
     header   => [ 'openssl/crypto.h', 'openssl/evp.h', 'openssl/x509.h' ],
     lib      => 'crypto',
     function => q{
@@ -379,6 +392,7 @@ check_lib(
         EVP_PKEY_free(pkey);
         return ok ? 0 : 1;
     },
+    %{ $assert_lib_args{openssl} },
   )
   or do {
     print STDERR "wrong result: Failed to verify cryptographic SHA-1 support in OpenSSL.\n"
