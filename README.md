@@ -244,10 +244,10 @@ be found in the [LICENSE](LICENSE) file included in this respository.
 [Docker Image Creation]:                             https://github.com/zonemaster/zonemaster/blob/master/docs/internal/maintenance/ReleaseProcess-create-docker-image.md
 [Ed25519]:                                           #ed25519
 [IDN]:                                               #idn
-[Installation instructions for Zonemaster::Engine]:  https://github.com/zonemaster/zonemaster/blob/master/docs/public/installation/zonemaster-engine.md
+[Installation instructions for Zonemaster::Engine]:  https://doc.zonemaster.net/latest/installation/zonemaster-engine.html
 [Internal ldns]:                                     #internal-ldns
 [Ldns library]:                                      https://www.nlnetlabs.nl/projects/ldns/
 [NLnet Labs]:                                        https://www.nlnetlabs.nl/
-[USING]:                                             https://github.com/zonemaster/zonemaster/blob/master/docs/public/using/cli.md
+[USING]:                                             https://doc.zonemaster.net/latest/using/cli.html
 [Zonemaster project]:                                http://github.com/zonemaster/zonemaster
 
